@@ -1,0 +1,157 @@
+'''
+ # @ Author: lucas
+ # @ Create Time: 2022-07-25 21:32:48
+ # @ Modified by: lucas
+ # @ Modified time: 2022-07-25 21:33:04
+ # @ Description: Script para generar pronosticos para una coordenada.
+ Uso: python3 pronostico_local.py nombre,lon,lat,outputpath
+'''
+
+# ---------------------------------------------------------------------------- #
+#                                    IMPORTS                                   #
+# ---------------------------------------------------------------------------- #
+import sys
+import locale
+locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
+
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+import seaborn as sns
+
+
+from load import forecast_path, load_forecast_ini
+from load import checkcreated_data
+from graphical import create_timegrid, plot_logo
+from graphical import plot_row_arrows, plot_row_textcolor
+from create_localforecast import create_localforecast
+from params import *
+
+# ---------------------------------------------------------------------------- #
+#                                GLOBAL VARIABLES                              #
+# ---------------------------------------------------------------------------- #
+def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
+    text=pd.DataFrame([name.ljust(30,' '),
+                       "{:.4f}".format(lon).ljust(20,' '),
+                       "{:.4f}".format(lat).ljust(20,' ')]).T.to_string(
+                           index=False,header=False)
+    print('         Making forecast for: '+text)
+    logo=plt.imread('static/Logo_Ceaza_color.png')
+    if checkcreated_data('tmp/'+name.replace("_","")+'_FORECAST_CURRENT.csv'):
+        data = pd.read_csv('tmp/'+name.replace("_","")+'_FORECAST_CURRENT.csv',
+                           index_col=0)
+        data.index = pd.to_datetime(data.index)  
+    else:
+        locations=pd.DataFrame([lon,lat],columns=[name],index=['lon','lat'])
+        data = create_localforecast(idate,locations.T, save=False)[0]
+        data.index = pd.to_datetime(data.index)
+        
+    inits = []
+    for ftype in ['atm','ocean','wave']:
+        path = forecast_path(idate,ftype)
+        inits.append(load_forecast_ini(path,ftype))  
+# ---------------------------------------------------------------------------- #
+#                                         PLOT                                 #
+# ---------------------------------------------------------------------------- #
+    plt.rc('font',size=12)
+    fig,ax,grid = create_timegrid(data.index,9, figsize=(130,5))
+    plot_row_textcolor({'data':data['WS'],
+                        'row':0,
+                        'fmt':'{:.1f}',
+                        'fontsize':12,
+                        'color_kwargs':{'cmap':'viridis',
+                                        'norm':mcolors.Normalize(-5,11)}
+                        },
+                        grid=grid, ax=ax)
+    plot_row_textcolor({'data':data['BEAUFORT'],
+                        'row':1,
+                        'fmt':'{:.0f}',
+                        'fontsize':12,
+                        'color_kwargs':{'cmap':'PuRd',
+                                        'norm':mcolors.Normalize(3,12)}},
+                         grid=grid,ax=ax)
+    plot_row_arrows({'data':data['WDIR'],
+                     'row':2},
+                    grid=grid,ax=ax)
+    plot_row_textcolor({'data':data['WDIR_STR'],
+                        'row':3,
+                        'fontsize':14
+                        },
+                        colors=False,grid=grid, ax=ax)
+    cmap = mcolors.ListedColormap(plt.cm.nipy_spectral(np.linspace(0.1,0.95,
+                                                                   1000)))
+    plot_row_textcolor({'data':data['VHM0'],
+                        'row':4,
+                        'fmt':'{:.1f}',
+                        'fontsize':12,
+                        'color_kwargs':{'cmap':cmap,
+                                        'norm':mcolors.Normalize(0,4.5)}
+                       },
+                        grid=grid, ax=ax)
+    plot_row_textcolor({'data':data['VTPK'],
+                        'row':5,
+                        'fmt':'{:.0f}',
+                        'fontsize':12,
+                        'color_kwargs':{'cmap':'YlGnBu',
+                                        'norm':mcolors.Normalize(4,24)}
+                       },
+                        grid=grid, ax=ax)
+    plot_row_arrows({'data':data['VMDR'],
+                     'row':6},
+                    grid=grid,ax=ax)
+    plot_row_textcolor({'data':data['VMDR_STR'],
+                        'row':7,
+                        'fontsize':14
+                        },
+                        colors=False,grid=grid, ax=ax)
+    plot_row_textcolor({'data':data['thetao_anomaly'],
+                        'row':8,
+                        'color_kwargs':{'cmap':'RdBu_r',
+                                        'norm':mcolors.TwoSlopeNorm(0,-3.8,3.8)}
+                        },
+                       text=False,grid=grid,ax=ax)
+    plot_row_textcolor({'data':data['thetao'],
+                        'row':8,
+                        'fmt':'{:0.1f}',
+                        'fontsize':12
+                        },
+                       colors=False,grid=grid,ax=ax)
+    
+    
+    # ------------------------------- common stuff --------------------------- #
+    ax.set_yticklabels(['Velocidad del\nviento (m/s)',
+                        'Escala de Beaufort',
+                        '\n\nDirección\ndel viento',
+                        '',
+                        'Altura\nde ola (m)',
+                        'Periodo (s)',
+                        '',
+                        'Dirección\nde oleaje\n\n',
+                        'Temperatura superficial\ndel mar (°C)'][::-1]);
+    ax.tick_params(axis='y', length=0, pad=15)
+    ax.text(0,1.25,'PRONÓSTICO '+name.replace("_"," "),
+            fontsize=18,
+            transform=ax.transAxes)
+    for d in np.unique(data.index.date)[1:]:
+        d = pd.to_datetime(d)-pd.Timedelta(minutes=30)
+        ax.axvline(d, color='k', lw=2)
+    ax.text(0,-0.15,
+            'Inicio pronóstico de viento: WRF-Ceaza '+inits[0]+'\n'+
+            'Inicio pronóstico de olas: MFWAM-MeteoFrance '+inits[1]+'\n'+
+            'Inicio pronóstico de TSM: NEMO-MeteoFrance '+inits[2],
+            fontsize=10, transform=ax.transAxes)
+    plot_logo(logo, (-0.0075,0.925), fig, 0.25)
+
+    plt.savefig(outdir+name.replace("_","")+'_FORECAST_CURRENT.png',
+                dpi=100, bbox_inches='tight')
+    plt.close()
+    return 
+
+# ---------------------------------------------------------------------------- #
+if __name__=='__main__':
+    # name,lon,lat,outdir = 'blabla',-72,-33,'plots/PRONOSTICO_SITIOS/'
+    name,lon,lat,outdir = sys.argv[1],float(sys.argv[2]),float(sys.argv[3]),sys.argv[4]
+    local_forecast(FORECAST_DATE,name,lon,lat,outdir)
+    sys.exit()
