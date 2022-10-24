@@ -48,7 +48,7 @@ def load_data(times, bbox=[-73,-70.67,-33,-27]):
     for p in times:
         ostia_path = 'data/OSTIA/'+p.strftime('%Y%m%d')+\
             '-UKMO-L4HRfnd-GLOB-v01-fv02-OSTIA.nc'
-        forecast_path = 'data/FORECAST/SST/DATAH/'+\
+        forecast_path = ocean_forecast_dir+'/'+\
             p.strftime('%Y-%m-%d.nc')
         try:
             data = xr.open_dataset(ostia_path).analysed_sst;

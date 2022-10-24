@@ -16,6 +16,7 @@ from multiprocessing import Pool
 
 import sys
 import os
+from glob import glob
 
 import xarray as xr
 import pandas as pd
@@ -24,7 +25,7 @@ import datetime
 import time
 
 from load import forecast_path, load_forecast_data
-from numerics import coastwinddir, deg2compass, beaufort_scale
+from numerics import coastwinddir, deg2compass, beaufort_scale, filter_timeseries
 from numerics import grabpoint
 from params import *
 # ---------------------------------------------------------------------------- #
@@ -61,15 +62,25 @@ def createlocal_data(name,lat,lon, atm, waves, ocean, clim):
     
 # ------------------------------------ SST ------------------------------- #
     sst_local = grabpoint(ocean,lat,lon)[sst_name]
-    sstclim_local = grabpoint(clim,lat,lon)[sst_name]
     #interpolate from xx:30 to xx:00
-    sst_local = sst_local.resample('h').interpolate(method='linear') 
-    sst_anomaly_local = sst_local.to_xarray().groupby('leadtime.dayofyear')
-    sst_anomaly_local = (sst_anomaly_local-sstclim_local.to_xarray()).to_series()
-    sst_anomaly_local.name = 'thetao_anomaly'
+    sst_local = sst_local.resample('h').bfill()
+
+    # #Anomaly respect to satellite
+    # sstclim_local = grabpoint(clim,lat,lon)[sst_name]
+    # sst_anomaly_local = sst_local.to_xarray().groupby('leadtime.dayofyear')
+    # sst_anomaly_local = (sst_anomaly_local-sstclim_local.to_xarray()).to_series()
+    # sst_anomaly_local.name = 'thetao_anomaly'
+    
+    #Synoptic anomalies
+    sst_sanomaly_local = sst_local-filter_timeseries(sst_local, 5, 1/45/24)
+    sst_sanomaly_local = sst_sanomaly_local.reindex(waves_local.index)
+    sst_local = sst_local.reindex(waves_local.index)
+    sst_sanomaly_local = sst_sanomaly_local.resample('d').mean()
+    sst_sanomaly_local = sst_sanomaly_local.reindex(sst_local.index).interpolate()
+    sst_sanomaly_local.name = 'thetao_synoptic_anomaly'
     
 # ----------------------------------- MERGE ---------------- ------------- #
-    data = pd.concat([atm_local,waves_local,sst_local, sst_anomaly_local],
+    data = pd.concat([atm_local,waves_local,sst_local, sst_sanomaly_local],
                         axis=1)
     data['WDIR_STR'] = data['WDIR'].map(lambda x: deg2compass(x))
     data['VMDR_STR'] = data['VMDR'].map(lambda x: deg2compass(x))
@@ -92,8 +103,13 @@ def create_localforecast(idate, locations, n_jobs=10, save=True):
     waves = load_forecast_data(waves_path,'wave').squeeze().sel(
         leadtime=slice(idate,fdate))
     
-    sst   = load_forecast_data(ocean_path,'ocean')[sst_name].squeeze().sel(
-        leadtime=slice(idate,fdate))
+    hindcast = sorted(glob(ocean_hindcast_dir+'/*.nc'))[-120:]
+    hindcast = [load_forecast_data(p,'ocean').chunk({'leadtime':1})[sst_name].squeeze().load()
+                for p in hindcast]
+    hindcast = xr.concat(hindcast,'leadtime')
+    
+    sst   = load_forecast_data(ocean_path,'ocean')[sst_name].squeeze()
+    sst   = xr.concat([hindcast,sst],'leadtime').sortby('leadtime').drop_duplicates(dim='leadtime')
     
     sstclim = xr.open_dataset(ocean_climatology_dir)[sst_name]
     # ------------------------ compute extra variables------------------------ #

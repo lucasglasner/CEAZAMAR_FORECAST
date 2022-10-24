@@ -68,8 +68,8 @@ def wind_forecast(idate):
     for i,axis in enumerate(ax.ravel()):
         axis.set_title(pd.to_datetime(wind.leadtime[i].values).strftime('%a %d-%b'),
                     loc='left', fontsize=13.5)
-        axis.quiver(wind.lon,wind.lat,u[i].values,v[i].values, scale=10,width=0.01,
-                transform=ccrs.PlateCarree(), regrid_shape=10, alpha=0.7,
+        axis.quiver(wind.lon,wind.lat,u[i].values,v[i].values, scale=12,width=0.01,
+                transform=ccrs.PlateCarree(), regrid_shape=12, alpha=0.7,
                 zorder=0)
 
     ax[0,0].set_title(pd.to_datetime(wind.leadtime[0].values).strftime('%Y\n%a %d-%b'),

@@ -15,6 +15,7 @@ import xesmf as xe
 import xarray as xr
 import numpy as np
 import pandas as pd
+import scipy.signal as signal
 
 # ---------------------------------------------------------------------------- #
 # ---------------------------- Numerical data functions ---------------------- #
@@ -22,6 +23,19 @@ import pandas as pd
 
 
 def rhopoints_depths(h,zeta,s_rho,Cs_r,hc,vtransform=2):
+    """ Compute depth of roms sigma coordinates.
+
+    Args:
+        h (_type_): _description_
+        zeta (_type_): _description_
+        s_rho (_type_): _description_
+        Cs_r (_type_): _description_
+        hc (_type_): _description_
+        vtransform (int, optional): _description_. Defaults to 2.
+
+    Returns:
+        _type_: _description_
+    """
     if vtransform==1:
         Z_rho = hc*(s_rho-Cs_r)+Cs_r*h
         z_rho = Z_rho+zeta*(1+Z_rho/h)
@@ -33,6 +47,16 @@ def rhopoints_depths(h,zeta,s_rho,Cs_r,hc,vtransform=2):
     
 
 def haversine(p1,p2):
+    """
+    Given two points with lat,lon coordinates, compute the distance 
+    between those points on the surface of the sphere with the haversine formula
+    Args:
+        p1 (tuple): first point lat,lon
+        p2 (tuple): last point lat,lon
+
+    Returns:
+        float: distance
+    """
     lat1,lon1 = p1
     lat2,lon2 = p2
     
@@ -205,7 +229,10 @@ def seasonal_decompose(ts, period, nharmonics=3, bandwidth=2):
     season : Seasonal component of the time series.
     anomaly : The time series anomaly without the seasonal cycle.
     """
-    n = len(ts)
+    if len(ts)%2==0:
+        n = len(ts)
+    else:
+        n = len(ts)+1
     ft = np.fft.fft(ts)
     ft[0] = 0  # Remove mean#
     for i in range(nharmonics):  # Filter cycle#
@@ -219,7 +246,71 @@ def seasonal_decompose(ts, period, nharmonics=3, bandwidth=2):
     season = ts-anomaly
     return season
 
-def compute_anomalies(forecast, climatology):
+def filter_timeseries(ts, order, cutoff, btype='lowpass', fs=1, **kwargs):
+    """Given an array, this function apply a butterworth (high/low pass) 
+    filter of the given order and cutoff frequency.
+    For example:
+    If 'ts' is a timeseries of daily samples, filter_timeseries(ts,3,1/20)
+    will return the series without the 20 days or less variability using an
+    order 3 butterworth filter. 
+    In the same way, filter_timeseries(ts,3,1/20, btype='highpass') will
+    return the series with only the 20 days or less variability.
+
+    Args:
+        ts (array_like): timeseries or 1D array to filter
+        order (int): _description_
+        cutoff (array_like): Single float for lowpass or highpass filters, 
+        arraylike for bandpass filters.
+        btype (str, optional): The type of filter. Defaults to 'lowpass'.
+        fs (int): Sampling frequency. Defaults to 1.s
+        **kwargs are passed to scipy.signal.butter
+
+    Returns:
+        output (array): Filtered array
+    """
+    mask = np.isnan(ts)
+    nans = np.ones(len(ts))*np.nan
+    if mask.sum()==len(ts):
+        return nans
+    else:
+        b, a = signal.butter(order,cutoff, btype=btype, fs=fs, **kwargs)
+        filt=signal.filtfilt(b, a, ts[~mask])
+        output=np.ones(len(ts))*np.nan
+        output[np.where(~mask)] = filt
+        return output
+    
+def filter_xarray(data, dim, order, cutoff, btype='lowpass', parallel=True, fs=1):
+    """Given a 3d DataArray, with time and spatial coordinates, this function apply
+    the 1D function filter_timeseries along the time dimension, filter the complete
+    xarray data.
+
+    Args:
+        data (XDataArray): data
+        dim (str): name of the time dimension
+        order (int): butterworth filter order
+        cutoff (array_like): if float, the cutoff frequency, if array must be the
+                            [min,max] frequencys for the bandpass filter.
+        btype (str, optional): {lowpass,highpass,bandpass}. Defaults to 'lowpass'.
+        parallel (bool, optional): If parallelize with dask. Defaults to True.
+        fs (int, optional): Sampling frequency. Defaults to 1.
+
+    Returns:
+        XDataArray: filtered data
+    """
+    if parallel:
+        dask='parallelized'
+    else:
+        dask='forbidden'
+    filt = xr.apply_ufunc(filter_timeseries, data, order, cutoff, btype, fs,
+                          input_core_dims=[[dim],[],[],[],[]],
+                          output_core_dims=[[dim]],
+                          exclude_dims=set((dim,)),
+                          keep_attrs=True,
+                          vectorize=True, dask=dask)
+    filt[dim] = data[dim]
+    return filt
+
+def compute_anomalies(forecast, climatology, timename='leadtime'):
     """Compute anomaly from climatology
 
     Args:
@@ -230,7 +321,7 @@ def compute_anomalies(forecast, climatology):
         XDataArray: anomaly
     """
     climatology = climatology.reindex({'lat':forecast.lat,'lon':forecast.lon})
-    anomaly = forecast.groupby('leadtime.dayofyear')-climatology
+    anomaly = forecast.groupby(timename+'.dayofyear')-climatology
     return anomaly
 
 def utc_to_local(series, gap=4):
@@ -256,7 +347,7 @@ def grabpoint(data,lat,lon,method='nearest'):
         data (xarray): _description_
         lat (float): _description_
         lon (float): _description_
-        method (str, optional): interpolation method. Defaults to 'nearest'.
+        method (str, optional): Interpolation method. Defaults to 'nearest'.
 
     Returns:
         pd.Dataframe: timeseries of the pixel as a dataframe

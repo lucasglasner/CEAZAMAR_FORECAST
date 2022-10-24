@@ -106,10 +106,11 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                         'fontsize':14
                         },
                         colors=False,grid=grid, ax=ax)
-    plot_row_textcolor({'data':data['thetao_anomaly'],
+
+    plot_row_textcolor({'data':data['thetao_synoptic_anomaly'],
                         'row':8,
                         'color_kwargs':{'cmap':'RdBu_r',
-                                        'norm':mcolors.TwoSlopeNorm(0,-3.8,3.8)}
+                                        'norm':mcolors.TwoSlopeNorm(0,-2,4.25)}
                         },
                        text=False,grid=grid,ax=ax)
     plot_row_textcolor({'data':data['thetao'],

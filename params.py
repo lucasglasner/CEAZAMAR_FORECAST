@@ -1,4 +1,12 @@
 '''
+ # @ Author: Your name
+ # @ Create Time: 2022-08-16 15:44:30
+ # @ Modified by: Your name
+ # @ Modified time: 2022-09-13 11:33:50
+ # @ Description:
+ '''
+
+'''
  # @ Author: lucas
  # @ Create Time: 2022-08-03 16:40:24
  # @ Modified by: lucas
@@ -13,20 +21,22 @@ import datetime
 FORECAST_DATE        = datetime.datetime.now().strftime('%F')
 EXECUTION_DIRECTORY  = '/home/lucas/CEAZAMAR_FORECAST'
 NDAYS_REGIONAL = 10
-NHOURS_LOCAL   = 216
+NHOURS_LOCAL   = 24*8
 N_JOBS = 10
 
 #LEADTIME MAPS GENERAL CONFIGURATION
+COASTLINE_MASK_PATH   = '~/storage/VECTORIAL/ChileCOASTMASK.shp'
 atm_mapsextent   = [-74,-70.5,-34,-28]
 ocean_mapsextent = [-73,-70.5,-33,-27]
 wave_mapsextent  = [-74,-70.5,-34,-27]
 
 MAPS_GRID    = (2,5)
 MAPS_FIGSIZE = (14,8)
+
 MAPS_LOCS    = {'Los Vilos':(-31.904,-71.499),
                 'Huentelauquen':(-31.621,-71.568),
                 'Tongoy':(-30.255,-71.486),
-                'La Serena':(-29.878,-71.273),
+                'La Serena':(-29.878,-71.286),
                 'Chañaral de\nAceituno':(-29.064,-71.514)}
 
 # ---------------------------------------------------------------------------- #
@@ -58,6 +68,7 @@ waveperiod_name  = 'VTPK'
 ocean_model_name = 'NEMO-Meteofrance'
 # ----------------------------------- paths ---------------------------------- #
 ocean_forecast_dir    = 'data/FORECAST/MERCATOR/PHYSICS'
+ocean_hindcast_dir    = 'data/FORECAST/MERCATOR/PHYSICS/HINDCAST/'
 ocean_climatology_dir = 'data/CLIMATOLOGIES.nc'
 ocean_validation_dir  = 'data/OSTIA'
 # ------------------------------ variable names ------------------------------ #

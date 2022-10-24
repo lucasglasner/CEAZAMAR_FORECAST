@@ -184,42 +184,69 @@ def make_maps(shape,figsize,
                           subplot_kw={'projection':proj},
                           figsize=figsize, **kwargs)
     #Check axis grid dimension
-    if len(ax.shape)==1:
-        ax = np.array([ax])
-    #Loop over axes
-    for axis in ax.ravel():
-        #Force spatial extent and draw features (coastlines, land, etc)
+    if np.size(ax)==1:
         PROVINCES = cf.NaturalEarthFeature('cultural',
-                                           'admin_1_states_provinces',
-                                           '10m')
+                                            'admin_1_states_provinces',
+                                            '10m')
         
-        axis.set_extent(extent, crs=ccrs.PlateCarree())
-        axis.add_feature(PROVINCES, rasterized=True, edgecolor='k',
-                         facecolor='silver',linewidth=0.5,
-                         zorder=2)
-        axis.scatter(loclons,loclats, color='gold', edgecolor='k',
-                     zorder=3,s=20)
-     
-    #For the first plot name the plotted points   
-    for i, txt in enumerate(locnames):
-        ax.ravel()[0].annotate(txt, (loclons[i]+0.05,loclats[i]+0.05),
-                               fontsize=9,
-                               zorder=3)
-    #Create colorbar(s) axis
-    if colorbar == 'one':
-        box1 = ax[0,-1].get_position()
-        box2 = ax[-1,-1].get_position()
-        cax = fig.add_axes([box2.xmax*1.05,box2.ymin,0.01,box1.ymax-box2.ymin])
-    else:
-        cax = None
+        ax.set_extent(extent, crs=ccrs.PlateCarree())
+        ax.add_feature(PROVINCES, rasterized=True, edgecolor='k',
+                        facecolor='silver',linewidth=0.5,
+                        zorder=2)
+        ax.scatter(loclons,loclats, color='gold', edgecolor='k',
+                    zorder=3,s=20)
+        for i, txt in enumerate(locnames):
+            ax.annotate(txt, (loclons[i]+0.05,loclats[i]+0.05),
+                        fontsize=9,
+                        zorder=3)
+        #Create colorbar(s) axis
+        if colorbar == 'one':
+            box = ax.get_position()
+            cax = fig.add_axes([box.xmax*1.05,box.ymin,0.01,box.ymax-box.ymin])
+        else:
+            cax = None
+        #Place tick labels
+        ax.set_yticks(yticks)
+        ax.set_yticklabels(list(map(lambda x: str(-x)+'$\degree S$',yticks)))
     
-    #Place tick labels
-    for i in range(rows):
-        ax[i,0].set_yticks(yticks)
-        ax[i,0].set_yticklabels(list(map(lambda x: str(-x)+'$\degree S$',yticks)))
-    for j in range(cols):
-        ax[-1,j].set_xticks(xticks)
-        ax[-1,j].set_xticklabels(list(map(lambda x: str(-x)+'$\degree W$',xticks)))
+        ax.set_xticks(xticks)
+        ax.set_xticklabels(list(map(lambda x: str(-x)+'$\degree W$',xticks)))
+    else:
+        if len(ax.shape) == 1:
+            ax = np.array([ax])
+        #Loop over axes
+        for axis in ax.ravel():
+            #Force spatial extent and draw features (coastlines, land, etc)
+            PROVINCES = cf.NaturalEarthFeature('cultural',
+                                            'admin_1_states_provinces',
+                                            '10m')
+            
+            axis.set_extent(extent, crs=ccrs.PlateCarree())
+            axis.add_feature(PROVINCES, rasterized=True, edgecolor='k',
+                            facecolor='silver',linewidth=0.5,
+                            zorder=2)
+            axis.scatter(loclons,loclats, color='gold', edgecolor='k',
+                        zorder=3,s=20)
+        
+        #For the first plot name the plotted points   
+        for i, txt in enumerate(locnames):
+            ax.ravel()[0].annotate(txt, (loclons[i]+0.05,loclats[i]+0.05),
+                                fontsize=9,
+                                zorder=3)
+        #Create colorbar(s) axis
+        if colorbar == 'one':
+            box1 = ax[0,-1].get_position()
+            box2 = ax[-1,-1].get_position()
+            cax = fig.add_axes([box2.xmax*1.05,box2.ymin,0.01,box1.ymax-box2.ymin])
+        else:
+            cax = None
+        #Place tick labels
+        for i in range(rows):
+            ax[i,0].set_yticks(yticks)
+            ax[i,0].set_yticklabels(list(map(lambda x: str(-x)+'$\degree S$',yticks)))
+        for j in range(cols):
+            ax[-1,j].set_xticks(xticks)
+            ax[-1,j].set_xticklabels(list(map(lambda x: str(-x)+'$\degree W$',xticks)))
     return fig,ax,cax
 
 def make_forecast_plot(var, cmap, cbar_label, vmin,

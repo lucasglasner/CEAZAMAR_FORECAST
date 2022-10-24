@@ -111,6 +111,7 @@ if __name__=='__main__':
             print('\n')
             print('LAUNCHING COASTAL ZONES FORECAST: '+now())
             locations=pd.read_csv('data/COASTAL_POINTS.csv', index_col=0)
+            # locations = locations.iloc[:10,:]
             
             print('\nExporting local forecast data...')
             create_localforecast(FORECAST_DATE, locations=locations, n_jobs=N_JOBS)

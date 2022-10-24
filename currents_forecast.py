@@ -41,8 +41,6 @@ def currents_forecast(idate):
                                                  ssh_name]]
     data = data.resample({'leadtime':'d'}).mean()
     data = data.reindex({'leadtime':pd.date_range(idate,fdate,freq='d')})
-    # data = data.sel(lat=slice(*sorted(ocean_mapsextent[2:])),
-    #                 lon=slice(*sorted(ocean_mapsextent[:-2])))
     uo,vo = data[uo_name],data[vo_name]
     data['cs'] = np.hypot(uo,vo)
 
@@ -71,6 +69,7 @@ def currents_forecast(idate):
         axis.quiver(data.lon,data.lat,uo[i].values,vo[i].values, scale=3,width=0.008,
                 transform=ccrs.PlateCarree(), regrid_shape=14, alpha=0.7,
                 zorder=0)
+
     ax[-1,0].text(0,-0.15,'Inicio pronóstico océanico: '+ocean_model_name+' '+init+'\n',
                   fontsize=10, transform=ax[-1,0].transAxes, va='top', ha='left')
     
@@ -84,7 +83,7 @@ def currents_forecast(idate):
     vmin,vmax=0,50
     fig,ax,cax,cbar = make_forecast_plot(var=data['cs']*100,
         cmap='PuBu',
-        cbar_label='Velocidad de la corriente (cm/s)',
+        cbar_label='Líneas de corriente y velocidad (cm/s)',
         vmin=vmin,vmax=vmax,level_step=0.5,
         xticks=[-73,-71],
         yticks=[-34,-33,-32,-31,-30,-29,-28,-27],
@@ -95,9 +94,13 @@ def currents_forecast(idate):
     for i,axis in enumerate(ax.ravel()):
         axis.set_title(pd.to_datetime(data.leadtime[i].values).strftime('%a %d-%b'),
                     loc='left', fontsize=13.5)
-        axis.quiver(data.lon,data.lat,uo[i].values,vo[i].values, scale=3,width=0.008,
-                transform=ccrs.PlateCarree(), regrid_shape=14, alpha=0.7,
-                zorder=0)
+        # axis.quiver(data.lon,data.lat,uo[i].values,vo[i].values, scale=3,width=0.008,
+        #         transform=ccrs.PlateCarree(), regrid_shape=14, alpha=0.7,
+        #         zorder=0)
+        axis.streamplot(data.lon,data.lat,uo[i].values, vo[i].values, density=1.5,
+                transform=ccrs.PlateCarree(), zorder=0, color='k', linewidth=0.5,
+                arrowsize=0.5)
+
     ax[-1,0].text(0,-0.15,'Inicio pronóstico océanico: '+ocean_model_name+' '+init+'\n',
                   fontsize=10, transform=ax[-1,0].transAxes, va='top', ha='left')
     
