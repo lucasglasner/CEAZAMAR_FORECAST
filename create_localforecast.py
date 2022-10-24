@@ -72,7 +72,7 @@ def createlocal_data(name,lat,lon, atm, waves, ocean, clim):
     # sst_anomaly_local.name = 'thetao_anomaly'
     
     #Synoptic anomalies
-    sst_sanomaly_local = sst_local-filter_timeseries(sst_local, 5, 1/45/24)
+    sst_sanomaly_local = sst_local-filter_timeseries(sst_local, 5, 1/30/24)
     sst_sanomaly_local = sst_sanomaly_local.reindex(waves_local.index)
     sst_local = sst_local.reindex(waves_local.index)
     sst_sanomaly_local = sst_sanomaly_local.resample('d').mean()
