@@ -21,23 +21,6 @@ from params import *
 # ---------------------------- Load data functions --------------------------- #
 # ---------------------------------------------------------------------------- #
 
-def checkcreated_data(path):
-    """
-    Given a path, checks if the file was created today
-    
-    Args:
-        path (str): path to file
-    Returns:
-        bool: 
-    """
-    if os.path.exists(path):
-        ctime = os.path.getctime(path)
-        ctime = datetime.datetime.fromtimestamp(ctime)
-        cond = ctime.date() == datetime.datetime.now().date()
-    else:
-        cond=False
-    return cond
-
 def target_date(forecast_directory,validationdata_directory):
     """
     Find out which is the last aviable date between
@@ -225,19 +208,18 @@ def init_mercator(path, which):
         str: forecast initialization date
     """
     if which=='ocean':
-        command = "grep -oP '(?<=history).*(?=;)'"
-        init = os.popen("ncdump -h "+path+" | "+command).read()
-        init = init[3:].split(" ")
-        init = init[0][1:]+"T"+init[1]
-        init = pd.to_datetime(init).strftime('%F %HUTC')
+        command = "grep -oP '(?<=\").*(?=T00:30)'"
+        init = os.popen("ncdump -ci "+path+" | grep time | tail -n 1 | "+
+                        command).read()
+        init = (pd.to_datetime(init)).strftime('%F %HUTC')
     elif which=='wave':
-        command = "grep -oP '(?<=date_created).*(?=;)'"
-        init = os.popen("ncdump -h "+path+" | "+command).read()
-        init = init[3:-1].replace('"','')
-        init = pd.to_datetime(init).strftime('%F %HUTC')
+        command = "grep -oP '(?<=,\ \").*(?=T03)'"
+        init = os.popen("ncdump -ci "+path+" | grep time | tail -n 1 | "+
+                        command).read()
+        init = (pd.to_datetime(init)).strftime('%F %HUTC')
     else:
         raise ValueError('Which parameter must indicate only some\
-            of these ["ocean","wave", "atm"]')   
+            of these ["ocean","wave"]')   
     return init
 
 def load_forecast_ini(path, which):

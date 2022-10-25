@@ -31,25 +31,6 @@ from params import *
 # ---------------------------------------------------------------------------- #
 #                                GLOBAL VARIABLES                              #
 # ---------------------------------------------------------------------------- #
-def checkcreated_data(name):
-    """
-    Given the name of a place, checks if the table for today
-    is already created
-    
-    Args:
-        name (str): name of a place in COASTAL_POINTS.csv
-
-    Returns:
-        bool: 
-    """
-    path='tmp/'+name.replace("_","")+'_CURRENT.csv'
-    if os.path.exists(path):
-        ctime = os.path.getctime(path)
-        ctime = datetime.datetime.fromtimestamp(ctime)
-        cond = ctime.date() == datetime.datetime.now().date()
-    else:
-        cond=False
-    return cond
     
 def createlocal_data(name,lat,lon, atm, waves, ocean, clim):
 # ----------------------------------- atm ------------------------------- #
@@ -86,7 +67,7 @@ def createlocal_data(name,lat,lon, atm, waves, ocean, clim):
     data['VMDR_STR'] = data['VMDR'].map(lambda x: deg2compass(x))
     data['BEAUFORT'] = (data['WS']*1.94).map(lambda x: beaufort_scale(x))
     data.name = name
-    print('         Creating data for: '+name)
+    # print('         Creating data for: '+name)
     return data
 
 def create_localforecast(idate, locations, n_jobs=10, save=True):
@@ -129,12 +110,13 @@ def create_localforecast(idate, locations, n_jobs=10, save=True):
                                               locations.lat,
                                               locations.lon))
     if save:
-        print('         Saving data...')
+        print('Saving data...')
         for name,data in zip(locations.index,DATA):
             data = data.reindex(pd.date_range(idate,fdate,freq='h'))
             data.to_csv('tmp/'+name.replace("_","")+'_FORECAST_CURRENT.csv')
-        print('Done')
+        print('Done\n')
     return DATA
+
 if __name__=='__main__':
     locations=pd.read_csv('data/COASTAL_POINTS.csv', index_col=0)
     create_localforecast(idate=FORECAST_DATE,locations=locations)

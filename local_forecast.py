@@ -10,6 +10,7 @@
 # ---------------------------------------------------------------------------- #
 #                                    IMPORTS                                   #
 # ---------------------------------------------------------------------------- #
+import os
 import sys
 import locale
 locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
@@ -23,7 +24,7 @@ import seaborn as sns
 
 
 from load import forecast_path, load_forecast_ini
-from load import checkcreated_data
+from check_forecast_status import checkcreated_data
 from graphical import create_timegrid, plot_logo
 from graphical import plot_row_arrows, plot_row_textcolor
 from create_localforecast import create_localforecast
@@ -33,13 +34,8 @@ from params import *
 #                                GLOBAL VARIABLES                              #
 # ---------------------------------------------------------------------------- #
 def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
-    text=pd.DataFrame([name.ljust(30,' '),
-                       "{:.4f}".format(lon).ljust(20,' '),
-                       "{:.4f}".format(lat).ljust(20,' ')]).T.to_string(
-                           index=False,header=False)
-    print('         Making forecast for: '+text)
     logo=plt.imread('static/Logo_Ceaza_color.png')
-    if checkcreated_data('tmp/'+name.replace("_","")+'_FORECAST_CURRENT.csv'):
+    if os.path.isfile('tmp/'+name.replace("_","")+'_FORECAST_CURRENT.csv'):
         data = pd.read_csv('tmp/'+name.replace("_","")+'_FORECAST_CURRENT.csv',
                            index_col=0)
         data.index = pd.to_datetime(data.index)  
@@ -154,5 +150,6 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
 if __name__=='__main__':
     # name,lon,lat,outdir = 'blabla',-72,-33,'plots/PRONOSTICO_SITIOS/'
     name,lon,lat,outdir = sys.argv[1],float(sys.argv[2]),float(sys.argv[3]),sys.argv[4]
+    print('Making forecast for: '+name)
     local_forecast(FORECAST_DATE,name,lon,lat,outdir)
     sys.exit()

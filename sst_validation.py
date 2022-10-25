@@ -25,7 +25,6 @@ from numerics import regrid, compute_metrics, fill_borders, bias_correct_SST
 from graphical import make_maps
 from params import *
 
-print('Starting SST validation...')
 
 # ------------------------- Script specific functions ------------------------ #
 def load_data(times, bbox=[-73,-70.67,-33,-27]):

@@ -1,3 +1,6 @@
+# !/usr/bin/env/python3
+
+
 '''
  # @ Author: lucas
  # @ Create Time: 2022-08-01 16:09:28
@@ -12,7 +15,6 @@
 # ---------------------------------------------------------------------------- #
 import os
 import sys
-import time
 import locale
 import warnings
 import datetime
@@ -29,8 +31,10 @@ from local_forecast import local_forecast
 from sst_validation import sst_validation
 from wind_validation import wind_validation
 from post_request import transfer_personalweb, transfer_ceazamar
+from check_forecast_status import check_forecastfiles, check_regionalforecast
+from check_forecast_status import checkcreated_data, check_localforecast
 
-from load import checkcreated_data
+
 from params import *
 
 # ---------------------------------------------------------------------------- #
@@ -53,6 +57,8 @@ post_webserver = True
 if post_webserver:
     post_ceazamar    = True
     post_personalweb = True
+check_todayforecast  = True
+
 
 
 os.chdir(EXECUTION_DIRECTORY)
@@ -68,7 +74,6 @@ def now(fmt='%F  %H:%M:%S'):
     return datetime.datetime.now().strftime(fmt)
 
 # ---------------------------------------------------------------------------- #
-
 if __name__=='__main__':
     start = datetime.datetime.now()
     if forecast:
@@ -113,23 +118,28 @@ if __name__=='__main__':
             locations=pd.read_csv('data/COASTAL_POINTS.csv', index_col=0)
             # locations = locations.iloc[:10,:]
             
-            print('\nExporting local forecast data...')
+            print('\nPicking time series forecast as a table for each location...')
             create_localforecast(FORECAST_DATE, locations=locations, n_jobs=N_JOBS)
-            print('Plotting...')
             outdir = []
-            for p in locations.CEAZAMAR:
+            print('Making forecast plots ("oceangrams")...')
+            for p,name,lat,lon in zip(locations.CEAZAMAR, locations.index,
+                                      locations.lon, locations.lat):
+                text=pd.DataFrame([name.ljust(30,' '),
+                    "{:.4f}".format(lon).ljust(20,' '),
+                    "{:.4f}".format(lat).ljust(20,' ')]).T.to_string(
+                        index=False,header=False)
+                print('Making forecast for: '+text)
                 if p:
                     outdir.append('plots/FORECAST_SITES/CEAZAMAR/')
                 else:
                     outdir.append('plots/FORECAST_SITES/')
-            
             Pool(processes=N_JOBS).starmap(local_forecast,
                                            zip(repeat(FORECAST_DATE, len(locations)),
                                                locations.index,
                                                locations.lon,
                                                locations.lat,
                                                outdir))
-            time.sleep(len(locations)//2)
+            # time.sleep(len(locations)*2)
             print('\n')
             print('Done')
             space(char='-')
@@ -169,15 +179,48 @@ if __name__=='__main__':
         print('Execution directory: '+os.getcwd())
         space()
         if post_ceazamar:
-            print('Sending forecast data to CEAZAMAR web server...')
+            print('\nSending forecast data to CEAZAMAR web server...')
             transfer_ceazamar()
-            print('Done')
+            print('Done\n')
         if post_personalweb:
             print('Sending forecast to personal web server...')
             transfer_personalweb()
-            print('Done')
+            print('Done\n')
+    if check_todayforecast:
+        space()
+        print('LAUNCHING FORECAST STATUS VALIDATION SCRIPT')
+        print('Date: '+now())
+        print('Execution directory: '+os.getcwd())
+        space()
+        print('CHECKING FORECAST FILES...')
+        cond1 = check_forecastfiles()
+        print('\n')
+        print('CHECKING REGIONAL FORECAST FIGURES...')
+        cond2 = check_regionalforecast()
+        print('\n')
+        print('CHECKING LOCAL FORECAST FILES...')
+        cond3 = check_localforecast()
+        print("\n")
+        if cond1:
+            print('FORECAST FILES: OK')
+        else:
+            print('FORECAST FILES: ERROR')
+        if cond2:
+            print('REGIONAL FORECAST: OK')
+        else:
+            print('REGIONAL FORECAST: ERROR')
+        if cond3:
+            print('LOCAL FORECAST: OK')
+        else:
+            print('LOCAL FORECAST: ERROR')
+        status = all([cond1,cond2,cond3])
+        if status:
+            print('GLOBAL STATUS: OK')
+        else:
+            print('GLOBAL STATUS: ERROR')
     space()
     end = datetime.datetime.now()
     print("LISTO !!!")
     print('Execution time: '+str((end-start)))
+    print('End time: '+end.strftime('%Y-%m-%d %H:%M:%S'))
     sys.exit()
