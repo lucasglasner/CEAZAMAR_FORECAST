@@ -78,7 +78,7 @@ def sst_forecast(idate,fix_bias=False):
     print('Plotting...')
     plt.rc('font',size=12)
     # ------------------------------------ SST ----------------------------------- #
-    vmin,vmax = SST.min().round(1),SST.max().round(1)
+    vmin,vmax = SST.min()-SST.min()%0.5,SST.max()-SST.max()%0.5
     fig,ax,cax,cbar = make_forecast_plot(var=SST,
                                         cmap=cmocean.cm.thermal,
                                         cbar_label='Temperatura superficial\n'+

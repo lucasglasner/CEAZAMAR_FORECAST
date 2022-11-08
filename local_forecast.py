@@ -102,11 +102,12 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                         'fontsize':14
                         },
                         colors=False,grid=grid, ax=ax)
-
-    plot_row_textcolor({'data':data['thetao_synoptic_anomaly'],
+    sst_daily = data['thetao'].resample('d').mean().reindex(data.index).interpolate()
+    plot_row_textcolor({'data':sst_daily,
                         'row':8,
                         'color_kwargs':{'cmap':'RdBu_r',
-                                        'norm':mcolors.TwoSlopeNorm(0,-2,4.25)}
+                                        'norm':mcolors.Normalize(sst_daily.min()*0.925,
+                                                                 sst_daily.max()*1.075)}
                         },
                        text=False,grid=grid,ax=ax)
     plot_row_textcolor({'data':data['thetao'],

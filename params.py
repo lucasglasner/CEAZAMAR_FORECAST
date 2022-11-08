@@ -21,7 +21,7 @@ import datetime
 FORECAST_DATE        = datetime.datetime.now().strftime('%F')
 EXECUTION_DIRECTORY  = '/home/lucas/CEAZAMAR_FORECAST'
 NDAYS_REGIONAL = 10
-NHOURS_LOCAL   = 24*8
+NHOURS_LOCAL   = 24*9
 N_JOBS = 10
 
 #LEADTIME MAPS GENERAL CONFIGURATION
