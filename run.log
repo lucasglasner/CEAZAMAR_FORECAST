@@ -1,0 +1,139 @@
+ERROR 1: PROJ: proj_create_from_database: Open of /home/lucas/miniconda3/envs/forecast/share/proj failed
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+LAUNCHING CEAZAMAR REGIONAL AND LOCAL FORECAST VISUALIZATION SYSTEM
+Date: 2022-12-09  16:00:03
+Execution directory: /home/lucas/CEAZAMAR_FORECAST
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+LAUNCHING REGIONAL SST FORECAST: 2022-12-09  16:00:03
+Loading SST forecast data...
+          Forecast data: data/FORECAST/MERCATOR/PHYSICS/2022-12-09.nc
+Loading SST hindcast data...
+          Hindcast data: data/FORECAST/MERCATOR/PHYSICS/HINDCAST/
+Computing SST synoptic anomalies...
+Plotting...
+Done
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+LAUNCHING REGIONAL WAVE FORECAST: 2022-12-09  16:00:19
+Loading wave forecast data...
+          Forecast data: data/FORECAST/MERCATOR/WAVES/2022-12-09.nc
+Plotting...
+Done
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+LAUNCHING REGIONAL WIND FORECAST: 2022-12-09  16:00:24
+Loading wind forecast data...
+          Forecast data: data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-12-07.nc
+Plotting...
+Done
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+LAUNCHING REGIONAL SURFACE CURRENTS FORECAST: 2022-12-09  16:00:43
+Loading currents and SSH forecast data...
+          Forecast data: data/FORECAST/MERCATOR/PHYSICS/2022-12-09.nc
+Plotting...
+Done
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+LAUNCHING COASTAL ZONES FORECAST: 2022-12-09  16:01:26
+
+Picking time series forecast as a table for each location...
+Saving data...
+Done
+
+Making forecast plots ("oceangrams")...
+Making forecast for: TOTORALILLO_SUR                -32.0256             -71.5134            
+Making forecast for: APOLILLADO                     -29.1810             -71.4917            
+Making forecast for: CHIGUALOCO                     -31.7534             -71.5180            
+Making forecast for: COQUIMBO                       -29.9557             -71.3350            
+Making forecast for: GUANAQUEROS                    -30.1944             -71.4311            
+Making forecast for: GUAYACAN                       -29.9674             -71.3506            
+Making forecast for: HORNOS                         -29.6226             -71.2887            
+Making forecast for: LA_CEBADA                      -31.0167             -71.6505            
+Making forecast for: CHUNGUNGO                      -29.4508             -71.3093            
+Making forecast for: PUNTA_DE_CHOROS_SAN_AGUSTIN    -29.2465             -71.4684            
+Making forecast for: MAITENCILLO                    -31.2638             -71.6319            
+Making forecast for: PICHIDANGUI                    -32.1361             -71.5296            
+Making forecast for: HUENTELAUQUEN                  -31.6473             -71.5576            
+Making forecast for: LAS_CONCHAS_LOS_VILOS          -31.9124             -71.5179            
+Making forecast for: PUERTO_ALDEA                   -30.2922             -71.6088            
+Making forecast for: CASCABELES                     -31.9790             -71.4995            
+Making forecast for: LIMARI                         -30.7352             -71.7002            
+Making forecast for: PUERTO_MANSO                   -31.5114             -71.5698            
+Making forecast for: PUERTO_OSCURO                  -31.4234             -71.5932            
+Making forecast for: TALQUILLA                      -30.8780             -71.6815            
+Making forecast for: TOTORALILLO_CENTRO             -30.0733             -71.3774            
+Making forecast for: SAN_PEDRO_LOS_VILOS            -31.9091             -71.5094            
+Making forecast for: TALCARUCA                      -30.4761             -71.6967            
+Making forecast for: SIERRA                         -31.1459             -71.6627            
+Making forecast for: TONGOY                         -30.2558             -71.4999            
+Making forecast for: TOTORALILLO_NORTE              -29.4922             -71.3273            
+Making forecast for: TALCA                          -30.9288             -71.6747            
+Making forecast for: PUNTA_CHOROS_LOS_CORRALES      -29.2504             -71.4627            
+Making forecast for: LOS_CHOROS                     -29.3100             -71.3585            
+Making forecast for: SAN_PEDRO_LA_SERENA            -29.8805             -71.2738            
+Making forecast for: PEÑUELAS                       -29.9528             -71.3009            
+Making forecast for: PLAYA_CHICA_LA_HERRADURA       -29.9842             -71.3635            
+Making forecast for: EL_TOTORAL                     -30.3672             -71.6705            
+Making forecast for: ISLA_CHAÑARAL_DE_ACEITUNO      -29.0340             -71.5782            
+Making forecast for: SITIO_COSMOS                   -30.4010             -71.8160            
+Making forecast for: CASA_MAITENCILLO               -32.6500             -71.4509            
+ls: no se puede acceder a 'data/ASCAT/2022120800*': No existe el archivo o el directorio
+ls: no se puede acceder a 'data/ASCAT/2022112200*': No existe el archivo o el directorio
+ls: no se puede acceder a 'data/ASCAT/2022112100*': No existe el archivo o el directorio
+
+
+Done
+------------------------------------------------------------------------------------------------------------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+LAUNCHING FORECAST DATA VALIDATION AND BIAS COMPUTING.
+Date: 2022-12-09  16:02:40
+Execution directory: /home/lucas/CEAZAMAR_FORECAST
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+STARTING VALIDATION OF THE LAST 30 DAYS OF WIND: 2022-12-09  16:02:40
+Cargando data...
+         File "" doesnt exist or is corrupted.
+         File "data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-12-08.nc" doesnt exist or is corrupted.
+         File "data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-12-06.nc" doesnt exist or is corrupted.
+         File "data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-11-24.nc" doesnt exist or is corrupted.
+         File "" doesnt exist or is corrupted.
+         File "" doesnt exist or is corrupted.
+         File "data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-11-21.nc" doesnt exist or is corrupted.
+         File "data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-11-20.nc" doesnt exist or is corrupted.
+         File "data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-11-19.nc" doesnt exist or is corrupted.
+         File "data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-11-14.nc" doesnt exist or is corrupted.
+         File "data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-11-09.nc" doesnt exist or is corrupted.
+Regrillando...
+Calculando metricas de validacion...
+Creando graficas...
+Fin
+
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+STARTING VALIDATION OF THE LAST 30 DAYS OF SST: 2022-12-09  16:02:53
+Traceback (most recent call last):
+  File "/home/lucas/CEAZAMAR_FORECAST/run.py", line 165, in <module>
+    sst_validation(N=N, bias_fix=False)
+  File "/home/lucas/CEAZAMAR_FORECAST/sst_validation.py", line 118, in sst_validation
+    time = target_date("data/FORECAST/SST/DATAD/*.nc","data/OSTIA/*.nc")
+  File "/home/lucas/CEAZAMAR_FORECAST/load.py", line 32, in target_date
+    last_forecast = max(list(map(os.path.getctime,last_forecast)))
+ValueError: max() arg is an empty sequence
