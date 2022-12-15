@@ -41,7 +41,7 @@ from params import *
 #                               GLOBAL VARIABLES                               #
 # ---------------------------------------------------------------------------- #
 
-validation = True
+validation = False
 if validation:
     make_wind_validation = True
     make_wave_validation = False
@@ -52,7 +52,7 @@ if forecast:
     make_wave_forecast     = True
     make_currents_forecast = True
     make_wind_forecast     = True
-    make_local_forecast    = True
+    make_local_forecast    = False
 post_webserver = True
 if post_webserver:
     post_ceazamar    = True

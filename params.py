@@ -35,6 +35,7 @@ MAPS_FIGSIZE = (14,8)
 
 MAPS_LOCS    = {'Los Vilos':(-31.904,-71.499),
                 'Huentelauquen':(-31.621,-71.568),
+                'Talcaruca':(-30.476,-71.697),
                 'Tongoy':(-30.255,-71.486),
                 'La Serena':(-29.878,-71.286),
                 'Chañaral de\nAceituno':(-29.064,-71.514)}

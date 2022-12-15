@@ -196,7 +196,7 @@ def make_maps(shape,figsize,
         ax.scatter(loclons,loclats, color='gold', edgecolor='k',
                     zorder=3,s=20)
         for i, txt in enumerate(locnames):
-            ax.annotate(txt, (loclons[i]+0.05,loclats[i]+0.05),
+            ax.annotate(txt, (loclons[i]+0.075,loclats[i]-0.05),
                         fontsize=9,
                         zorder=3)
         #Create colorbar(s) axis
