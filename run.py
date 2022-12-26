@@ -22,15 +22,22 @@ import pandas as pd
 from itertools import repeat
 from multiprocessing import Pool
 
+from sst_diagnostics import sst_diagnostics
+from wave_diagnostics import wave_diagnostics
+from wind_diagnostics import wind_diagnostics
+
 from sst_forecast import sst_forecast
 from wave_forecast import wave_forecast
 from wind_forecast import wind_forecast
 from currents_forecast import currents_forecast
 from create_localforecast import create_localforecast
 from local_forecast import local_forecast
+
 from sst_validation import sst_validation
 from wind_validation import wind_validation
+
 from post_request import transfer_personalweb, transfer_ceazamar
+
 from check_forecast_status import check_forecastfiles, check_regionalforecast
 from check_forecast_status import checkcreated_data, check_localforecast
 
@@ -40,8 +47,12 @@ from params import *
 # ---------------------------------------------------------------------------- #
 #                               GLOBAL VARIABLES                               #
 # ---------------------------------------------------------------------------- #
-
-validation = False
+diagnostics=True
+if diagnostics:
+    make_wind_diagnostics = True
+    make_wave_diagnostics = True
+    make_sst_diagnostics  = True
+validation = True
 if validation:
     make_wind_validation = True
     make_wave_validation = False
@@ -52,7 +63,7 @@ if forecast:
     make_wave_forecast     = True
     make_currents_forecast = True
     make_wind_forecast     = True
-    make_local_forecast    = False
+    make_local_forecast    = True
 post_webserver = True
 if post_webserver:
     post_ceazamar    = True
@@ -87,63 +98,114 @@ if __name__=='__main__':
             #regional sst forecast
             print('\n')
             print('LAUNCHING REGIONAL SST FORECAST: '+now())
-            sst_forecast(FORECAST_DATE, fix_bias=False)
+            try:
+                sst_forecast(FORECAST_DATE, fix_bias=False)
+            except Exception as e:
+                print(e)
             print('\n')
             space(char='-')
         if make_wave_forecast:
             #regional waves forecast
             print('\n')
             print('LAUNCHING REGIONAL WAVE FORECAST: '+now())
-            wave_forecast(FORECAST_DATE)
+            try:
+                wave_forecast(FORECAST_DATE)
+            except Exception as e:
+                print(e)
             print('\n')
             space(char='-')
         if make_wind_forecast:
             #regional wind forecast
             print('\n')
             print('LAUNCHING REGIONAL WIND FORECAST: '+now())
-            wind_forecast(FORECAST_DATE)
+            try:
+                wind_forecast(FORECAST_DATE)
+            except Exception as e:
+                print(e)
             print('\n')
             space(char='-')
         if make_currents_forecast:
             #regional currents forecast
             print('\n')
             print('LAUNCHING REGIONAL SURFACE CURRENTS FORECAST: '+now())
-            currents_forecast(FORECAST_DATE)
+            try:
+                currents_forecast(FORECAST_DATE)
+            except Exception as e:
+                print(e)
             print('\n')
             space(char='-')
         if make_local_forecast:
             #local point forecast
             print('\n')
             print('LAUNCHING COASTAL ZONES FORECAST: '+now())
-            locations=pd.read_csv('data/COASTAL_POINTS.csv', index_col=0)
-            # locations = locations.iloc[:10,:]
-            
-            print('\nPicking time series forecast as a table for each location...')
-            create_localforecast(FORECAST_DATE, locations=locations, n_jobs=N_JOBS)
-            outdir = []
-            print('Making forecast plots ("oceangrams")...')
-            for p,name,lat,lon in zip(locations.CEAZAMAR, locations.index,
-                                      locations.lon, locations.lat):
-                text=pd.DataFrame([name.ljust(30,' '),
-                    "{:.4f}".format(lon).ljust(20,' '),
-                    "{:.4f}".format(lat).ljust(20,' ')]).T.to_string(
-                        index=False,header=False)
-                print('Making forecast for: '+text)
-                if p:
-                    outdir.append('plots/FORECAST_SITES/CEAZAMAR/')
-                else:
-                    outdir.append('plots/FORECAST_SITES/')
-            Pool(processes=N_JOBS).starmap(local_forecast,
-                                           zip(repeat(FORECAST_DATE, len(locations)),
-                                               locations.index,
-                                               locations.lon,
-                                               locations.lat,
-                                               outdir))
+            try:
+                locations=pd.read_csv('data/COASTAL_POINTS.csv', index_col=0)
+                # locations = locations.iloc[:10,:]
+                
+                print('\nPicking time series forecast as a table for each location...')
+                create_localforecast(FORECAST_DATE, locations=locations, n_jobs=N_JOBS)
+                outdir = []
+                print('Making forecast plots ("oceangrams")...')
+                for p,name,lat,lon in zip(locations.CEAZAMAR, locations.index,
+                                        locations.lon, locations.lat):
+                    text=pd.DataFrame([name.ljust(30,' '),
+                        "{:.4f}".format(lon).ljust(20,' '),
+                        "{:.4f}".format(lat).ljust(20,' ')]).T.to_string(
+                            index=False,header=False)
+                    print('Making forecast for: '+text)
+                    if p:
+                        outdir.append('plots/FORECAST_SITES/CEAZAMAR/')
+                    else:
+                        outdir.append('plots/FORECAST_SITES/')
+                Pool(processes=N_JOBS).starmap(local_forecast,
+                                            zip(repeat(FORECAST_DATE, len(locations)),
+                                                locations.index,
+                                                locations.lon,
+                                                locations.lat,
+                                                outdir))
+            except Exception as e:
+                print(e)
             # time.sleep(len(locations)*2)
             print('\n')
             print('Done')
             space(char='-')
             
+    if diagnostics:
+        #start
+        space()
+        print('LAUNCHING CEAZAMAR REGIONAL DIAGNOSTICS')
+        print('Date: '+now())
+        print('Execution directory: '+os.getcwd())
+        space()
+        if make_sst_diagnostics:
+            print('\n')
+            print('STARTING TSM DIAGNOSTICS FOR YESTERDAY: '+now())
+            try:
+                sst_diagnostics((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=1)).strftime('%F'))
+            except Exception as e:
+                print(e)
+            print('\n')
+            space(char='-')
+        if make_wind_diagnostics:
+            print('\n')
+            print('STARTING WIND DIAGNOSTICS FOR THE DAY AFTER YESTERDAY: '+now())
+            try:
+                wind_diagnostics((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=2)).strftime('%F'))
+            except Exception as e:
+                print(e)
+            print('\n')
+            space(char='-')
+        if make_wave_diagnostics:
+            print('\n')
+            print('STARTING WAVE DIAGNOSTICS FOR YESTERDAY: '+now())
+            try:
+                wave_diagnostics((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=1)).strftime('%F'))
+            except Exception as e:
+                print(e)
+            print('\n')
+            space(char='-')
+            
+        
     if validation:
         #start
         space()
@@ -155,14 +217,20 @@ if __name__=='__main__':
             #compute regional wind bias for last N days
             print('\n')
             print('STARTING VALIDATION OF THE LAST '+str(N)+' DAYS OF WIND: '+now())
-            wind_validation(N=N)
+            try:
+                wind_validation(N=N)
+            except Exception as e:
+                print(e)
             print('\n')
             space(char='-')
         if make_sst_validation:
             #compute regional sst bias for last N days
             print('\n')
             print('STARTING VALIDATION OF THE LAST '+str(N)+' DAYS OF SST: '+now())
-            sst_validation(N=N, bias_fix=False)
+            try:
+                sst_validation(N=N, bias_fix=False)
+            except Exception as e:
+                print(e)
             print('\n')
             space(char='-')
         if make_wave_validation:
@@ -180,11 +248,17 @@ if __name__=='__main__':
         space()
         if post_ceazamar:
             print('\nSending forecast data to CEAZAMAR web server...')
-            transfer_ceazamar()
+            try:
+                transfer_ceazamar()
+            except Exception as e:
+                print(e)
             print('Done\n')
         if post_personalweb:
             print('Sending forecast to personal web server...')
-            transfer_personalweb()
+            try:
+                transfer_personalweb()
+            except Exception as e:
+                print(e)
             print('Done\n')
     if check_todayforecast:
         space()

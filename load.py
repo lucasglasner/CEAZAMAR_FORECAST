@@ -14,6 +14,7 @@ import os
 import datetime
 from glob import iglob,glob
 import xarray as xr
+import numpy as np
 import pandas as pd
 
 from params import *
@@ -245,3 +246,68 @@ def load_forecast_ini(path, which):
     else:
         raise ValueError('Which parameter must indicate only some\
             of these ["ocean","wave", "atm"]')
+
+
+def load_altimeters(idate, centerhour=datetime.datetime.now(), hwidth=4):
+    centerhour = datetime.datetime.now()
+    print('Loading altimeter data...')
+    pddate           = pd.to_datetime(idate)
+    altimeters_paths = sorted(glob(wave_altimeter_dir+'/*'))
+    altimeters_data  = []
+    names            = []
+    for a in altimeters_paths:
+        try:
+            p = a+'/'+str(pddate.year)+'/'+ str(pddate.month)+'/*'+idate.replace("-","")+'*'
+            data = xr.open_mfdataset(p).load().to_dataframe()
+            data['longitude'] = (data['longitude']+180)%360-180
+            times = slice(pddate-pd.Timedelta(hours=hwidth)+pd.Timedelta(hours=centerhour.hour),
+                          pddate+pd.Timedelta(hours=hwidth)+pd.Timedelta(hours=centerhour.hour))
+            data = data.loc[times]
+            # data = data.loc[idate]
+            altimeters_data.append(data)
+            print('          '+a.split("/")[-1],': Done')
+            if 'cmems' in a.split("/")[-1]:
+                n = 's6a-'+a.split("/")[-1].split("-")[-1]
+                if 'PREV' in n:
+                    n = 's6a-2'
+                else:
+                    n = 's6a-1'
+                names.append(n)
+            else:
+                names.append(a.split("/")[-1].split("-")[-1])
+            del data
+        except Exception as e:
+            print('          '+a.split("/")[-1],':', e)
+
+    altimeters_data = pd.concat(altimeters_data, keys=names)
+    altimeters_data = altimeters_data[['latitude','longitude','VAVH','WIND_SPEED']]
+    altimeters_data.columns = ['lat','lon',waveheight_name, windspeed_name]
+    return altimeters_data.drop_duplicates()
+        
+def load_ascat(idate):
+    p = pd.to_datetime(idate)
+    ascat_path = os.popen('ls data/ASCAT/'+p.strftime('%Y%m%d')+'00*').read()
+    ascat_path = ascat_path.replace("\n","")
+    print(ascat_path)
+
+    data = xr.open_dataset(ascat_path, engine='netcdf4').squeeze()
+    data = data.rename({'longitude':'lon',
+                        'latitude':'lat'})
+    data = data.sortby('lat').sortby('lon')
+    data = data.sel(lat=slice(diagnostics_mapsextent[2]-1,diagnostics_mapsextent[3]+1),
+                    lon=slice(diagnostics_mapsextent[0]-1,diagnostics_mapsextent[1]+1))
+    data = data[['eastward_wind','northward_wind']]
+    data = data.rename({'eastward_wind':'U10','northward_wind':'V10'})
+    data['WS'] = np.hypot(data['U10'],data['V10'])
+    return data
+
+def load_ostia(idate):
+    p = pd.to_datetime(idate)
+    ostia_path = 'data/OSTIA/'+p.strftime('%Y%m%d')+\
+        '-UKMO-L4HRfnd-GLOB-v01-fv02-OSTIA.nc'
+
+    data = xr.open_dataset(ostia_path).analysed_sst-273.15
+    data = data.resample({'time':'d'}).mean().squeeze()
+    data = data.sel(lat=slice(diagnostics_mapsextent[2]-1,diagnostics_mapsextent[3]+1),
+                lon=slice(diagnostics_mapsextent[0]-1,diagnostics_mapsextent[1]+1))
+    return data

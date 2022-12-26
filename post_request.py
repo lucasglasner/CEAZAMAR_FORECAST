@@ -35,7 +35,7 @@ def transfer_personalweb():
     paths = paths + glob(localforecastdir+'CEAZAMAR/*FORECAST*.png')
     for p in paths:
         postserver(p)
-    for p in glob(regionalforecastdir+'*FORECAST*.png'):
+    for p in glob(regionalforecastdir+'*.png'):
         postserver(p)
     return
 

@@ -197,7 +197,7 @@ def make_maps(shape,figsize,
                     zorder=3,s=20)
         for i, txt in enumerate(locnames):
             ax.annotate(txt, (loclons[i]+0.075,loclats[i]-0.05),
-                        fontsize=9,
+                        fontsize=8,
                         zorder=3)
         #Create colorbar(s) axis
         if colorbar == 'one':
@@ -249,10 +249,10 @@ def make_maps(shape,figsize,
             ax[-1,j].set_xticklabels(list(map(lambda x: str(-x)+'$\degree W$',xticks)))
     return fig,ax,cax
 
-def make_forecast_plot(var, cmap, cbar_label, vmin,
-                       vmax, level_step=0.25,fill=True,
+def make_forecast_plot(var, cmap, cbar_label, vmin, vmax, figsize=MAPS_FIGSIZE,
+                       level_step=0.25,fill=True,
                        **kwargs):
-    fig,ax,cax = make_maps((2,5),figsize=(14,8),
+    fig,ax,cax = make_maps((2,5),figsize=figsize,
                         **kwargs)
     if fill:
         var = fill_borders(var)

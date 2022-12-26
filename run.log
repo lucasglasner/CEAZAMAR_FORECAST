@@ -1,14 +1,14 @@
 ERROR 1: PROJ: proj_create_from_database: Open of /home/lucas/miniconda3/envs/forecast/share/proj failed
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 LAUNCHING CEAZAMAR REGIONAL AND LOCAL FORECAST VISUALIZATION SYSTEM
-Date: 2022-12-15  08:30:04
+Date: 2022-12-26  14:00:03
 Execution directory: /home/lucas/CEAZAMAR_FORECAST
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-LAUNCHING REGIONAL SST FORECAST: 2022-12-15  08:30:04
+LAUNCHING REGIONAL SST FORECAST: 2022-12-26  14:00:03
 Loading SST forecast data...
-          Forecast data: data/FORECAST/MERCATOR/PHYSICS/2022-12-15.nc
+          Forecast data: data/FORECAST/MERCATOR/PHYSICS/2022-12-26.nc
 Loading SST hindcast data...
           Hindcast data: data/FORECAST/MERCATOR/PHYSICS/HINDCAST/
 Computing SST synoptic anomalies...
@@ -19,9 +19,9 @@ Done
 ------------------------------------------------------------------------------------------------------------------------
 
 
-LAUNCHING REGIONAL WAVE FORECAST: 2022-12-15  08:30:19
+LAUNCHING REGIONAL WAVE FORECAST: 2022-12-26  14:00:23
 Loading wave forecast data...
-          Forecast data: data/FORECAST/MERCATOR/WAVES/2022-12-15.nc
+          Forecast data: data/FORECAST/MERCATOR/WAVES/2022-12-26.nc
 Plotting...
 Done
 
@@ -29,9 +29,9 @@ Done
 ------------------------------------------------------------------------------------------------------------------------
 
 
-LAUNCHING REGIONAL WIND FORECAST: 2022-12-15  08:30:24
+LAUNCHING REGIONAL WIND FORECAST: 2022-12-26  14:00:28
 Loading wind forecast data...
-          Forecast data: data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-12-14.nc
+          Forecast data: data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-12-25.nc
 Plotting...
 Done
 
@@ -39,9 +39,9 @@ Done
 ------------------------------------------------------------------------------------------------------------------------
 
 
-LAUNCHING REGIONAL SURFACE CURRENTS FORECAST: 2022-12-15  08:30:42
+LAUNCHING REGIONAL SURFACE CURRENTS FORECAST: 2022-12-26  14:00:47
 Loading currents and SSH forecast data...
-          Forecast data: data/FORECAST/MERCATOR/PHYSICS/2022-12-15.nc
+          Forecast data: data/FORECAST/MERCATOR/PHYSICS/2022-12-26.nc
 Plotting...
 Done
 
@@ -49,7 +49,7 @@ Done
 ------------------------------------------------------------------------------------------------------------------------
 
 
-LAUNCHING COASTAL ZONES FORECAST: 2022-12-15  08:31:25
+LAUNCHING COASTAL ZONES FORECAST: 2022-12-26  14:01:30
 
 Picking time series forecast as a table for each location...
 Saving data...
@@ -92,33 +92,26 @@ Making forecast for: EL_TOTORAL                     -30.3672             -71.670
 Making forecast for: ISLA_CHAÑARAL_DE_ACEITUNO      -29.0340             -71.5782            
 Making forecast for: SITIO_COSMOS                   -30.4010             -71.8160            
 Making forecast for: CASA_MAITENCILLO               -32.6500             -71.4509            
-ls: no se puede acceder a 'data/ASCAT/2022121400*': No existe el archivo o el directorio
-ls: no se puede acceder a 'data/ASCAT/2022121300*': No existe el archivo o el directorio
-ls: no se puede acceder a 'data/ASCAT/2022112200*': No existe el archivo o el directorio
-ls: no se puede acceder a 'data/ASCAT/2022112100*': No existe el archivo o el directorio
+Making forecast for: PUNTA_LENGUA_DE_VACA           -30.2550             -71.6550            
+ls: no se puede acceder a 'data/ASCAT/2022122500*': No existe el archivo o el directorio
+ls: no se puede acceder a 'data/ASCAT/2022122400*': No existe el archivo o el directorio
 
 
 Done
 ------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 LAUNCHING FORECAST DATA VALIDATION AND BIAS COMPUTING.
-Date: 2022-12-15  08:32:41
+Date: 2022-12-26  14:02:40
 Execution directory: /home/lucas/CEAZAMAR_FORECAST
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-STARTING VALIDATION OF THE LAST 30 DAYS OF WIND: 2022-12-15  08:32:41
+STARTING VALIDATION OF THE LAST 30 DAYS OF WIND: 2022-12-26  14:02:40
 Cargando data...
          File "" doesnt exist or is corrupted.
          File "" doesnt exist or is corrupted.
          File "data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-12-08.nc" doesnt exist or is corrupted.
          File "data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-12-06.nc" doesnt exist or is corrupted.
-         File "data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-11-24.nc" doesnt exist or is corrupted.
-         File "" doesnt exist or is corrupted.
-         File "" doesnt exist or is corrupted.
-         File "data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-11-21.nc" doesnt exist or is corrupted.
-         File "data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-11-20.nc" doesnt exist or is corrupted.
-         File "data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-11-19.nc" doesnt exist or is corrupted.
 Regrillando...
 Calculando metricas de validacion...
 Creando graficas...
@@ -128,7 +121,7 @@ Fin
 ------------------------------------------------------------------------------------------------------------------------
 
 
-STARTING VALIDATION OF THE LAST 30 DAYS OF SST: 2022-12-15  08:32:48
+STARTING VALIDATION OF THE LAST 30 DAYS OF SST: 2022-12-26  14:02:49
 Loading data...
 Regriding...
 Computing validation metrics...
@@ -139,7 +132,7 @@ Done
 ------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 LAUNCHING POST REQUEST AND DATA TRANSFER TO WEB SERVERS.
-Date: 2022-12-15  08:32:54
+Date: 2022-12-26  14:03:01
 Execution directory: /home/lucas/CEAZAMAR_FORECAST
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -147,6 +140,7 @@ Sending forecast data to CEAZAMAR web server...
 Done
 
 Sending forecast to personal web server...
+/home/lucas/CEAZAMAR_FORECAST/plots/FORECAST_SITES/PUNTALENGUADEVACA_FORECAST_CURRENT.png
 /home/lucas/CEAZAMAR_FORECAST/plots/FORECAST_SITES/CASAMAITENCILLO_FORECAST_CURRENT.png
 /home/lucas/CEAZAMAR_FORECAST/plots/FORECAST_SITES/SITIOCOSMOS_FORECAST_CURRENT.png
 /home/lucas/CEAZAMAR_FORECAST/plots/FORECAST_SITES/CEAZAMAR/PICHIDANGUI_FORECAST_CURRENT.png
@@ -174,6 +168,7 @@ Sending forecast to personal web server...
 /home/lucas/CEAZAMAR_FORECAST/plots/FORECAST_SITES/CEAZAMAR/COQUIMBO_FORECAST_CURRENT.png
 /home/lucas/CEAZAMAR_FORECAST/plots/FORECAST_SITES/CEAZAMAR/PUERTOMANSO_FORECAST_CURRENT.png
 /home/lucas/CEAZAMAR_FORECAST/plots/FORECAST_SITES/CEAZAMAR/CASCABELES_FORECAST_CURRENT.png
+/home/lucas/CEAZAMAR_FORECAST/plots/FORECAST_SITES/CEAZAMAR/PUNTALENGUADEVACA_FORECAST_CURRENT.png
 /home/lucas/CEAZAMAR_FORECAST/plots/FORECAST_SITES/CEAZAMAR/MAITENCILLO_FORECAST_CURRENT.png
 /home/lucas/CEAZAMAR_FORECAST/plots/FORECAST_SITES/CEAZAMAR/HUENTELAUQUEN_FORECAST_CURRENT.png
 /home/lucas/CEAZAMAR_FORECAST/plots/FORECAST_SITES/CEAZAMAR/GUAYACAN_FORECAST_CURRENT.png
@@ -194,106 +189,107 @@ Done
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 LAUNCHING FORECAST STATUS VALIDATION SCRIPT
-Date: 2022-12-15  08:34:39
+Date: 2022-12-26  14:04:18
 Execution directory: /home/lucas/CEAZAMAR_FORECAST
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 CHECKING FORECAST FILES...
-2022-12-15 08:34:39 :  Checking OCEAN forecast file...
-                       Path: /home/lucas/CEAZAMAR_FORECAST/data/FORECAST/MERCATOR/PHYSICS/2022-12-15.nc
-                       Creation time: 2022-12-15 01:01:40
-                       Forecast initialization time: 2022-12-15 00UTC
+2022-12-26 14:04:18 :  Checking OCEAN forecast file...
+                       Path: /home/lucas/CEAZAMAR_FORECAST/data/FORECAST/MERCATOR/PHYSICS/2022-12-26.nc
+                       Creation time: 2022-12-26 01:01:21
+                       Forecast initialization time: 2022-12-26 00UTC
                        Forecast status: OK
 
 
-2022-12-15 08:34:39 :  Checking WAVE forecast file...
-                       Path: /home/lucas/CEAZAMAR_FORECAST/data/FORECAST/MERCATOR/WAVES/2022-12-15.nc
-                       Creation time: 2022-12-15 07:30:30
-                       Forecast initialization time: 2022-12-15 00UTC
+2022-12-26 14:04:18 :  Checking WAVE forecast file...
+                       Path: /home/lucas/CEAZAMAR_FORECAST/data/FORECAST/MERCATOR/WAVES/2022-12-26.nc
+                       Creation time: 2022-12-26 07:30:29
+                       Forecast initialization time: 2022-12-26 00UTC
                        Forecast status: OK
 
 
-2022-12-15 08:34:39 :  Checking ATM forecast file...
-                       Path: /home/lucas/CEAZAMAR_FORECAST/data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-12-14.nc
-                       Creation time: 2022-12-15 06:18:30
-                       Forecast initialization time: 2022-12-14 12UTC
+2022-12-26 14:04:18 :  Checking ATM forecast file...
+                       Path: /home/lucas/CEAZAMAR_FORECAST/data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2022-12-25.nc
+                       Creation time: 2022-12-26 04:56:41
+                       Forecast initialization time: 2022-12-25 12UTC
                        Forecast status: OK
 
 
 
 
 CHECKING REGIONAL FORECAST FIGURES...
-2022-12-15 08:34:39 :  Path: plots/SST_FORECASTMAP_CURRENT.png
-                       Creation time: 2022-12-15 08:30:17
+2022-12-26 14:04:18 :  Path: plots/SST_FORECASTMAP_CURRENT.png
+                       Creation time: 2022-12-26 14:00:22
                        Figure status: OK
 
 
-2022-12-15 08:34:39 :  Path: plots/SST_ANOMALY_FORECASTMAP_CURRENT.png
-                       Creation time: 2022-12-15 08:30:18
+2022-12-26 14:04:18 :  Path: plots/SST_ANOMALY_FORECASTMAP_CURRENT.png
+                       Creation time: 2022-12-26 14:00:23
                        Figure status: OK
 
 
-2022-12-15 08:34:39 :  Path: plots/SEALEVEL_ANOMALY_FORECASTMAP_CURRENT.png
-                       Creation time: 2022-12-15 08:30:56
+2022-12-26 14:04:18 :  Path: plots/SEALEVEL_ANOMALY_FORECASTMAP_CURRENT.png
+                       Creation time: 2022-12-26 14:01:02
                        Figure status: OK
 
 
-2022-12-15 08:34:39 :  Path: plots/SURFACECURRENTS_FORECASTMAP_CURRENT.png
-                       Creation time: 2022-12-15 08:31:23
+2022-12-26 14:04:18 :  Path: plots/SURFACECURRENTS_FORECASTMAP_CURRENT.png
+                       Creation time: 2022-12-26 14:01:28
                        Figure status: OK
 
 
-2022-12-15 08:34:39 :  Path: plots/WAVEHEIGHT_FORECASTMAP_CURRENT.png
-                       Creation time: 2022-12-15 08:30:21
+2022-12-26 14:04:18 :  Path: plots/WAVEHEIGHT_FORECASTMAP_CURRENT.png
+                       Creation time: 2022-12-26 14:00:26
                        Figure status: OK
 
 
-2022-12-15 08:34:39 :  Path: plots/PERIOD_FORECASTMAP_CURRENT.png
-                       Creation time: 2022-12-15 08:30:23
+2022-12-26 14:04:18 :  Path: plots/PERIOD_FORECASTMAP_CURRENT.png
+                       Creation time: 2022-12-26 14:00:28
                        Figure status: OK
 
 
-2022-12-15 08:34:39 :  Path: plots/WINDSPEED_FORECASTMAP_CURRENT.png
-                       Creation time: 2022-12-15 08:30:40
+2022-12-26 14:04:18 :  Path: plots/WINDSPEED_FORECASTMAP_CURRENT.png
+                       Creation time: 2022-12-26 14:00:46
                        Figure status: OK
 
 
 
 
 CHECKING LOCAL FORECAST FILES...
-2022-12-15 08:34:39 :  TOTORALILLO_SUR - File and figure status: OK
-2022-12-15 08:34:39 :  APOLILLADO - File and figure status: OK
-2022-12-15 08:34:39 :  CHIGUALOCO - File and figure status: OK
-2022-12-15 08:34:39 :  COQUIMBO - File and figure status: OK
-2022-12-15 08:34:39 :  GUANAQUEROS - File and figure status: OK
-2022-12-15 08:34:39 :  GUAYACAN - File and figure status: OK
-2022-12-15 08:34:39 :  HORNOS - File and figure status: OK
-2022-12-15 08:34:39 :  LA_CEBADA - File and figure status: OK
-2022-12-15 08:34:39 :  CHUNGUNGO - File and figure status: OK
-2022-12-15 08:34:39 :  PUNTA_DE_CHOROS_SAN_AGUSTIN - File and figure status: OK
-2022-12-15 08:34:39 :  MAITENCILLO - File and figure status: OK
-2022-12-15 08:34:39 :  PICHIDANGUI - File and figure status: OK
-2022-12-15 08:34:39 :  HUENTELAUQUEN - File and figure status: OK
-2022-12-15 08:34:39 :  LAS_CONCHAS_LOS_VILOS - File and figure status: OK
-2022-12-15 08:34:39 :  PUERTO_ALDEA - File and figure status: OK
-2022-12-15 08:34:39 :  CASCABELES - File and figure status: OK
-2022-12-15 08:34:39 :  LIMARI - File and figure status: OK
-2022-12-15 08:34:39 :  PUERTO_MANSO - File and figure status: OK
-2022-12-15 08:34:39 :  PUERTO_OSCURO - File and figure status: OK
-2022-12-15 08:34:39 :  TALQUILLA - File and figure status: OK
-2022-12-15 08:34:39 :  TOTORALILLO_CENTRO - File and figure status: OK
-2022-12-15 08:34:39 :  SAN_PEDRO_LOS_VILOS - File and figure status: OK
-2022-12-15 08:34:39 :  TALCARUCA - File and figure status: OK
-2022-12-15 08:34:39 :  SIERRA - File and figure status: OK
-2022-12-15 08:34:39 :  TONGOY - File and figure status: OK
-2022-12-15 08:34:39 :  TOTORALILLO_NORTE - File and figure status: OK
-2022-12-15 08:34:39 :  TALCA - File and figure status: OK
-2022-12-15 08:34:39 :  PUNTA_CHOROS_LOS_CORRALES - File and figure status: OK
-2022-12-15 08:34:39 :  LOS_CHOROS - File and figure status: OK
-2022-12-15 08:34:39 :  SAN_PEDRO_LA_SERENA - File and figure status: OK
-2022-12-15 08:34:39 :  PEÑUELAS - File and figure status: OK
-2022-12-15 08:34:39 :  PLAYA_CHICA_LA_HERRADURA - File and figure status: OK
-2022-12-15 08:34:39 :  EL_TOTORAL - File and figure status: OK
-2022-12-15 08:34:39 :  ISLA_CHAÑARAL_DE_ACEITUNO - File and figure status: OK
+2022-12-26 14:04:19 :  TOTORALILLO_SUR - File and figure status: OK
+2022-12-26 14:04:19 :  APOLILLADO - File and figure status: OK
+2022-12-26 14:04:19 :  CHIGUALOCO - File and figure status: OK
+2022-12-26 14:04:19 :  COQUIMBO - File and figure status: OK
+2022-12-26 14:04:19 :  GUANAQUEROS - File and figure status: OK
+2022-12-26 14:04:19 :  GUAYACAN - File and figure status: OK
+2022-12-26 14:04:19 :  HORNOS - File and figure status: OK
+2022-12-26 14:04:19 :  LA_CEBADA - File and figure status: OK
+2022-12-26 14:04:19 :  CHUNGUNGO - File and figure status: OK
+2022-12-26 14:04:19 :  PUNTA_DE_CHOROS_SAN_AGUSTIN - File and figure status: OK
+2022-12-26 14:04:19 :  MAITENCILLO - File and figure status: OK
+2022-12-26 14:04:19 :  PICHIDANGUI - File and figure status: OK
+2022-12-26 14:04:19 :  HUENTELAUQUEN - File and figure status: OK
+2022-12-26 14:04:19 :  LAS_CONCHAS_LOS_VILOS - File and figure status: OK
+2022-12-26 14:04:19 :  PUERTO_ALDEA - File and figure status: OK
+2022-12-26 14:04:19 :  CASCABELES - File and figure status: OK
+2022-12-26 14:04:19 :  LIMARI - File and figure status: OK
+2022-12-26 14:04:19 :  PUERTO_MANSO - File and figure status: OK
+2022-12-26 14:04:19 :  PUERTO_OSCURO - File and figure status: OK
+2022-12-26 14:04:19 :  TALQUILLA - File and figure status: OK
+2022-12-26 14:04:19 :  TOTORALILLO_CENTRO - File and figure status: OK
+2022-12-26 14:04:19 :  SAN_PEDRO_LOS_VILOS - File and figure status: OK
+2022-12-26 14:04:19 :  TALCARUCA - File and figure status: OK
+2022-12-26 14:04:19 :  SIERRA - File and figure status: OK
+2022-12-26 14:04:19 :  TONGOY - File and figure status: OK
+2022-12-26 14:04:19 :  TOTORALILLO_NORTE - File and figure status: OK
+2022-12-26 14:04:19 :  TALCA - File and figure status: OK
+2022-12-26 14:04:19 :  PUNTA_CHOROS_LOS_CORRALES - File and figure status: OK
+2022-12-26 14:04:19 :  LOS_CHOROS - File and figure status: OK
+2022-12-26 14:04:19 :  SAN_PEDRO_LA_SERENA - File and figure status: OK
+2022-12-26 14:04:19 :  PEÑUELAS - File and figure status: OK
+2022-12-26 14:04:19 :  PLAYA_CHICA_LA_HERRADURA - File and figure status: OK
+2022-12-26 14:04:19 :  EL_TOTORAL - File and figure status: OK
+2022-12-26 14:04:19 :  ISLA_CHAÑARAL_DE_ACEITUNO - File and figure status: OK
+2022-12-26 14:04:19 :  PUNTA_LENGUA_DE_VACA - File and figure status: OK
 
 
 FORECAST FILES: OK
@@ -302,5 +298,5 @@ LOCAL FORECAST: OK
 GLOBAL STATUS: OK
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 LISTO !!!
-Execution time: 0:04:35.778409
-End time: 2022-12-15 08:34:39
+Execution time: 0:04:15.752791
+End time: 2022-12-26 14:04:19

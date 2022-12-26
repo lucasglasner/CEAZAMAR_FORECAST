@@ -66,8 +66,8 @@ def wave_forecast(idate):
     for i,axis in enumerate(ax.ravel()):
         axis.set_title(pd.to_datetime(waves.leadtime[i].values).strftime('%a %d-%b'),
                     loc='left', fontsize=13.5)
-        axis.quiver(waves.lon,waves.lat,u[i].values,v[i].values, scale=8,width=0.01,
-                transform=ccrs.PlateCarree(), regrid_shape=8, alpha=0.7,
+        axis.quiver(waves.lon,waves.lat,u[i].values,v[i].values, scale=12,width=0.0075,
+                transform=ccrs.PlateCarree(), regrid_shape=12, alpha=0.5,
                 zorder=0)
     ax[-1,0].text(0,-0.15,'Inicio pronóstico de olas: '+wave_model_name+' '+init+'\n',
                   fontsize=10, transform=ax[-1,0].transAxes, va='top', ha='left')
@@ -94,8 +94,8 @@ def wave_forecast(idate):
     for i,axis in enumerate(ax.ravel()):
         axis.set_title(pd.to_datetime(waves.leadtime[i].values).strftime('%a %d-%b'),
                     loc='left', fontsize=13.5)
-        axis.quiver(waves.lon,waves.lat,u[i].values,v[i].values, scale=8,width=0.01,
-                transform=ccrs.PlateCarree(), regrid_shape=8, alpha=0.7,
+        axis.quiver(waves.lon,waves.lat,u[i].values,v[i].values, scale=12,width=0.0075,
+                transform=ccrs.PlateCarree(), regrid_shape=12, alpha=0.5,
                 zorder=0)
     ax[-1,0].text(0,-0.15,'Inicio pronóstico de olas: '+wave_model_name+' '+init+'\n',
                   fontsize=10, transform=ax[-1,0].transAxes, va='top', ha='left')

@@ -56,9 +56,9 @@ def currents_forecast(idate):
         cmap=cmocean.cm.balance,
         cbar_label='Anomalía del nivel del mar (cm)',
         vmin=vmin,vmax=vmax,level_step=0.5,
-        xticks=[-73,-71],
+        xticks=[-75,-73,-71],
         yticks=[-34,-33,-32,-31,-30,-29,-28,-27],
-        extent=[-74,-70.5,-34,-27])
+        extent=ocean_mapsextent)
     
     
     cbar.ax.tick_params(labelsize=14)
@@ -85,9 +85,9 @@ def currents_forecast(idate):
         cmap='PuBu',
         cbar_label='Líneas de corriente y velocidad (cm/s)',
         vmin=vmin,vmax=vmax,level_step=0.5,
-        xticks=[-73,-71],
+        xticks=[-75,-73,-71],
         yticks=[-34,-33,-32,-31,-30,-29,-28,-27],
-        extent=[-74,-70.5,-34,-27])
+        extent=ocean_mapsextent)
     
     cbar.ax.tick_params(labelsize=14)
     cbar.ax.set_yticks(np.arange(vmin,vmax+5,5))
