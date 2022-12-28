@@ -43,10 +43,11 @@ def wind_diagnostics(idate):
     winds = load_ascat(idate)
     winds = winds.squeeze()
 
-    # u = -np.cos(winds[winddir_name]*np.pi/180)
-    # v = -np.sin(winds[winddir_name]*np.pi/180)
+    u = winds[uwnd_name]#/winds[windspeed_name]
+    v = winds[vwnd_name]#/winds[windspeed_name]
     
     altimeters_data = load_altimeters(idate, centerhour=12, hwidth=6)[['lat','lon', windspeed_name]]
+
     # ---------------------------------------------------------------------------- #
     # ----------------------------------- PLOTS ---------------------------------- #
     # ---------------------------------------------------------------------------- #
@@ -61,6 +62,8 @@ def wind_diagnostics(idate):
 
     cbar=fig.colorbar(m, cax=cax, label='Velocidad del viento (m/s)')
     
+    ax.quiver(winds.lon,winds.lat,u.values,v.values, scale=300,width=0.0025,
+              transform=ccrs.PlateCarree(), regrid_shape=25, alpha=0.5)
     # ax.set_title(pd.to_datetime(winds.time.item()), loc='left', fontsize=13.5)
     ax.set_title('DIAGNOSTICO DE VELOCIDAD DEL VIENTO\nASCAT: '+
                  pd.to_datetime(winds.time.item()).strftime('%F %H:%M'),
@@ -69,34 +72,37 @@ def wind_diagnostics(idate):
     cbar.ax.set_yticks(np.arange(vmin,vmax+1,1))
     
     for a in altimeters_data.index.get_level_values(0).unique():
-        data = altimeters_data.loc[a]
-        data = data.where(data['lon']>=diagnostics_mapsextent[0])
-        data = data.where(data['lon']<=diagnostics_mapsextent[1])
-        data = data.where(data['lat']>=diagnostics_mapsextent[2])
-        data = data.where(data['lat']<=diagnostics_mapsextent[3])
-        data = data.dropna()
+        try:
+            data = altimeters_data.loc[a]
+            data = data.where(data['lon']>=diagnostics_mapsextent[0])
+            data = data.where(data['lon']<=diagnostics_mapsextent[1])
+            data = data.where(data['lat']>=diagnostics_mapsextent[2])
+            data = data.where(data['lat']<=diagnostics_mapsextent[3])
+            data = data.dropna()
 
-        ax.plot(data.lon+0.1, data.lat, color='k', zorder=1,
-                transform=ccrs.Geodetic(), lw=1.5)
-        ax.plot(data.lon-0.1, data.lat, color='k', zorder=1,
-                transform=ccrs.Geodetic(), lw=1.5)
-        
-        ax.scatter(data.lon,data.lat,c=data[windspeed_name],
-                    cmap='viridis', vmin=vmin, vmax=vmax, s=40,
-                    marker='s', zorder=2)
+            ax.plot(data.lon+0.1, data.lat, color='k', zorder=1,
+                    transform=ccrs.Geodetic(), lw=1.5)
+            ax.plot(data.lon-0.1, data.lat, color='k', zorder=1,
+                    transform=ccrs.Geodetic(), lw=1.5)
+            
+            ax.scatter(data.lon,data.lat,c=data[windspeed_name],
+                        cmap='viridis', vmin=vmin, vmax=vmax, s=40,
+                        marker='s', zorder=2)
 
-        n = len(data)
-        if n==0:
-            continue
-        text = data.sort_values(by='lat')
-        text = text[5:-5].iloc[::40]
-        for i,lon,lat in zip(range(len(text)),
-                            text.lon,
-                            text.lat):
-            ax.text(lon-0.2, lat,
-                    a.upper()+'\n'+text.index[i].strftime("%H:%M:%S"),
-                    transform=ax.transData,
-                    fontsize=8, ha='right')
+            n = len(data)
+            if n==0:
+                continue
+            text = data.sort_values(by='lat')
+            text = text[5:-5].iloc[::40]
+            for i,lon,lat in zip(range(len(text)),
+                                text.lon,
+                                text.lat):
+                ax.text(lon-0.2, lat,
+                        a.upper()+'\n'+text.index[i].strftime("%H:%M:%S"),
+                        transform=ax.transData,
+                        fontsize=10, ha='right')
+        except:
+            pass
 
     
     plt.savefig('plots/WINDSPEED_DIAGNOSTICMAP_CURRENT.png',
@@ -107,7 +113,8 @@ def wind_diagnostics(idate):
     
     
 if __name__=='__main__':
-    wind_diagnostics((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=2)).strftime('%F'))
+    # wind_diagnostics((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=2)).strftime('%F'))
+    wind_diagnostics("2022-12-24")
     sys.exit()
 
     

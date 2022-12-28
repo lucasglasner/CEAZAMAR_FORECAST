@@ -43,7 +43,8 @@ from check_forecast_status import checkcreated_data, check_localforecast
 
 
 from params import *
-
+import matplotlib
+matplotlib.use('Agg')
 # ---------------------------------------------------------------------------- #
 #                               GLOBAL VARIABLES                               #
 # ---------------------------------------------------------------------------- #
@@ -140,7 +141,7 @@ if __name__=='__main__':
             print('LAUNCHING COASTAL ZONES FORECAST: '+now())
             try:
                 locations=pd.read_csv('data/COASTAL_POINTS.csv', index_col=0)
-                # locations = locations.iloc[:10,:]
+                #locations = locations.iloc[:10,:]
                 
                 print('\nPicking time series forecast as a table for each location...')
                 create_localforecast(FORECAST_DATE, locations=locations, n_jobs=N_JOBS)

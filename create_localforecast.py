@@ -45,7 +45,7 @@ def createlocal_data(name,lat,lon, atm, waves, ocean, clim):
     sst_local = grabpoint(ocean,lat,lon)[sst_name]
     #interpolate from xx:30 to xx:00
     sst_local = sst_local.resample('h').bfill()
-
+    
     # #Anomaly respect to satellite
     # sstclim_local = grabpoint(clim,lat,lon)[sst_name]
     # sst_anomaly_local = sst_local.to_xarray().groupby('leadtime.dayofyear')

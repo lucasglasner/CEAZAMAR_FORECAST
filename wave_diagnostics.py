@@ -68,6 +68,9 @@ def wave_diagnostics(idate):
                   cmap=cmap, extend='both', levels=np.arange(1,5.5+0.1,0.1))
     cbar=fig.colorbar(m, cax=cax, label='Altura significativa de ola (m)')
     
+
+    ax.quiver(waves.lon,waves.lat,u.values,v.values, scale=25,width=0.003,
+              transform=ccrs.PlateCarree(), regrid_shape=25, alpha=0.35)
     # ax.set_title(pd.to_datetime(waves.time.item()), loc='left', fontsize=13.5)
     ax.set_title('DIAGNOSTICO DE ALTURA DE OLAS\n'+wave_model_name+' Hindcast: '+
                  pd.to_datetime(waves.leadtime.item()).strftime('%F %H:%M:%S'),
@@ -103,7 +106,7 @@ def wave_diagnostics(idate):
             ax.text(lon-0.2, lat,
                     a.upper()+'\n'+text.index[i].strftime("%H:%M:%S"),
                     transform=ax.transData,
-                    fontsize=8, ha='right')
+                    fontsize=10, ha='right')
 
     
     plt.savefig('plots/WAVEHEIGHT_DIAGNOSTICMAP_CURRENT.png',
@@ -114,7 +117,7 @@ def wave_diagnostics(idate):
     
     
 if __name__=='__main__':
-    wave_diagnostics((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=1)).strftime('%F'))
+    wave_diagnostics((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=4)).strftime('%F'))
     sys.exit()
 
     
