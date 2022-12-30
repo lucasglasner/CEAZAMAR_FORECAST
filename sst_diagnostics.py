@@ -38,7 +38,8 @@ def sst_diagnostics(idate):
     sst = xr.concat(sst, 'time')
     sst.coords['days'] = ('time',np.arange(1,len(sst.time)+1,1))
 
-    trend = sst.swap_dims({'time':'days'}).polyfit(dim='days', deg=1).sel(degree=1)
+    trend = sst.swap_dims({'time':'days'}).polyfit(dim='days',
+                                                   deg=1).sel(degree=1)
     trend = trend.polyfit_coefficients
 
     # ---------------------------------------------------------------------------- #
@@ -47,7 +48,7 @@ def sst_diagnostics(idate):
     # ---------------------------------- raw tsm --------------------------------- #
     print('Plotting...')
     plt.rc('font',size=12)
-    vmin,vmax = sst.min()-sst.min()%0.5,sst.max()-sst.max()%0.5
+    vmin,vmax = sst.min()-sst.min()%0.5+1,sst.max()-sst.max()%0.5-0.5
     fig, ax, cax =  make_maps((1,1), figsize=(14,8), 
                               extent=diagnostics_mapsextent)
     
@@ -56,12 +57,15 @@ def sst_diagnostics(idate):
                                                                            vmax+0.25,
                                                                            0.25))
 
-    cbar=fig.colorbar(m, cax=cax, label='Temperatura superficial del mar (°C)')
-    
-    # ax.set_title(pd.to_datetime(ssts.time.item()), loc='left', fontsize=13.5)
-    ax.set_title('DIAGNOSTICO DE TEMPERATURA SUPERFICIAL DEL MAR\nTSM (OSTIA): '+
-                 pd.to_datetime(sst.time[-1].item()).strftime('%F'),
-                 loc='left', fontsize=13.5)
+    cbar=fig.colorbar(m, cax=cax, label='(°C)')
+    ax.set_title('Diagnóstico de temperatura\nsuperficial del mar.',
+                 loc='left', fontsize=14)    
+    ax.text(1, 1.01,
+            pd.to_datetime(sst.time[-1].item()).strftime('%Y-%m-%d'),
+            transform=ax.transAxes, fontsize=14, ha='right')
+    ax.text(0,-0.025, 'Fuente: Operational Sea Surface Temperature and Sea Ice Analysis (OSTIA)',
+            fontsize=10, ha='left',
+            transform=ax.transAxes)
     cbar.ax.tick_params(labelsize=14)
     cbar.ax.set_yticks(np.arange(vmin,vmax,1))
 
@@ -78,13 +82,15 @@ def sst_diagnostics(idate):
                                                                  vmax+0.025,
                                                                  0.025))
 
-    cbar=fig.colorbar(m, cax=cax, label='Tendencia de TSM (últimos 10 días) (°C/dia)')
-    
-    # ax.set_title(pd.to_datetime(ssts.time.item()), loc='left', fontsize=13.5)
-    ax.set_title('DIAGNOSTICO DE TEMPERATURA SUPERFICIAL DEL MAR\nTendencia TSM (OSTIA): '+
-                 pd.to_datetime(sst.time[0].item()).strftime('%F')+'  /  '+
-                 pd.to_datetime(sst.time[-1].item()).strftime('%F'),
-                 loc='left', fontsize=13.5)
+    cbar=fig.colorbar(m, cax=cax, label='(°C/dia)')
+    ax.set_title('Tendencia de temperatura\nsuperficial del mar (últimos 10 días).',
+                 loc='left', fontsize=14)    
+    ax.text(1, 1.01,
+            pd.to_datetime(sst.time[-1].item()).strftime('%Y-%m-%d'),
+            transform=ax.transAxes, fontsize=14, ha='right')
+    ax.text(0,-0.025, 'Fuente: Operational Sea Surface Temperature and Sea Ice Analysis (OSTIA)',
+            fontsize=10, ha='left',
+            transform=ax.transAxes)
     cbar.ax.tick_params(labelsize=14)
     cbar.ax.set_yticks(np.arange(vmin,vmax+0.1,0.1))
 

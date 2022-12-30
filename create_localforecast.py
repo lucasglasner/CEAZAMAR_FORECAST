@@ -32,7 +32,7 @@ from params import *
 #                                GLOBAL VARIABLES                              #
 # ---------------------------------------------------------------------------- #
     
-def createlocal_data(name,lat,lon, atm, waves, ocean, clim):
+def createlocal_data(name, lat, lon, atm, waves, ocean, clim):
 # ----------------------------------- atm ------------------------------- #
     atm_local  = grabpoint(atm,lat,lon)[['WS','WDIR','COASTANGLE',
                                          'U10','V10']]
@@ -45,7 +45,7 @@ def createlocal_data(name,lat,lon, atm, waves, ocean, clim):
     sst_local = grabpoint(ocean,lat,lon)[sst_name]
     #interpolate from xx:30 to xx:00
     sst_local = sst_local.resample('h').bfill()
-    
+  
     # #Anomaly respect to satellite
     # sstclim_local = grabpoint(clim,lat,lon)[sst_name]
     # sst_anomaly_local = sst_local.to_xarray().groupby('leadtime.dayofyear')
@@ -53,20 +53,21 @@ def createlocal_data(name,lat,lon, atm, waves, ocean, clim):
     # sst_anomaly_local.name = 'thetao_anomaly'
     
     #Synoptic anomalies
-    sst_sanomaly_local = sst_local-filter_timeseries(sst_local, 5, 1/30/24)
-    sst_sanomaly_local = sst_sanomaly_local.reindex(waves_local.index)
-    sst_local = sst_local.reindex(waves_local.index)
-    sst_sanomaly_local = sst_sanomaly_local.resample('d').mean()
-    sst_sanomaly_local = sst_sanomaly_local.reindex(sst_local.index).interpolate()
-    sst_sanomaly_local.name = 'thetao_synoptic_anomaly'
-    
+    #sst_sanomaly_local = sst_local-filter_timeseries(sst_local, 5, 1/30/24)
+    #sst_sanomaly_local = sst_sanomaly_local.reindex(waves_local.index)
+    #sst_local = sst_local.reindex(waves_local.index)
+    #sst_sanomaly_local = sst_sanomaly_local.resample('d').mean()
+    #sst_sanomaly_local.index = sst_sanomaly_local.index+pd.Timedelta(hours=12)
+    #sst_sanomaly_local = sst_sanomaly_local.resample('h').interpolate('cubic')
+    #sst_sanomaly_local.name = 'thetao_synoptic_anomaly'
+ 
 # ----------------------------------- MERGE ---------------- ------------- #
-    data = pd.concat([atm_local,waves_local,sst_local, sst_sanomaly_local],
-                        axis=1)
+    data = pd.concat([atm_local,waves_local,sst_local], axis=1)
     data['WDIR_STR'] = data['WDIR'].map(lambda x: deg2compass(x))
     data['VMDR_STR'] = data['VMDR'].map(lambda x: deg2compass(x))
     data['BEAUFORT'] = (data['WS']*1.94).map(lambda x: beaufort_scale(x))
     data.name = name
+    data = data.loc[FORECAST_DATE:]
     # print('         Creating data for: '+name)
     return data
 
@@ -113,11 +114,12 @@ def create_localforecast(idate, locations, n_jobs=10, save=True):
         print('Saving data...')
         for name,data in zip(locations.index,DATA):
             data = data.reindex(pd.date_range(idate,fdate,freq='h'))
+            data = data.loc[idate:fdate]
             data.to_csv('tmp/'+name.replace("_","")+'_FORECAST_CURRENT.csv')
         print('Done\n')
     return DATA
 
 if __name__=='__main__':
-    locations=pd.read_csv('data/COASTAL_POINTS.csv', index_col=0)
+    locations=pd.read_csv('data/COASTAL_POINTS.csv', index_col=0).iloc[:1,:]
     create_localforecast(idate=FORECAST_DATE,locations=locations)
     sys.exit()

@@ -22,23 +22,10 @@ from params import *
 # ---------------------------- Load data functions --------------------------- #
 # ---------------------------------------------------------------------------- #
 
-def target_date(forecast_directory,validationdata_directory):
-    """
-    Find out which is the last aviable date between
-    forecast and validation data
-    Returns:
-        pandas Timestamp: last aviable data
-    """
-    last_forecast = iglob(forecast_directory)
-    last_forecast = max(list(map(os.path.getctime,last_forecast)))
-    last_forecast = datetime.datetime.fromtimestamp(last_forecast)
 
-    last_validation = iglob(validationdata_directory)
-    last_validation = max(list(map(os.path.getctime,last_validation)))
-    last_validation = datetime.datetime.fromtimestamp(last_validation)
 
-    return min(last_forecast,last_validation).date()
 
+# ------------------------------ FORECAST TOOLS ------------------------------ #
 def last_forecast_path(which):
     """
     Return last aviable forecast of each type
@@ -76,7 +63,25 @@ def first_forecast_date(which):
     time = pd.to_datetime(data.time.item())
     return time
 
-def forecast_path(date,which):
+def target_date(forecast_directory, validationdata_directory):
+    """
+    Find out which is the last aviable date between
+    forecast and validation data
+    Returns:
+        pandas Timestamp: last aviable data
+    """
+    last_forecast = iglob(forecast_directory)
+    last_forecast = max(list(map(os.path.getctime,last_forecast)))
+    last_forecast = datetime.datetime.fromtimestamp(last_forecast)
+
+    last_validation = iglob(validationdata_directory)
+    last_validation = max(list(map(os.path.getctime,last_validation)))
+    last_validation = datetime.datetime.fromtimestamp(last_validation)
+
+    return min(last_forecast,last_validation).date()
+
+
+def forecast_path(date, which):
     """
     Return forecast path for a type and date. If asked for today
     or for the future returns last aviable forecast.
@@ -248,7 +253,22 @@ def load_forecast_ini(path, which):
             of these ["ocean","wave", "atm"]')
 
 
+# ------------------- Diagnostic and validation data tools ------------------- #
+
+
 def load_altimeters(idate, centerhour=datetime.datetime.now(), hwidth=4):
+    """
+    Function for loading as a table the wave/wind altimeter data from 
+    copernicus database.
+
+    Args:
+        idate (str): Target date to recover data
+        centerhour (datetime, optional): _description_. Defaults to datetime.datetime.now().
+        hwidth (int, optional): _description_. Defaults to 4.
+
+    Returns:
+        _type_: _description_
+    """
     centerhour = datetime.datetime.now()
     print('Loading altimeter data...')
     pddate           = pd.to_datetime(idate)
@@ -284,13 +304,22 @@ def load_altimeters(idate, centerhour=datetime.datetime.now(), hwidth=4):
     altimeters_data.columns = ['lat','lon',waveheight_name, windspeed_name]
     return altimeters_data.drop_duplicates()
         
-def load_ascat(idate):
+def load_ascat(idate, **kwargs):
+    """
+    Function for loading ASCAT L4 data as xarray
+
+    Args:
+        idate (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     p = pd.to_datetime(idate)
     ascat_path = os.popen('ls data/ASCAT/'+p.strftime('%Y%m%d')+'00*').read()
     ascat_path = ascat_path.replace("\n","")
     print(ascat_path)
 
-    data = xr.open_dataset(ascat_path, engine='netcdf4').squeeze()
+    data = xr.open_dataset(ascat_path, **kwargs).squeeze()
     data = data.rename({'longitude':'lon',
                         'latitude':'lat'})
     data = data.sortby('lat').sortby('lon')
@@ -301,13 +330,47 @@ def load_ascat(idate):
     data['WS'] = np.hypot(data['U10'],data['V10'])
     return data
 
-def load_ostia(idate):
+def load_ccmp(idate, **kwargs):
+    """
+    Function for loading CCMP Wind data as xarray
+
+    Args:
+        idate (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    ccmp_path = 'data/CCMPWINDS/'
+    file_name = 'CCMP_RT_Wind_Analysis_'+idate.replace('-','')+'_V02.1_L3.0_RSS.nc'
+    ccmp_path = ccmp_path+file_name
+    print('          '+ccmp_path)
+    data = xr.open_dataset(ccmp_path, **kwargs).squeeze()
+    data = data.rename({'latitude':'lat', 'longitude':'lon',
+                        'uwnd':uwnd_name,'vwnd':vwnd_name})
+    data['lon'] = (data['lon']+180)%360-180
+    data = data.sortby('lon').sortby('lat')
+    data[windspeed_name] = np.hypot(data[uwnd_name], data[vwnd_name])
+    data = data.sel(lat=slice(diagnostics_mapsextent[2]-1,diagnostics_mapsextent[3]+1),
+                    lon=slice(diagnostics_mapsextent[0]-1,diagnostics_mapsextent[1]+1))
+    return data
+
+def load_ostia(idate, **kwargs):
+    """
+    Function for loading OSTIA SST L4 satellite data as xarray
+
+    Args:
+        idate (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     p = pd.to_datetime(idate)
     ostia_path = 'data/OSTIA/'+p.strftime('%Y%m%d')+\
         '-UKMO-L4HRfnd-GLOB-v01-fv02-OSTIA.nc'
-
-    data = xr.open_dataset(ostia_path).analysed_sst-273.15
+    # print('          '+ostia_path)
+    data = xr.open_dataset(ostia_path, **kwargs).analysed_sst-273.15
     data = data.resample({'time':'d'}).mean().squeeze()
     data = data.sel(lat=slice(diagnostics_mapsextent[2]-1,diagnostics_mapsextent[3]+1),
                 lon=slice(diagnostics_mapsextent[0]-1,diagnostics_mapsextent[1]+1))
+    
     return data

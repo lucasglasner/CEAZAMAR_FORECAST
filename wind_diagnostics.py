@@ -30,47 +30,58 @@ import matplotlib.colors as mcolors
 import cartopy.crs as ccrs
 
 
-from load import load_altimeters, load_ascat
+from load import load_altimeters, load_ccmp, forecast_path, load_forecast_data
 from graphical import make_maps
-from numerics import fill_borders
+from numerics import fill_borders, utc_to_local
 from params import *
 
 
 def wind_diagnostics(idate):
     now = datetime.datetime.now()
     # --------------------------------- load data -------------------------------- #
-    print('Loading ASCAT wind data...')
-    winds = load_ascat(idate)
+    print('Loading CCMP wind data...')
+    winds = load_ccmp(idate)
+    winds.coords['leadtime'] = ('leadtime',
+                                utc_to_local(winds.time.to_series()).index)
+    winds = winds.resample({'time':'h'}).interpolate('cubic')
+    winds = winds.sel(time=idate+'T{:02d}'.format(now.hour), method='nearest')
     winds = winds.squeeze()
-
-    u = winds[uwnd_name]#/winds[windspeed_name]
-    v = winds[vwnd_name]#/winds[windspeed_name]
     
-    altimeters_data = load_altimeters(idate, centerhour=12, hwidth=6)[['lat','lon', windspeed_name]]
-
+    altimeters_data = load_altimeters(idate)[['lat','lon', windspeed_name]]
     # ---------------------------------------------------------------------------- #
     # ----------------------------------- PLOTS ---------------------------------- #
     # ---------------------------------------------------------------------------- #
     print('Plotting...')
     plt.rc('font',size=12)
     vmin,vmax=0, 15
+    cmap='viridis'
     fig, ax, cax =  make_maps((1,1), figsize=(14,8), 
                               extent=diagnostics_mapsextent)
     
     m=ax.contourf(winds.lon, winds.lat, fill_borders(winds[windspeed_name]),
-                  cmap='viridis', extend='both', levels=np.arange(vmin,vmax+0.5,0.5))
+                  cmap=cmap, extend='both', levels=np.arange(vmin,vmax+0.5,0.5))
 
-    cbar=fig.colorbar(m, cax=cax, label='Velocidad del viento (m/s)')
+    cbar=fig.colorbar(m, cax=cax, label='(m/s)')
+
     
-    ax.quiver(winds.lon,winds.lat,u.values,v.values, scale=300,width=0.0025,
-              transform=ccrs.PlateCarree(), regrid_shape=25, alpha=0.5)
+    ax.quiver(winds.lon,winds.lat,winds[uwnd_name].values,winds[vwnd_name].values,
+              scale=350,width=0.0025,
+              transform=ccrs.PlateCarree(), regrid_shape=30, alpha=0.5)
     # ax.set_title(pd.to_datetime(winds.time.item()), loc='left', fontsize=13.5)
-    ax.set_title('DIAGNOSTICO DE VELOCIDAD DEL VIENTO\nASCAT: '+
-                 pd.to_datetime(winds.time.item()).strftime('%F %H:%M'),
-                 loc='left', fontsize=13.5)
+    ax.set_title('Diagnóstico de\nvelocidad del viento.',
+                 loc='left', fontsize=14)    
+    ax.text(1, 1.01,
+            pd.to_datetime(winds.time.item()).strftime('%Y-%m-%d\nHora: %H:%M'),
+            transform=ax.transAxes, fontsize=14, ha='right')
+    ax.text(0,-0.025, 'Fuente: Cross-Calibrated Multi-Platform '+
+            '(CCMP) Wind analysis + Altimetros.',
+            fontsize=10, ha='left',
+            transform=ax.transAxes)
+
     cbar.ax.tick_params(labelsize=14)
     cbar.ax.set_yticks(np.arange(vmin,vmax+1,1))
     
+     
     for a in altimeters_data.index.get_level_values(0).unique():
         try:
             data = altimeters_data.loc[a]
@@ -86,7 +97,7 @@ def wind_diagnostics(idate):
                     transform=ccrs.Geodetic(), lw=1.5)
             
             ax.scatter(data.lon,data.lat,c=data[windspeed_name],
-                        cmap='viridis', vmin=vmin, vmax=vmax, s=40,
+                        cmap=cmap, vmin=vmin, vmax=vmax, s=40,
                         marker='s', zorder=2)
 
             n = len(data)
@@ -98,12 +109,11 @@ def wind_diagnostics(idate):
                                 text.lon,
                                 text.lat):
                 ax.text(lon-0.2, lat,
-                        a.upper()+'\n'+text.index[i].strftime("%H:%M:%S"),
+                        a.upper()+'\n'+text.index[i].strftime("%H:%M"),
                         transform=ax.transData,
                         fontsize=10, ha='right')
         except:
             pass
-
     
     plt.savefig('plots/WINDSPEED_DIAGNOSTICMAP_CURRENT.png',
                 dpi=150,bbox_inches='tight')
@@ -113,8 +123,7 @@ def wind_diagnostics(idate):
     
     
 if __name__=='__main__':
-    # wind_diagnostics((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=2)).strftime('%F'))
-    wind_diagnostics("2022-12-24")
+    wind_diagnostics((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=1)).strftime('%F'))
     sys.exit()
 
     

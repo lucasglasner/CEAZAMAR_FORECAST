@@ -30,7 +30,7 @@ import cartopy.crs as ccrs
 
 from load import load_forecast_data, load_altimeters
 from graphical import make_maps
-from numerics import fill_borders
+from numerics import fill_borders, utc_to_local
 from params import *
 
 
@@ -41,17 +41,17 @@ def wave_diagnostics(idate):
     hindcast = wave_hindcast_dir+'/'+idate+'.nc'
     print('          Hindcast data: '+hindcast)
     waves = load_forecast_data(hindcast, 'wave')
-    waves = waves.sel(leadtime=idate+'T{:02d}'.format(now.hour), method='nearest')
+
+    waves.coords['leadtime'] = ('leadtime',
+                                utc_to_local(waves.leadtime.to_series()).index)
+    waves = waves.resample({'leadtime':'h'}).interpolate()
+    waves = waves.sel(leadtime=idate+'T{:02d}'.format(now.hour),
+                      method='nearest')
     
     u = -np.cos(waves[wavedir_name]*np.pi/180)
     v = -np.sin(waves[wavedir_name]*np.pi/180)
     
     altimeters_data = load_altimeters(idate)[['lat','lon',waveheight_name]]
-    # altimeters_data = altimeters_data.where(altimeters_data['lon']>=extent[0])
-    # altimeters_data = altimeters_data.where(altimeters_data['lon']<=extent[1])
-    # altimeters_data = altimeters_data.where(altimeters_data['lat']>=extent[2])
-    # altimeters_data = altimeters_data.where(altimeters_data['lat']<=extent[3])
-    # altimeters_data = altimeters_data.dropna()
 
     # ---------------------------------------------------------------------------- #
     # ----------------------------------- PLOTS ---------------------------------- #
@@ -66,15 +66,19 @@ def wave_diagnostics(idate):
     
     m=ax.contourf(waves.lon, waves.lat, fill_borders(waves[waveheight_name]),
                   cmap=cmap, extend='both', levels=np.arange(1,5.5+0.1,0.1))
-    cbar=fig.colorbar(m, cax=cax, label='Altura significativa de ola (m)')
+    cbar=fig.colorbar(m, cax=cax, label='(m)')
     
 
     ax.quiver(waves.lon,waves.lat,u.values,v.values, scale=25,width=0.003,
               transform=ccrs.PlateCarree(), regrid_shape=25, alpha=0.35)
-    # ax.set_title(pd.to_datetime(waves.time.item()), loc='left', fontsize=13.5)
-    ax.set_title('DIAGNOSTICO DE ALTURA DE OLAS\n'+wave_model_name+' Hindcast: '+
-                 pd.to_datetime(waves.leadtime.item()).strftime('%F %H:%M:%S'),
-                loc='left',fontsize=13.5)
+    ax.set_title('Diagnóstico de\naltura de olas.',
+                 loc='left', fontsize=14)    
+    ax.text(1, 1.01,
+            pd.to_datetime(waves.leadtime.item()).strftime('%Y-%m-%d\nHora: %H:%M'),
+            transform=ax.transAxes, fontsize=14, ha='right')
+    ax.text(0,-0.025, 'Fuente: '+wave_model_name+' Hindcast + Altimetros',
+            fontsize=10, ha='left',
+            transform=ax.transAxes)
     cbar.ax.tick_params(labelsize=14)
     cbar.ax.set_yticks(np.arange(vmin,vmax+0.5,0.5))
     
@@ -104,7 +108,7 @@ def wave_diagnostics(idate):
                             text.lon,
                             text.lat):
             ax.text(lon-0.2, lat,
-                    a.upper()+'\n'+text.index[i].strftime("%H:%M:%S"),
+                    a.upper()+'\n'+text.index[i].strftime("%H:%M"),
                     transform=ax.transData,
                     fontsize=10, ha='right')
 
@@ -117,7 +121,7 @@ def wave_diagnostics(idate):
     
     
 if __name__=='__main__':
-    wave_diagnostics((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=4)).strftime('%F'))
+    wave_diagnostics((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=1)).strftime('%F'))
     sys.exit()
 
     

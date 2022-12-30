@@ -25,6 +25,7 @@ from multiprocessing import Pool
 from sst_diagnostics import sst_diagnostics
 from wave_diagnostics import wave_diagnostics
 from wind_diagnostics import wind_diagnostics
+from nrt_forecast import nrt_forecast
 
 from sst_forecast import sst_forecast
 from wave_forecast import wave_forecast
@@ -53,6 +54,7 @@ if diagnostics:
     make_wind_diagnostics = True
     make_wave_diagnostics = True
     make_sst_diagnostics  = True
+    make_nrt_diagnostics  = True
 validation = True
 if validation:
     make_wind_validation = True
@@ -141,7 +143,7 @@ if __name__=='__main__':
             print('LAUNCHING COASTAL ZONES FORECAST: '+now())
             try:
                 locations=pd.read_csv('data/COASTAL_POINTS.csv', index_col=0)
-                #locations = locations.iloc[:10,:]
+                # locations = locations.iloc[:10,:]
                 
                 print('\nPicking time series forecast as a table for each location...')
                 create_localforecast(FORECAST_DATE, locations=locations, n_jobs=N_JOBS)
@@ -178,6 +180,15 @@ if __name__=='__main__':
         print('Date: '+now())
         print('Execution directory: '+os.getcwd())
         space()
+        if make_nrt_diagnostics:
+            print('\n')
+            print('STARTING NRT DIAGNOSTICS FOR TODAY: '+now())
+            try:
+                nrt_forecast((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=1)).strftime('%F'))
+            except Exception as e:
+                print(e)
+            print('\n')
+            space(char='-')
         if make_sst_diagnostics:
             print('\n')
             print('STARTING TSM DIAGNOSTICS FOR YESTERDAY: '+now())

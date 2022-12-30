@@ -29,16 +29,19 @@ COASTLINE_MASK_PATH    = '~/storage/VECTORIAL/ChileCOASTMASK.shp'
 atm_mapsextent   = [-74,-70.5,-34,-28]
 ocean_mapsextent = [-73,-70.5,-33,-27]
 wave_mapsextent  = [-74,-70.5,-34,-27]
-diagnostics_mapsextent = [-80,-70.5,-35,-26]
+diagnostics_mapsextent = [-78,-70.5,-34,-26]
 
 MAPS_GRID    = (2,5)
 MAPS_FIGSIZE = (14,8)
 
-MAPS_LOCS    = {'Los Vilos':(-31.904,-71.499),
+MAPS_LOCS    = {'Valparaíso':(-33.046,-71.613),
+                'Los Vilos':(-31.904,-71.499),
                 'Huentelauquen':(-31.621,-71.568),
                 'Talcaruca':(-30.476,-71.697),
                 'La Serena':(-29.878,-71.286),
-                'Chañaral de\nAceituno':(-29.064,-71.514)}
+                'Chañaral de\nAceituno':(-29.064,-71.514),
+                'Huasco':(-28.458, -71.212),
+                'Caldera':(-27.060,-70.810)}
 
 # -----------------------------------------------------wave----------------------- #
 #                                  ATMOSPHERE                                  #
