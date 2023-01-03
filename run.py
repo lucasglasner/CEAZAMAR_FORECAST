@@ -200,9 +200,9 @@ if __name__=='__main__':
             space(char='-')
         if make_wind_diagnostics:
             print('\n')
-            print('STARTING WIND DIAGNOSTICS FOR THE DAY AFTER YESTERDAY: '+now())
+            print('STARTING WIND DIAGNOSTICS FOR YESTERDAY: '+now())
             try:
-                wind_diagnostics((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=2)).strftime('%F'))
+                wind_diagnostics((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=1)).strftime('%F'))
             except Exception as e:
                 print(e)
             print('\n')

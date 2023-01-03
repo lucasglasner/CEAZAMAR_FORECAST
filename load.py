@@ -277,7 +277,7 @@ def load_altimeters(idate, centerhour=datetime.datetime.now(), hwidth=4):
     names            = []
     for a in altimeters_paths:
         try:
-            p = a+'/'+str(pddate.year)+'/'+ str(pddate.month)+'/*'+idate.replace("-","")+'*'
+            p = a+'/'+str(pddate.year)+'/'+ str('%02d' % pddate.month)+'/*'+idate.replace("-","")+'*'
             data = xr.open_mfdataset(p).load().to_dataframe()
             data['longitude'] = (data['longitude']+180)%360-180
             times = slice(pddate-pd.Timedelta(hours=hwidth)+pd.Timedelta(hours=centerhour.hour),

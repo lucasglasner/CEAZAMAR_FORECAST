@@ -43,7 +43,8 @@ def wind_diagnostics(idate):
     winds = load_ccmp(idate)
     winds.coords['leadtime'] = ('leadtime',
                                 utc_to_local(winds.time.to_series()).index)
-    winds = winds.resample({'time':'h'}).interpolate('cubic')
+    time  = pd.date_range(idate+'T00:00',idate+'T23:59', freq='h')
+    winds = winds.reindex({'time':time}, method='nearest')
     winds = winds.sel(time=idate+'T{:02d}'.format(now.hour), method='nearest')
     winds = winds.squeeze()
     

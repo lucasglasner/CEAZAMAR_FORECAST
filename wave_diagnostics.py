@@ -44,7 +44,8 @@ def wave_diagnostics(idate):
 
     waves.coords['leadtime'] = ('leadtime',
                                 utc_to_local(waves.leadtime.to_series()).index)
-    waves = waves.resample({'leadtime':'h'}).interpolate()
+    time  = pd.date_range(idate+'T00:00',idate+'T23:59', freq='h')
+    waves = waves.reindex({'leadtime':time}, method='nearest')
     waves = waves.sel(leadtime=idate+'T{:02d}'.format(now.hour),
                       method='nearest')
     
