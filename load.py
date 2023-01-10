@@ -156,6 +156,7 @@ def load_mercator(path, **kwargs):
                     'time':'leadtime'})
     p = path.split("/")[-1].split(".")[0]
     data.coords['time'] = pd.to_datetime(p,format="%Y-%m-%d")
+
     return data
     
 def load_forecast_data(path, which,**kwargs):
@@ -315,20 +316,23 @@ def load_ascat(idate, **kwargs):
         _type_: _description_
     """
     p = pd.to_datetime(idate)
-    ascat_path = os.popen('ls data/ASCAT/'+p.strftime('%Y%m%d')+'00*').read()
-    ascat_path = ascat_path.replace("\n","")
-    print(ascat_path)
+    ascat_path = glob('data/ASCAT/'+p.strftime('%Y%m%d')+'00*')
 
-    data = xr.open_dataset(ascat_path, **kwargs).squeeze()
-    data = data.rename({'longitude':'lon',
-                        'latitude':'lat'})
-    data = data.sortby('lat').sortby('lon')
-    data = data.sel(lat=slice(diagnostics_mapsextent[2]-1,diagnostics_mapsextent[3]+1),
-                    lon=slice(diagnostics_mapsextent[0]-1,diagnostics_mapsextent[1]+1))
-    data = data[['eastward_wind','northward_wind']]
-    data = data.rename({'eastward_wind':'U10','northward_wind':'V10'})
-    data['WS'] = np.hypot(data['U10'],data['V10'])
-    return data
+
+    if ascat_path!=[]:
+        ascat_path = ascat_path[0]
+        data = xr.open_dataset(ascat_path, **kwargs).squeeze()
+        data = data.rename({'longitude':'lon',
+                            'latitude':'lat'})
+        data = data.sortby('lat').sortby('lon')
+        data = data[['eastward_wind','northward_wind']]
+        data = data.rename({'eastward_wind':uwnd_name,'northward_wind':vwnd_name})
+        data[windspeed_name] = np.hypot(data[uwnd_name],data[vwnd_name])
+        return data
+    else:
+        print('         ASCAT data for '+idate+' doesnt exists!')
+        return
+    
 
 def load_ccmp(idate, **kwargs):
     """
@@ -367,10 +371,13 @@ def load_ostia(idate, **kwargs):
     p = pd.to_datetime(idate)
     ostia_path = 'data/OSTIA/'+p.strftime('%Y%m%d')+\
         '-UKMO-L4HRfnd-GLOB-v01-fv02-OSTIA.nc'
-    # print('          '+ostia_path)
-    data = xr.open_dataset(ostia_path, **kwargs).analysed_sst-273.15
-    data = data.resample({'time':'d'}).mean().squeeze()
-    data = data.sel(lat=slice(diagnostics_mapsextent[2]-1,diagnostics_mapsextent[3]+1),
-                lon=slice(diagnostics_mapsextent[0]-1,diagnostics_mapsextent[1]+1))
-    
-    return data
+    if os.path.isfile(ostia_path):
+        # print('          '+ostia_path)
+        data = xr.open_dataset(ostia_path, **kwargs).analysed_sst-273.15
+        data = data.resample({'time':'d'}).mean().squeeze()
+        data = data.sel(lat=slice(diagnostics_mapsextent[2]-1,diagnostics_mapsextent[3]+1),
+                    lon=slice(diagnostics_mapsextent[0]-1,diagnostics_mapsextent[1]+1))
+        return data
+    else:
+        print('         OSTIA data for '+idate+' doesnt exists!')
+        return

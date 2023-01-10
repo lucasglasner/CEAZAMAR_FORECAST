@@ -253,7 +253,7 @@ def make_forecast_plot(var, cmap, cbar_label, vmin, vmax, figsize=MAPS_FIGSIZE,
                        level_step=0.25,fill=True,
                        **kwargs):
     fig,ax,cax = make_maps((2,5),figsize=figsize,
-                        **kwargs)
+                            **kwargs)
     if fill:
         var = fill_borders(var)
     lon,lat = var.lon,var.lat

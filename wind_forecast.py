@@ -42,11 +42,10 @@ def wind_forecast(idate):
     init  = load_forecast_ini(forecast,'atm')
     # wind = wind.sel(lat=slice(*sorted(atm_mapsextent[2:])),
     #                 lon=slice(*sorted(atm_mapsextent[:-2])))
-    
-    
-    wind['WS'] = np.hypot(wind[uwnd_name],wind[vwnd_name])
-    u = wind[uwnd_name]/wind['WS']
-    v = wind[vwnd_name]/wind['WS']
+
+    wind[windspeed_name] = np.hypot(wind[uwnd_name],wind[vwnd_name])
+    u = wind[uwnd_name]/wind[windspeed_name]
+    v = wind[vwnd_name]/wind[windspeed_name]
 # ---------------------------------------------------------------------------- #
 #                                     PLOTS                                    #
 # ---------------------------------------------------------------------------- #
@@ -54,11 +53,11 @@ def wind_forecast(idate):
 # ------------------------------------ wind ---------------------------------- #
     plt.rc('font',size=12)
     vmin,vmax=0,15.
-    fig,ax,cax,cbar = make_forecast_plot(var=wind['WS'],
+    fig,ax,cax,cbar = make_forecast_plot(var=wind[windspeed_name],
         cmap='viridis',
         cbar_label='Velocidad del viento (m/s)',
         vmin=vmin,vmax=vmax,level_step=0.1,
-        xticks=[-73,-71],
+        xticks=[-74,-72],
         yticks=[-34,-33,-32,-31,-30,-29,-28],
         extent=atm_mapsextent)
     
@@ -68,8 +67,8 @@ def wind_forecast(idate):
     for i,axis in enumerate(ax.ravel()):
         axis.set_title(pd.to_datetime(wind.leadtime[i].values).strftime('%a %d-%b'),
                     loc='left', fontsize=13.5)
-        axis.quiver(wind.lon,wind.lat,u[i].values,v[i].values, scale=12,width=0.01,
-                transform=ccrs.PlateCarree(), regrid_shape=12, alpha=0.7,
+        axis.quiver(wind.XLONG,wind.XLAT,u[i].values,v[i].values, scale=16,width=0.005,
+                transform=ccrs.PlateCarree(), regrid_shape=16, alpha=1.0,
                 zorder=0)
 
     ax[0,0].set_title(pd.to_datetime(wind.leadtime[0].values).strftime('%Y\n%a %d-%b'),

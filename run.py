@@ -102,7 +102,7 @@ if __name__=='__main__':
             print('\n')
             print('LAUNCHING REGIONAL SST FORECAST: '+now())
             try:
-                sst_forecast(FORECAST_DATE, fix_bias=False)
+                sst_forecast(FORECAST_DATE)
             except Exception as e:
                 print(e)
             print('\n')
@@ -240,7 +240,7 @@ if __name__=='__main__':
             print('\n')
             print('STARTING VALIDATION OF THE LAST '+str(N)+' DAYS OF SST: '+now())
             try:
-                sst_validation(N=N, bias_fix=False)
+                sst_validation(N=N)
             except Exception as e:
                 print(e)
             print('\n')

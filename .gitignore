@@ -4,3 +4,5 @@ plots/*
 **/*.png
 run.log
 **/*.nc
+**/*.shp
+data/CHILE*

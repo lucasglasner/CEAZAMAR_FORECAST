@@ -41,8 +41,8 @@ def wave_forecast(idate):
     waves = waves.sel(lat=slice(*sorted(wave_mapsextent[2:])),
                       lon=slice(*sorted(wave_mapsextent[:-2])))
     
-    u = -np.cos(waves[wavedir_name]*np.pi/180)
-    v = -np.sin(waves[wavedir_name]*np.pi/180)
+    u = np.cos(((270-waves[wavedir_name]+180)%360+180)*np.pi/180)
+    v = np.sin(((270-waves[wavedir_name]+180)%360+180)*np.pi/180)
 # ---------------------------------------------------------------------------- #
 #                                     PLOTS                                    #
 # ---------------------------------------------------------------------------- #
@@ -56,8 +56,8 @@ def wave_forecast(idate):
         cmap=cmap,
         cbar_label='Altura significativa \nde ola (m)',
         vmin=vmin,vmax=vmax,level_step=0.1,
-        xticks=[-73,-71],
-        yticks=[-34,-33,-32,-31,-30,-29,-28,-27],
+        xticks=[-74,-72],
+        yticks=[-34,-33,-32,-31,-30,-29,-28],
         extent=wave_mapsextent)
     
     
@@ -79,24 +79,24 @@ def wave_forecast(idate):
     
 # ---------------------------------- periodo --------------------------------- #
     plt.rc('font',size=12)
-    vmin,vmax=9,20
+    vmin,vmax=8,21
     fig,ax,cax,cbar = make_forecast_plot(var=waves[waveperiod_name],
-        cmap=sns.color_palette('mako_r',as_cmap=True),
-        cbar_label='Período del peak \nespectral (s)',
-        vmin=vmin,vmax=vmax,level_step=0.5,
-        xticks=[-73,-71],
-        yticks=[-34,-33,-32,-31,-30,-29,-28,-27],
+        cmap=sns.color_palette('mako_r', as_cmap=True),
+        cbar_label='Período peak (s)',
+        vmin=vmin,vmax=vmax,level_step=0.25,
+        xticks=[-74,-72],
+        yticks=[-34,-33,-32,-31,-30,-29,-28],
         extent=wave_mapsextent)
     
-    
-    cbar.ax.tick_params(labelsize=14)
+
+    cbar.ax.tick_params(labelsize=12)
     cbar.ax.set_yticks(np.arange(vmin,vmax+1,1))
     for i,axis in enumerate(ax.ravel()):
         axis.set_title(pd.to_datetime(waves.leadtime[i].values).strftime('%a %d-%b'),
                     loc='left', fontsize=13.5)
         axis.quiver(waves.lon,waves.lat,u[i].values,v[i].values, scale=12,width=0.0075,
                 transform=ccrs.PlateCarree(), regrid_shape=12, alpha=0.5,
-                zorder=0)
+                zorder=0, lw=0.5)
     ax[-1,0].text(0,-0.15,'Inicio pronóstico de olas: '+wave_model_name+' '+init+'\n',
                   fontsize=10, transform=ax[-1,0].transAxes, va='top', ha='left')
     ax[0,0].set_title(pd.to_datetime(waves.leadtime[0].values).strftime('%Y\n%a %d-%b'),

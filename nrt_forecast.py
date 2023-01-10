@@ -29,6 +29,9 @@ from graphical import make_maps
 from numerics import fill_borders, utc_to_local
 from params import *
 
+import fuckit
+
+@fuckit
 def nrt_forecast(idate):
     now = datetime.datetime.now()
     extent = [-75, -70.5, -34, -28]
