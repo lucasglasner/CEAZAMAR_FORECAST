@@ -35,7 +35,9 @@ from graphical import make_maps
 from numerics import fill_borders, utc_to_local
 from params import *
 
+import fuckit
 
+@fuckit
 def wind_diagnostics(idate):
     now = datetime.datetime.now()
     # --------------------------------- load data -------------------------------- #

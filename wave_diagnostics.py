@@ -32,8 +32,9 @@ from load import load_forecast_data, load_altimeters
 from graphical import make_maps
 from numerics import fill_borders, utc_to_local
 from params import *
+import fuckit
 
-
+@fuckit
 def wave_diagnostics(idate):
     now = datetime.datetime.now()
     # --------------------------------- load data -------------------------------- #
