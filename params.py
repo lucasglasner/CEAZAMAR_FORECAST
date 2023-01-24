@@ -29,7 +29,7 @@ COASTLINE_MASK_PATH    = 'data/ChileCOASTMASK.shp'
 atm_mapsextent         = [-75,-70.8,-34,-28]
 ocean_mapsextent       = [-75,-70.8,-34,-28]
 wave_mapsextent        = [-75,-70.8,-34,-28]
-diagnostics_mapsextent = [-78,-70.8,-34,-26]
+diagnostics_mapsextent = [-75,-70.8,-34,-28]
 
 MAPS_GRID    = (2,5)
 MAPS_FIGSIZE = (15,8)
@@ -72,13 +72,13 @@ waveperiod_name  = 'VTPK'
 # ---------------------------------------------------------------------------- #
 #                                     OCEAN                                    #
 # ---------------------------------------------------------------------------- #
-ocean_model_name      = 'NEMO-Meteofrance'
-ocean_validation_name = 'OSTIA'
+ocean_model_name       = 'NEMO-Meteofrance'
+ocean_validation_name  = 'OSTIA'
 # ----------------------------------- paths ---------------------------------- #
-ocean_forecast_dir    = 'data/FORECAST/MERCATOR/PHYSICS'
-ocean_hindcast_dir    = 'data/FORECAST/MERCATOR/PHYSICS/HINDCAST'
-ocean_climatology_dir = 'data/CLIMATOLOGIES.nc'
-ocean_validation_dir  = 'data/OSTIA'
+ocean_forecast_dir     = 'data/FORECAST/MERCATOR/PHYSICS'
+ocean_hindcast_dir     = 'data/FORECAST/MERCATOR/PHYSICS/HINDCAST'
+ocean_climatology_file = 'data/CLIMATOLOGIES.nc'
+ocean_validation_dir   = 'data/OSTIA'
 # ------------------------------ variable names ------------------------------ #
 sst_name = 'thetao'
 uo_name  = 'uo'

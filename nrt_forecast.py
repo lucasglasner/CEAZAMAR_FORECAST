@@ -29,9 +29,6 @@ from graphical import make_maps
 from numerics import fill_borders, utc_to_local
 from params import *
 
-import fuckit
-
-@fuckit
 def nrt_forecast(idate):
     now = datetime.datetime.now()
     extent = [-75, -70.5, -34, -28]
@@ -41,13 +38,18 @@ def nrt_forecast(idate):
     ocean = forecast_path(idate, 'ocean')
     print('          Ocean forecast data: '+ocean)
     ocean = load_forecast_data(ocean, 'ocean').squeeze().load()
+    ocean = ocean.sel(lat=slice(extent[2], extent[3]),
+                      lon=slice(extent[0], extent[1]))
+    #grab sst forecast color limits
+    vmin  = ocean[sst_name].resample({'leadtime':'d'}).mean().min()
+    vmin  = vmin-vmin%0.5
+    vmax  = ocean[sst_name].resample({'leadtime':'d'}).mean().max()
+    vmax  = vmax-vmax%0.5
     ocean.coords['leadtime'] = ('leadtime',
                                 utc_to_local(ocean.leadtime.to_series()).index)
     time  = pd.date_range(idate+'T00:00',idate+'T23:59', freq='h')
     ocean = ocean.reindex({'leadtime':time}, method='nearest')
     ocean = ocean.sel(leadtime=idate+'T{:02d}'.format(now.hour), method='nearest')
-    ocean = ocean.sel(lat=slice(extent[2], extent[3]),
-                      lon=slice(extent[0], extent[1]))
     sst   = ocean[sst_name]
     cs    = np.hypot(ocean[uo_name],ocean[vo_name])
     #Load wave data
@@ -76,6 +78,15 @@ def nrt_forecast(idate):
     print('Plotting...')
     fig, ax, cax =  make_maps((1,3), figsize=(18,9),
                               extent=extent)
+    cmap = cmocean.cm.thermal
+    m=ax[0,1].contourf(sst.lon, sst.lat, fill_borders(sst),
+                  cmap=cmap, extend='both', levels=np.arange(vmin,
+                                                             vmax+0.25,
+                                                             0.25))
+    cbar=fig.colorbar(m, ax=ax[0,1], orientation='horizontal', pad=0.01,
+                 label='Temperatura superficial del mar (°C)',
+                 ticks=np.arange(vmin,vmax,1))
+
     cax.axis('off')
     vmin,vmax=0, 15
     cmap='viridis'
@@ -89,15 +100,6 @@ def nrt_forecast(idate):
 
     fig.colorbar(m, ax=ax[0,0], orientation='horizontal', pad=0.01,
                  label='Velocidad del viento (m/s)')
-    
-    vmin,vmax = sst.min()-sst.min()%0.5+0.5,sst.max()-sst.max()%0.5
-    cmap = cmocean.cm.thermal
-    m=ax[0,1].contourf(sst.lon, sst.lat, fill_borders(sst),
-                  cmap=cmap, extend='both', levels=np.arange(vmin,
-                                                             vmax+0.1,
-                                                             0.1))
-    fig.colorbar(m, ax=ax[0,1], orientation='horizontal', pad=0.01,
-                 label='Temperatura superficial del mar (°C)')
     
     vmin,vmax=1.0, 5.5
     cmap = mcolors.ListedColormap(plt.cm.nipy_spectral(np.linspace(0.1,0.95,

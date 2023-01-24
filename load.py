@@ -194,13 +194,10 @@ def init_wrf(path):
     Returns:
         str: forecast initialization date
     """
-    command = "grep -oP '(?<=START_DATE).*(?=;)'"
-    init = os.popen("ncdump -h "+path+" | "+command).read()
-    init = init.replace('_','T')
-    init = init.split("\n")
-    init = init[0][4:-2]+","+init[1][4:-2]
-    init = [pd.to_datetime(t) for t in init.split(",")]
-    init = min(init).strftime('%F %HUTC')
+    command = "ncdump -i -v XTIME "+path+" | grep XTIME"
+    init = os.popen(command+" | tail -n 1 | awk '{ print $3 }'").read()
+    init = init.replace(",","").replace("\"","")
+    init = pd.to_datetime(init).strftime('%F %HUTC')
     return init
     
 def init_mercator(path, which):
@@ -215,15 +212,15 @@ def init_mercator(path, which):
         str: forecast initialization date
     """
     if which=='ocean':
-        command = "grep -oP '(?<=\").*(?=T00:30)'"
-        init = os.popen("ncdump -ci "+path+" | grep time | tail -n 1 | "+
-                        command).read()
-        init = (pd.to_datetime(init)).strftime('%F %HUTC')
+        command = "ncdump -i -v time "+path+" | grep time"
+        init = os.popen(command+" | tail -n 1 | awk '{ print $3 }'").read()
+        init = init.replace(",","").replace("\"","")
+        init = pd.to_datetime(init).strftime('%F %HUTC')
     elif which=='wave':
-        command = "grep -oP '(?<=,\ \").*(?=T03)'"
-        init = os.popen("ncdump -ci "+path+" | grep time | tail -n 1 | "+
-                        command).read()
-        init = (pd.to_datetime(init)).strftime('%F %HUTC')
+        command = "ncdump -i -v time "+path+" | grep time"
+        init = os.popen(command+" | tail -n 1 | awk '{ print $3 }'").read()
+        init = init.replace(",","").replace("\"","")
+        init = pd.to_datetime(init).strftime('%F %HUTC')
     else:
         raise ValueError('Which parameter must indicate only some\
             of these ["ocean","wave"]')   
