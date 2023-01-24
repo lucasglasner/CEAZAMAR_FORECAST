@@ -32,12 +32,14 @@ from params import *
 #                                GLOBAL VARIABLES                              #
 # ---------------------------------------------------------------------------- #
     
-def createlocal_data(name, lat, lon, atm, waves, ocean, clim):
+def createlocal_data(name, lat, lon, atm, waves, ocean):
 # ----------------------------------- atm ------------------------------- #
-    atm_local  = grabpoint(atm,lat,lon)[['WS','WDIR','COASTANGLE',
-                                         'U10','V10']]
+    atm_local  = grabpoint(atm,lat,lon)[[windspeed_name,'WDIR','COASTANGLE',
+                                         uwnd_name,vwnd_name]]
 # ----------------------------------- waves ------------------------------ #
-    waves_local = grabpoint(waves,lat,lon)[['VTPK','VHM0','VMDR']]  
+    waves_local = grabpoint(waves,lat,lon)[[waveperiod_name,
+                                            waveheight_name,
+                                            wavedir_name]]  
     #fill 3h to 1h
     waves_local = waves_local.resample('h').interpolate(method='linear')
     
@@ -64,8 +66,8 @@ def createlocal_data(name, lat, lon, atm, waves, ocean, clim):
 # ----------------------------------- MERGE ---------------- ------------- #
     data = pd.concat([atm_local,waves_local,sst_local], axis=1)
     data['WDIR_STR'] = data['WDIR'].map(lambda x: deg2compass(x))
-    data['VMDR_STR'] = data['VMDR'].map(lambda x: deg2compass(x))
-    data['BEAUFORT'] = (data['WS']*1.94).map(lambda x: beaufort_scale(x))
+    data['VMDR_STR'] = data[wavedir_name].map(lambda x: deg2compass(x))
+    data['BEAUFORT'] = (data[windspeed_name]*1.94).map(lambda x: beaufort_scale(x))
     data.name = name
     data = data.loc[FORECAST_DATE:]
     # print('         Creating data for: '+name)
@@ -93,9 +95,9 @@ def create_localforecast(idate, locations, n_jobs=10, save=True):
     sst   = load_forecast_data(ocean_path,'ocean')[sst_name].squeeze()
     sst   = xr.concat([hindcast,sst],'leadtime').sortby('leadtime').drop_duplicates(dim='leadtime')
     
-    sstclim = xr.open_dataset(ocean_climatology_dir)[sst_name]
+    # sstclim = xr.open_dataset(ocean_climatology_dir)[sst_name]
     # ------------------------ compute extra variables------------------------ #
-    atm['WS'] = np.hypot(atm.U10,atm.V10)
+    atm[windspeed_name] = np.hypot(atm.U10,atm.V10)
     atm['COASTANGLE'] = coastwinddir(atm.U10,atm.V10,atm.LANDMASK)
     atm['WDIR'] = (90-np.rad2deg(np.arctan2(-atm.V10,-atm.U10)))%360
     atm = atm.where(~atm.LANDMASK.values[0].astype(bool))
@@ -105,8 +107,7 @@ def create_localforecast(idate, locations, n_jobs=10, save=True):
     DATA=Parallel(n_jobs=n_jobs)(delayed(createlocal_data)(n,i,j,
                                                        atm,
                                                        waves,
-                                                       sst,
-                                                       sstclim) 
+                                                       sst) 
                              for n,i,j in zip(locations.index,
                                               locations.lat,
                                               locations.lon))

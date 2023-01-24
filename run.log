@@ -1,12 +1,12 @@
 ERROR 1: PROJ: proj_create_from_database: Open of /home/lucas/miniconda3/envs/forecast/share/proj failed
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 LAUNCHING CEAZAMAR REGIONAL AND LOCAL FORECAST VISUALIZATION SYSTEM
-Date: 2023-01-24  11:30:03
+Date: 2023-01-24  12:30:04
 Execution directory: /home/lucas/CEAZAMAR_FORECAST
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-LAUNCHING REGIONAL SST FORECAST: 2023-01-24  11:30:03
+LAUNCHING REGIONAL SST FORECAST: 2023-01-24  12:30:04
 Loading SST forecast data...
           Forecast data: data/FORECAST/MERCATOR/PHYSICS/2023-01-24.nc
 Plotting...
@@ -16,7 +16,7 @@ Done
 ------------------------------------------------------------------------------------------------------------------------
 
 
-LAUNCHING REGIONAL WAVE FORECAST: 2023-01-24  11:30:07
+LAUNCHING REGIONAL WAVE FORECAST: 2023-01-24  12:30:09
 Loading wave forecast data...
           Forecast data: data/FORECAST/MERCATOR/WAVES/2023-01-24.nc
 Plotting...
@@ -26,7 +26,7 @@ Done
 ------------------------------------------------------------------------------------------------------------------------
 
 
-LAUNCHING REGIONAL WIND FORECAST: 2023-01-24  11:30:15
+LAUNCHING REGIONAL WIND FORECAST: 2023-01-24  12:30:19
 Loading wind forecast data...
           Forecast data: data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2023-01-23.nc
 Plotting...
@@ -36,7 +36,7 @@ Done
 ------------------------------------------------------------------------------------------------------------------------
 
 
-LAUNCHING REGIONAL SURFACE CURRENTS FORECAST: 2023-01-24  11:30:35
+LAUNCHING REGIONAL SURFACE CURRENTS FORECAST: 2023-01-24  12:30:41
 Loading currents and SSH forecast data...
           Forecast data: data/FORECAST/MERCATOR/PHYSICS/2023-01-24.nc
 Plotting...
@@ -46,22 +46,62 @@ Done
 ------------------------------------------------------------------------------------------------------------------------
 
 
-LAUNCHING COASTAL ZONES FORECAST: 2023-01-24  11:31:25
+LAUNCHING COASTAL ZONES FORECAST: 2023-01-24  12:31:39
 
 Picking time series forecast as a table for each location...
-'thetao'
+Saving data...
+Done
+
+Making forecast plots ("oceangrams")...
+Making forecast for: TOTORALILLO_SUR                -32.0256             -71.5134            
+Making forecast for: APOLILLADO                     -29.1810             -71.4917            
+Making forecast for: CHIGUALOCO                     -31.7534             -71.5180            
+Making forecast for: COQUIMBO                       -29.9557             -71.3350            
+Making forecast for: GUANAQUEROS                    -30.1944             -71.4311            
+Making forecast for: GUAYACAN                       -29.9674             -71.3506            
+Making forecast for: HORNOS                         -29.6226             -71.2887            
+Making forecast for: LA_CEBADA                      -31.0167             -71.6505            
+Making forecast for: CHUNGUNGO                      -29.4508             -71.3093            
+Making forecast for: PUNTA_DE_CHOROS_SAN_AGUSTIN    -29.2465             -71.4684            
+Making forecast for: MAITENCILLO                    -31.2638             -71.6319            
+Making forecast for: PICHIDANGUI                    -32.1361             -71.5296            
+Making forecast for: HUENTELAUQUEN                  -31.6473             -71.5576            
+Making forecast for: LAS_CONCHAS_LOS_VILOS          -31.9124             -71.5179            
+Making forecast for: PUERTO_ALDEA                   -30.2922             -71.6088            
+Making forecast for: CASCABELES                     -31.9790             -71.4995            
+Making forecast for: LIMARI                         -30.7352             -71.7002            
+Making forecast for: PUERTO_MANSO                   -31.5114             -71.5698            
+Making forecast for: PUERTO_OSCURO                  -31.4234             -71.5932            
+Making forecast for: TALQUILLA                      -30.8780             -71.6815            
+Making forecast for: TOTORALILLO_CENTRO             -30.0733             -71.3774            
+Making forecast for: SAN_PEDRO_LOS_VILOS            -31.9091             -71.5094            
+Making forecast for: TALCARUCA                      -30.4761             -71.6967            
+Making forecast for: SIERRA                         -31.1459             -71.6627            
+Making forecast for: TONGOY                         -30.2558             -71.4999            
+Making forecast for: TOTORALILLO_NORTE              -29.4922             -71.3273            
+Making forecast for: TALCA                          -30.9288             -71.6747            
+Making forecast for: PUNTA_CHOROS_LOS_CORRALES      -29.2504             -71.4627            
+Making forecast for: LOS_CHOROS                     -29.3100             -71.3585            
+Making forecast for: SAN_PEDRO_LA_SERENA            -29.8805             -71.2738            
+Making forecast for: PEÑUELAS                       -29.9528             -71.3009            
+Making forecast for: PLAYA_CHICA_LA_HERRADURA       -29.9842             -71.3635            
+Making forecast for: EL_TOTORAL                     -30.3672             -71.6705            
+Making forecast for: ISLA_CHAÑARAL_DE_ACEITUNO      -29.0340             -71.5782            
+Making forecast for: SITIO_COSMOS                   -30.4010             -71.8160            
+Making forecast for: CASA_MAITENCILLO               -32.6500             -71.4509            
+Making forecast for: PUNTA_LENGUA_DE_VACA           -30.2550             -71.6550            
 
 
 Done
 ------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 LAUNCHING CEAZAMAR REGIONAL DIAGNOSTICS
-Date: 2023-01-24  11:31:38
+Date: 2023-01-24  12:33:37
 Execution directory: /home/lucas/CEAZAMAR_FORECAST
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-STARTING NRT DIAGNOSTICS FOR TODAY: 2023-01-24  11:31:38
+STARTING NRT DIAGNOSTICS FOR TODAY: 2023-01-24  12:33:37
 Loading SST and currents forecast data...
           Ocean forecast data: data/FORECAST/MERCATOR/PHYSICS/2023-01-23.nc
 Loading wave forecast data...
@@ -75,15 +115,16 @@ Done
 ------------------------------------------------------------------------------------------------------------------------
 
 
-STARTING TSM DIAGNOSTICS FOR YESTERDAY: 2023-01-24  11:31:42
+STARTING TSM DIAGNOSTICS FOR YESTERDAY: 2023-01-24  12:33:42
 Loading OSTIA SST data...
-name 'ocean_climatology_file' is not defined
+Plotting...
+Done
 
 
 ------------------------------------------------------------------------------------------------------------------------
 
 
-STARTING WIND DIAGNOSTICS FOR YESTERDAY: 2023-01-24  11:31:42
+STARTING WIND DIAGNOSTICS FOR YESTERDAY: 2023-01-24  12:33:51
 Loading CCMP wind data...
           data/CCMPWINDS/CCMP_RT_Wind_Analysis_20230123_V02.1_L3.0_RSS.nc
 Loading altimeter data...
@@ -103,7 +144,7 @@ Done
 ------------------------------------------------------------------------------------------------------------------------
 
 
-STARTING WAVE DIAGNOSTICS FOR YESTERDAY: 2023-01-24  11:31:44
+STARTING WAVE DIAGNOSTICS FOR YESTERDAY: 2023-01-24  12:33:53
 Loading wave hindcast data...
           Hindcast data: data/FORECAST/MERCATOR/WAVES/HINDCAST/2023-01-23.nc
 Loading altimeter data...
@@ -123,12 +164,12 @@ Done
 ------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 LAUNCHING FORECAST DATA VALIDATION AND BIAS COMPUTING.
-Date: 2023-01-24  11:31:47
+Date: 2023-01-24  12:33:57
 Execution directory: /home/lucas/CEAZAMAR_FORECAST
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-STARTING VALIDATION OF THE LAST 30 DAYS OF WIND: 2023-01-24  11:31:47
+STARTING VALIDATION OF THE LAST 30 DAYS OF WIND: 2023-01-24  12:33:57
 Loading last 30 days of WRF-Ceaza forecast data...
           ATM forecast for 2023-01-16 doesnt exist, trying with yesterday...
           ATM forecast for 2023-01-15 doesnt exist, trying with yesterday...
@@ -144,7 +185,7 @@ Done
 ------------------------------------------------------------------------------------------------------------------------
 
 
-STARTING VALIDATION OF THE LAST 30 DAYS OF SST: 2023-01-24  11:32:04
+STARTING VALIDATION OF THE LAST 30 DAYS OF SST: 2023-01-24  12:34:14
 Loading last 30 days of NEMO-Meteofrance forecast data...
 Loading last 30 days of OSTIA data
 Performing horizontal regridding...
@@ -156,7 +197,7 @@ Done
 ------------------------------------------------------------------------------------------------------------------------
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 LAUNCHING POST REQUEST AND DATA TRANSFER TO WEB SERVERS.
-Date: 2023-01-24  11:32:52
+Date: 2023-01-24  12:35:05
 Execution directory: /home/lucas/CEAZAMAR_FORECAST
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -220,29 +261,30 @@ Sending forecast to personal web server...
 /home/lucas/CEAZAMAR_FORECAST/plots/SURFACECURRENTS_FORECASTMAP_CURRENT.png
 /home/lucas/CEAZAMAR_FORECAST/plots/VIENTO_MBIAS_DIAPRONOSTICO_CURRENT.png
 /home/lucas/CEAZAMAR_FORECAST/plots/VIENTO_RMSE_DIAPRONOSTICO_CURRENT.png
+/home/lucas/CEAZAMAR_FORECAST/plots/SSTANOMALY_DIAGNOSTICMAP_CURRENT.png
 Done
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 LAUNCHING FORECAST STATUS VALIDATION SCRIPT
-Date: 2023-01-24  11:34:40
+Date: 2023-01-24  12:36:31
 Execution directory: /home/lucas/CEAZAMAR_FORECAST
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 CHECKING FORECAST FILES...
-2023-01-24 11:34:40 :  Checking OCEAN forecast file...
+2023-01-24 12:36:31 :  Checking OCEAN forecast file...
                        Path: /home/lucas/CEAZAMAR_FORECAST/data/FORECAST/MERCATOR/PHYSICS/2023-01-24.nc
                        Creation time: 2023-01-24 01:36:43
                        Forecast initialization time: 2023-01-24 00UTC
                        Forecast status: OK
 
 
-2023-01-24 11:34:40 :  Checking WAVE forecast file...
+2023-01-24 12:36:31 :  Checking WAVE forecast file...
                        Path: /home/lucas/CEAZAMAR_FORECAST/data/FORECAST/MERCATOR/WAVES/2023-01-24.nc
                        Creation time: 2023-01-24 06:00:58
                        Forecast initialization time: 2023-01-24 00UTC
                        Forecast status: OK
 
 
-2023-01-24 11:34:40 :  Checking ATM forecast file...
+2023-01-24 12:36:31 :  Checking ATM forecast file...
                        Path: /home/lucas/CEAZAMAR_FORECAST/data/FORECAST/WRF/U10V10/wrfCeazaOp_U10V10_d02_2023-01-23.nc
                        Creation time: 2023-01-24 06:37:40
                        Forecast initialization time: 2023-01-23 12UTC
@@ -252,86 +294,86 @@ CHECKING FORECAST FILES...
 
 
 CHECKING REGIONAL FORECAST FIGURES...
-2023-01-24 11:34:40 :  Path: plots/SST_FORECASTMAP_CURRENT.png
-                       Creation time: 2023-01-24 11:32:04
+2023-01-24 12:36:31 :  Path: plots/SST_FORECASTMAP_CURRENT.png
+                       Creation time: 2023-01-24 12:30:08
                        Figure status: OK
 
 
-2023-01-24 11:34:40 :  Path: plots/SST_ANOMALY_FORECASTMAP_CURRENT.png
+2023-01-24 12:36:31 :  Path: plots/SST_ANOMALY_FORECASTMAP_CURRENT.png
                        Creation time: 2023-01-24 10:08:55
                        Figure status: OK
 
 
-2023-01-24 11:34:40 :  Path: plots/SEALEVEL_ANOMALY_FORECASTMAP_CURRENT.png
-                       Creation time: 2023-01-24 11:32:52
+2023-01-24 12:36:31 :  Path: plots/SEALEVEL_ANOMALY_FORECASTMAP_CURRENT.png
+                       Creation time: 2023-01-24 12:30:59
                        Figure status: OK
 
 
-2023-01-24 11:34:40 :  Path: plots/SURFACECURRENTS_FORECASTMAP_CURRENT.png
-                       Creation time: 2023-01-24 11:33:27
+2023-01-24 12:36:31 :  Path: plots/SURFACECURRENTS_FORECASTMAP_CURRENT.png
+                       Creation time: 2023-01-24 12:31:36
                        Figure status: OK
 
 
-2023-01-24 11:34:40 :  Path: plots/WAVEHEIGHT_FORECASTMAP_CURRENT.png
-                       Creation time: 2023-01-24 11:32:09
+2023-01-24 12:36:31 :  Path: plots/WAVEHEIGHT_FORECASTMAP_CURRENT.png
+                       Creation time: 2023-01-24 12:30:14
                        Figure status: OK
 
 
-2023-01-24 11:34:40 :  Path: plots/PERIOD_FORECASTMAP_CURRENT.png
-                       Creation time: 2023-01-24 11:32:13
+2023-01-24 12:36:31 :  Path: plots/PERIOD_FORECASTMAP_CURRENT.png
+                       Creation time: 2023-01-24 12:30:18
                        Figure status: OK
 
 
-2023-01-24 11:34:40 :  Path: plots/WINDSPEED_FORECASTMAP_CURRENT.png
-                       Creation time: 2023-01-24 11:32:33
+2023-01-24 12:36:31 :  Path: plots/WINDSPEED_FORECASTMAP_CURRENT.png
+                       Creation time: 2023-01-24 12:30:40
                        Figure status: OK
 
 
 
 
 CHECKING LOCAL FORECAST FILES...
-2023-01-24 11:34:40 :  TOTORALILLO_SUR - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  APOLILLADO - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  CHIGUALOCO - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  COQUIMBO - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  GUANAQUEROS - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  GUAYACAN - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  HORNOS - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  LA_CEBADA - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  CHUNGUNGO - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  PUNTA_DE_CHOROS_SAN_AGUSTIN - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  MAITENCILLO - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  PICHIDANGUI - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  HUENTELAUQUEN - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  LAS_CONCHAS_LOS_VILOS - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  PUERTO_ALDEA - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  CASCABELES - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  LIMARI - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  PUERTO_MANSO - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  PUERTO_OSCURO - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  TALQUILLA - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  TOTORALILLO_CENTRO - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  SAN_PEDRO_LOS_VILOS - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  TALCARUCA - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  SIERRA - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  TONGOY - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  TOTORALILLO_NORTE - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  TALCA - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  PUNTA_CHOROS_LOS_CORRALES - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  LOS_CHOROS - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  SAN_PEDRO_LA_SERENA - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  PEÑUELAS - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  PLAYA_CHICA_LA_HERRADURA - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  EL_TOTORAL - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  ISLA_CHAÑARAL_DE_ACEITUNO - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
-2023-01-24 11:34:40 :  PUNTA_LENGUA_DE_VACA - File and figure status: ERROR - Forecast file is not from 2023-01-24 !
+2023-01-24 12:36:31 :  TOTORALILLO_SUR - File and figure status: OK
+2023-01-24 12:36:31 :  APOLILLADO - File and figure status: OK
+2023-01-24 12:36:31 :  CHIGUALOCO - File and figure status: OK
+2023-01-24 12:36:31 :  COQUIMBO - File and figure status: OK
+2023-01-24 12:36:31 :  GUANAQUEROS - File and figure status: OK
+2023-01-24 12:36:31 :  GUAYACAN - File and figure status: OK
+2023-01-24 12:36:31 :  HORNOS - File and figure status: OK
+2023-01-24 12:36:31 :  LA_CEBADA - File and figure status: OK
+2023-01-24 12:36:31 :  CHUNGUNGO - File and figure status: OK
+2023-01-24 12:36:31 :  PUNTA_DE_CHOROS_SAN_AGUSTIN - File and figure status: OK
+2023-01-24 12:36:31 :  MAITENCILLO - File and figure status: OK
+2023-01-24 12:36:31 :  PICHIDANGUI - File and figure status: OK
+2023-01-24 12:36:31 :  HUENTELAUQUEN - File and figure status: OK
+2023-01-24 12:36:31 :  LAS_CONCHAS_LOS_VILOS - File and figure status: OK
+2023-01-24 12:36:31 :  PUERTO_ALDEA - File and figure status: OK
+2023-01-24 12:36:31 :  CASCABELES - File and figure status: OK
+2023-01-24 12:36:31 :  LIMARI - File and figure status: OK
+2023-01-24 12:36:31 :  PUERTO_MANSO - File and figure status: OK
+2023-01-24 12:36:31 :  PUERTO_OSCURO - File and figure status: OK
+2023-01-24 12:36:31 :  TALQUILLA - File and figure status: OK
+2023-01-24 12:36:31 :  TOTORALILLO_CENTRO - File and figure status: OK
+2023-01-24 12:36:31 :  SAN_PEDRO_LOS_VILOS - File and figure status: OK
+2023-01-24 12:36:31 :  TALCARUCA - File and figure status: OK
+2023-01-24 12:36:31 :  SIERRA - File and figure status: OK
+2023-01-24 12:36:31 :  TONGOY - File and figure status: OK
+2023-01-24 12:36:31 :  TOTORALILLO_NORTE - File and figure status: OK
+2023-01-24 12:36:31 :  TALCA - File and figure status: OK
+2023-01-24 12:36:31 :  PUNTA_CHOROS_LOS_CORRALES - File and figure status: OK
+2023-01-24 12:36:31 :  LOS_CHOROS - File and figure status: OK
+2023-01-24 12:36:31 :  SAN_PEDRO_LA_SERENA - File and figure status: OK
+2023-01-24 12:36:31 :  PEÑUELAS - File and figure status: OK
+2023-01-24 12:36:31 :  PLAYA_CHICA_LA_HERRADURA - File and figure status: OK
+2023-01-24 12:36:31 :  EL_TOTORAL - File and figure status: OK
+2023-01-24 12:36:31 :  ISLA_CHAÑARAL_DE_ACEITUNO - File and figure status: OK
+2023-01-24 12:36:31 :  PUNTA_LENGUA_DE_VACA - File and figure status: OK
 
 
 FORECAST FILES: OK
 REGIONAL FORECAST: OK
-LOCAL FORECAST: ERROR
-GLOBAL STATUS: ERROR
+LOCAL FORECAST: OK
+GLOBAL STATUS: OK
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 LISTO !!!
-Execution time: 0:04:37.199890
-End time: 2023-01-24 11:34:40
+Execution time: 0:06:26.958398
+End time: 2023-01-24 12:36:31
