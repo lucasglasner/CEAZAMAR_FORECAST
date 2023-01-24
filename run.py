@@ -184,7 +184,7 @@ if __name__=='__main__':
             print('\n')
             print('STARTING NRT DIAGNOSTICS FOR TODAY: '+now())
             try:
-                nrt_forecast(FORECAST_DATE)
+                nrt_forecast((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=1)).strftime('%F'))
             except Exception as e:
                 print(e)
             print('\n')

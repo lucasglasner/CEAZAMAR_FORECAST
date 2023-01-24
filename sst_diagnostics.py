@@ -28,9 +28,7 @@ from graphical import make_maps
 from numerics import fill_borders
 from params import *
 
-import fuckit
 
-@fuckit
 def sst_diagnostics(idate):
     # --------------------------------- load data -------------------------------- #
     daysago = pd.to_datetime(idate)-pd.Timedelta(days=10)
