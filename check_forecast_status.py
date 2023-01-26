@@ -102,7 +102,7 @@ def check_regionalforecast(date=FORECAST_DATE):
     Returns:
         status (bool): Regional forecast maps (plots/*.png) status
     """
-    files = ['SST', 'SST_ANOMALY','SEALEVEL_ANOMALY','SURFACECURRENTS',
+    files = ['SST','SEALEVEL_ANOMALY','SURFACECURRENTS',
              'WAVEHEIGHT','PERIOD','WINDSPEED']
     status=[]
     for f in files:

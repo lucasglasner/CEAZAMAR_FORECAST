@@ -53,7 +53,7 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
 # ---------------------------------------------------------------------------- #
     plt.rc('font',size=12)
     fig,ax,grid = create_timegrid(data.index,9, figsize=(130,5))
-    plot_row_textcolor({'data':data['WS'],
+    plot_row_textcolor({'data':data[windspeed_name],
                         'row':0,
                         'fmt':'{:.1f}',
                         'fontsize':12,
@@ -78,7 +78,7 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                         colors=False,grid=grid, ax=ax)
     cmap = mcolors.ListedColormap(plt.cm.nipy_spectral(np.linspace(0.1,0.95,
                                                                    1000)))
-    plot_row_textcolor({'data':data['VHM0'],
+    plot_row_textcolor({'data':data[waveheight_name],
                         'row':4,
                         'fmt':'{:.1f}',
                         'fontsize':12,
@@ -86,7 +86,7 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                                         'norm':mcolors.Normalize(0,4.5)}
                        },
                         grid=grid, ax=ax)
-    plot_row_textcolor({'data':data['VTPK'],
+    plot_row_textcolor({'data':data[waveperiod_name],
                         'row':5,
                         'fmt':'{:.0f}',
                         'fontsize':12,
@@ -94,7 +94,7 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                                         'norm':mcolors.Normalize(4,24)}
                        },
                         grid=grid, ax=ax)
-    plot_row_arrows({'data':data['VMDR'],
+    plot_row_arrows({'data':data[wavedir_name],
                      'row':6},
                     grid=grid,ax=ax)
     plot_row_textcolor({'data':data['VMDR_STR'],
@@ -102,7 +102,7 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                         'fontsize':14
                         },
                         colors=False,grid=grid, ax=ax)
-    sst_daily = data['thetao'].resample('d').mean().reindex(data.index).interpolate()
+    sst_daily = data[sst_name].resample('d').mean().reindex(data.index).interpolate()
     plot_row_textcolor({'data':sst_daily,
                         'row':8,
                         'color_kwargs':{'cmap':'RdBu_r',
@@ -110,7 +110,7 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                                                                  sst_daily.max()*1.075)}
                         },
                        text=False,grid=grid,ax=ax)
-    plot_row_textcolor({'data':data['thetao'],
+    plot_row_textcolor({'data':data[sst_name],
                         'row':8,
                         'fmt':'{:0.1f}',
                         'fontsize':12
@@ -149,8 +149,8 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
 
 # ---------------------------------------------------------------------------- #
 if __name__=='__main__':
-    # name,lon,lat,outdir = 'blabla',-72,-33,'plots/PRONOSTICO_SITIOS/'
-    name,lon,lat,outdir = sys.argv[1],float(sys.argv[2]),float(sys.argv[3]),sys.argv[4]
+    name,lon,lat,outdir = 'blabla',-72,-33,'./'
+    #name,lon,lat,outdir = sys.argv[1],float(sys.argv[2]),float(sys.argv[3]),sys.argv[4]
     print('Making forecast for: '+name)
     local_forecast(FORECAST_DATE,name,lon,lat,outdir)
     sys.exit()

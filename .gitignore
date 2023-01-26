@@ -1,8 +1,2 @@
 __pycache__
-tmp/*
-plots/*
-**/*.png
-run.log
-**/*.nc
-**/*.shp
-data/CHILE*
+update.sh
