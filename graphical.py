@@ -23,6 +23,8 @@ import matplotlib.cbook as cbook
 from matplotlib.projections import register_projection
 import cartopy.crs as ccrs
 import cartopy.feature as cf
+import geopandas as gpd
+from shapely.geometry import Polygon
 
 from numerics import fill_borders
 from params import *
@@ -183,16 +185,16 @@ def make_maps(shape,figsize,
     fig,ax = plt.subplots(rows,cols,sharex=True,sharey=True,
                           subplot_kw={'projection':proj},
                           figsize=figsize, **kwargs)
+    LAND    = gpd.read_file(landpolygon_path)
+    polygon = Polygon(zip([extent[0], extent[1], extent[1], extent[0], extent[0]],
+                          [extent[2], extent[2], extent[3], extent[3], extent[2]]))
+    polygon = gpd.GeoDataFrame(index=[0], crs='epsg:4326', geometry=[polygon])
+    LAND    = gpd.clip(LAND,polygon)
     #Check axis grid dimension
     if np.size(ax)==1:
-        PROVINCES = cf.NaturalEarthFeature('cultural',
-                                            'admin_1_states_provinces',
-                                            '10m')
-        
         ax.set_extent(extent, crs=ccrs.PlateCarree())
-        ax.add_feature(PROVINCES, rasterized=True, edgecolor='k',
-                        facecolor='silver',linewidth=0.5,
-                        zorder=2)
+        LAND.plot(ax=ax, color='silver', lw=0, zorder=3)
+        LAND.boundary.plot(ax=ax, color='k', lw=0.25, zorder=3)
         ax.scatter(loclons,loclats, color='gold', edgecolor='k',
                     zorder=3,s=20)
         for i, txt in enumerate(locnames):
@@ -217,14 +219,12 @@ def make_maps(shape,figsize,
         #Loop over axes
         for axis in ax.ravel():
             #Force spatial extent and draw features (coastlines, land, etc)
-            PROVINCES = cf.NaturalEarthFeature('cultural',
-                                            'admin_1_states_provinces',
-                                            '10m')
+            
+            LAND.plot(ax=axis, color='silver', lw=0, zorder=3)
+            LAND.boundary.plot(ax=axis, color='k', lw=0.75, zorder=3)
             
             axis.set_extent(extent, crs=ccrs.PlateCarree())
-            axis.add_feature(PROVINCES, rasterized=True, edgecolor='k',
-                            facecolor='silver',linewidth=0.5,
-                            zorder=2)
+
             axis.scatter(loclons,loclats, color='gold', edgecolor='k',
                         zorder=3,s=20)
         

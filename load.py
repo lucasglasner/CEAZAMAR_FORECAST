@@ -276,7 +276,7 @@ def load_altimeters(idate, centerhour=datetime.datetime.now(), hwidth=4):
     for a in altimeters_paths:
         try:
             p = a+'/'+str(pddate.year)+'/'+ str('%02d' % pddate.month)+'/*'+idate.replace("-","")+'*'
-            data = xr.open_mfdataset(p).load().to_dataframe()
+            data = xr.open_mfdataset(p).load().drop_duplicates('time').sortby('time').to_dataframe()
             data['longitude'] = (data['longitude']+180)%360-180
             times = slice(pddate-pd.Timedelta(hours=hwidth)+pd.Timedelta(hours=centerhour.hour),
                           pddate+pd.Timedelta(hours=hwidth)+pd.Timedelta(hours=centerhour.hour))
@@ -284,15 +284,7 @@ def load_altimeters(idate, centerhour=datetime.datetime.now(), hwidth=4):
             # data = data.loc[idate]
             altimeters_data.append(data)
             print('          '+a.split("/")[-1],': Done')
-            if 'cmems' in a.split("/")[-1]:
-                n = 's6a-'+a.split("/")[-1].split("-")[-1]
-                if 'PREV' in n:
-                    n = 's6a-2'
-                else:
-                    n = 's6a-1'
-                names.append(n)
-            else:
-                names.append(a.split("/")[-1].split("-")[-1])
+            names.append(a.split("/")[-1].split("_")[-2].split("-")[0])
             del data
         except Exception as e:
             print('          '+a.split("/")[-1],':', e)
@@ -301,7 +293,8 @@ def load_altimeters(idate, centerhour=datetime.datetime.now(), hwidth=4):
     altimeters_data = altimeters_data[['latitude','longitude','VAVH','WIND_SPEED']]
     altimeters_data.columns = ['lat','lon',waveheight_name, windspeed_name]
     return altimeters_data.drop_duplicates()
-        
+         
+
 def load_ascat(idate, **kwargs):
     """
     Function for loading ASCAT L4 data as xarray

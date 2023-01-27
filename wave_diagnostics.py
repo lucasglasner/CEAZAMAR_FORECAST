@@ -32,9 +32,7 @@ from load import load_forecast_data, load_altimeters
 from graphical import make_maps
 from numerics import fill_borders, utc_to_local
 from params import *
-import fuckit
 
-@fuckit
 def wave_diagnostics(idate):
     now = datetime.datetime.now()
     # --------------------------------- load data -------------------------------- #
@@ -54,6 +52,10 @@ def wave_diagnostics(idate):
     v = -np.sin(waves[wavedir_name]*np.pi/180)
     
     altimeters_data = load_altimeters(idate)[['lat','lon',waveheight_name]]
+    satellites      = altimeters_data.index.get_level_values(0).unique()
+    altimeters_data = [utc_to_local(altimeters_data.loc[s]) 
+                       for s in satellites]
+    altimeters_data = pd.concat(altimeters_data, keys=satellites)
 
     # ---------------------------------------------------------------------------- #
     # ----------------------------------- PLOTS ---------------------------------- #
@@ -123,7 +125,7 @@ def wave_diagnostics(idate):
     
     
 if __name__=='__main__':
-    wave_diagnostics((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=1)).strftime('%F'))
+    wave_diagnostics((pd.to_datetime(FORECAST_DATE)-pd.Timedelta(days=3)).strftime('%F'))
     sys.exit()
 
     

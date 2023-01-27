@@ -25,7 +25,7 @@ NHOURS_LOCAL   = 24*9
 N_JOBS = 10
 
 #LEADTIME MAPS GENERAL CONFIGURATION
-COASTLINE_MASK_PATH    = 'data/ChileCOASTMASK.shp'
+landpolygon_path       = 'data/regiones.gpkg'
 atm_mapsextent         = [-75,-70.8,-34,-28]
 ocean_mapsextent       = [-75,-70.8,-34,-28]
 wave_mapsextent        = [-75,-70.8,-34,-28]
@@ -63,7 +63,7 @@ wave_model_name = 'MFWAM-Meteofrance'
 wave_forecast_dir  = 'data/FORECAST/MERCATOR/WAVES'
 wave_hindcast_dir  = 'data/FORECAST/MERCATOR/WAVES/HINDCAST'
 wave_altimeter_dir = str('data/WAVES_SATELLITE_NRT/nrt.cmems-du.eu/Core/'+
-                     'WAVE_GLO_WAV_L3_SWH_NRT_OBSERVATIONS_014_001')
+                     'WAVE_GLO_PHY_SWH_L3_NRT_014_001')
 # ------------------------------ wave variables ------------------------------ #
 waveheight_name  = 'VHM0'
 wavedir_name     = 'VPED'

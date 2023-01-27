@@ -51,8 +51,8 @@ matplotlib.use('Agg')
 # ---------------------------------------------------------------------------- #
 diagnostics=True
 if diagnostics:
-    make_wind_diagnostics = True
-    make_wave_diagnostics = True
+    make_wind_diagnostics = False
+    make_wave_diagnostics = False
     make_sst_diagnostics  = True
     make_nrt_diagnostics  = True
 validation = True
@@ -67,7 +67,7 @@ if forecast:
     make_currents_forecast = True
     make_wind_forecast     = True
     make_local_forecast    = True
-post_webserver = True
+post_webserver = False
 if post_webserver:
     post_ceazamar    = True
     post_personalweb = True
