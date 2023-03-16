@@ -55,12 +55,12 @@ if diagnostics:
     make_wave_diagnostics = False
     make_sst_diagnostics  = True
     make_nrt_diagnostics  = True
-validation = True
+validation = False
 if validation:
     make_wind_validation = True
     make_wave_validation = False
     make_sst_validation  = True
-forecast = True
+forecast = False
 if forecast:
     make_sst_forecast      = True
     make_wave_forecast     = True

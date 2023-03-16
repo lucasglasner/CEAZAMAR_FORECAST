@@ -7,6 +7,7 @@
   Script for making SST diagnostics based on OSTIA dataset.
  '''
 
+import os
 import sys
 from glob import glob
 import datetime
@@ -37,13 +38,15 @@ def sst_diagnostics(idate):
     sst_clim = xr.open_dataset(ocean_climatology_file)['sst_ostia']
     sst = [load_ostia(d) for d in pd.date_range(daysago, idate, freq='d')]
     sst = xr.concat(sst, 'time')
-    sst.coords['days'] = ('time',np.arange(1,len(sst.time)+1,1))
-
-    trend = sst.swap_dims({'time':'days'}).polyfit(dim='days',
+    sst.coords['days'] = ('time',np.arange(1,len(sst.time)+1,1))    
+    
+    sst_anomaly = sst.convert_calendar('noleap').groupby('time.dayofyear')-sst_clim
+    
+    trend = sst_anomaly.swap_dims({'time':'days'}).polyfit(dim='days',
                                                    deg=1).sel(degree=1)
     trend = trend.polyfit_coefficients
     
-    sst_anomaly = sst.convert_calendar('noleap').groupby('time.dayofyear')-sst_clim
+    
 
     # ---------------------------------------------------------------------------- #
     # ----------------------------------- PLOTS ---------------------------------- #
@@ -132,6 +135,26 @@ def sst_diagnostics(idate):
 
     plt.savefig('plots/SSTTREND_DIAGNOSTICMAP_CURRENT.png',
                 dpi=150,bbox_inches='tight')
+    
+    
+    #Concatenate images in one!
+    sstdiag  = plt.imread('plots/SST_DIAGNOSTICMAP_CURRENT.png', format='png')
+    sstdiag  = np.concatenate([sstdiag, np.ones(sstdiag.shape)[:,:100]],axis=1)
+    
+    sstadiag = plt.imread('plots/SSTANOMALY_DIAGNOSTICMAP_CURRENT.png', format='png')
+    sstadiag = np.concatenate([sstadiag, np.ones(sstadiag.shape)[:,:100]],axis=1)
+    
+    ssttrend = plt.imread('plots/SSTTREND_DIAGNOSTICMAP_CURRENT.png', format='png')
+    ssttrend = np.concatenate([ssttrend, np.ones(ssttrend.shape)[:,:100]],axis=1)
+    
+    fig=plt.figure(figsize=(14,8))
+    img = np.concatenate([sstdiag, sstadiag, ssttrend], axis=1)
+    plt.imshow(img)
+    plt.axis('off')
+    plt.savefig('plots/SST_DIAGNOSTICMAP_CURRENT.png', dpi=300, bbox_inches='tight')
+    os.remove('plots/SSTANOMALY_DIAGNOSTICMAP_CURRENT.png')
+    os.remove('plots/SSTTREND_DIAGNOSTICMAP_CURRENT.png')
+    
     
     print('Done')
     return
