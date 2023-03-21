@@ -18,6 +18,7 @@ import numpy as np
 import pandas as pd
 
 from params import *
+
 # ---------------------------------------------------------------------------- #
 # ---------------------------- Load data functions --------------------------- #
 # ---------------------------------------------------------------------------- #
@@ -371,3 +372,54 @@ def load_ostia(idate, **kwargs):
     else:
         print('         OSTIA data for '+idate+' doesnt exists!')
         return
+
+def load_tpxo(idate, path=ocean_tidemodel_file, n_constituents=10, **kwargs):
+    """
+    This functions load the TPXO ocean tides dataset and computes the 
+    amplitude and phase of each tidal constituent.
+
+    Args: 
+        idate (str): forecast date
+        path (str): ocean tide model file (netcdf)
+        n_constituents (int): number of tidal constituents (1..10)
+        **kwargs are passed to xarray.open_dataset()
+    Returns:
+        _type_: _description_
+    """
+#   print('Loading tide model data: '+ocean_tidemodel_file)
+    if os.path.isfile(ocean_tidemodel_file):
+        tides = xr.open_dataset(path, **kwargs)
+        tides = tides.isel(periods=slice(0,n_constituents))
+    else:
+        # print('Tide model: '+ocean_tidemodel_file+'doesnt exists!')
+        return
+    # print('Tidal constituents: '+tides.components)
+    try:
+        tides = tides.rename({'lat_r':'lat','lon_r':'lon'})
+        tides.coords['lon'] = (tides.coords['lon'] + 180) % 360 - 180
+    except Exception as e:
+        print(e)
+        pass
+    name=np.array(tides.components.split(' ')).squeeze()[:n_constituents]
+    tides = tides.assign_coords({'name':('periods',name)})
+    tides = tides.swap_dims({'periods':'name'})
+    # print('Computing amplitude and phase for each constituent...')
+    tides['tssh_complex']   = tides.ssh_r+tides.ssh_i*np.sqrt(-1, dtype=complex)
+    tides['tssh_amplitude'] = np.abs(tides['tssh_complex'])
+
+    tides['tssh_phase']     = np.mod(np.rad2deg(xr.apply_ufunc(np.angle,tides['tssh_complex'])),360)
+    tides['t_time']         = pd.to_datetime(idate)
+    
+    # if nodal_correct:
+    #     # print('Performing nodal corrections for '+idate+'...')
+    #     pf,pu,t0,phase_mkB  = egbert_correct(modified_julian_day(pd.to_datetime(idate).date()),
+    #                                          0,0,0)
+    #     pf = pf.loc[name]
+    #     pu = pu.loc[name]
+        
+    #     tides['tssh_amplitude'] = tides['tssh_amplitude']*pf.to_xarray().rename({'index':'name'})
+    #     tides['tssh_phase']     = np.mod(-tides['tssh_phase']-pu.to_xarray().rename({'index':'name'}),360)
+        
+    # print('Done')
+    return tides
+    

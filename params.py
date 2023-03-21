@@ -1,18 +1,11 @@
 '''
- # @ Author: Your name
- # @ Create Time: 2022-08-16 15:44:30
- # @ Modified by: Your name
- # @ Modified time: 2022-09-13 11:33:50
- # @ Description:
- '''
-
-'''
  # @ Author: lucas
  # @ Create Time: 2022-08-03 16:40:24
  # @ Modified by: lucas
  # @ Modified time: 2022-08-03 16:40:38
  # @ Description: Main parameters definitions
  '''
+
 import datetime
 
 # ---------------------------------------------------------------------------- #
@@ -54,6 +47,7 @@ uwnd_name           = 'U10'
 vwnd_name           = 'V10'
 lsm_name            = 'LANDMASK'
 windspeed_name      = 'WS'
+winddir_name        = 'WDIR'
 
 # ---------------------------------------------------------------------------- #
 #                                     WAVES                                    #
@@ -75,15 +69,16 @@ waveperiod_name  = 'VTPK'
 ocean_model_name       = 'NEMO-Meteofrance'
 ocean_validation_name  = 'OSTIA'
 # ----------------------------------- paths ---------------------------------- #
+ocean_tidemodel_file   = 'data/TPXO7.nc'
 ocean_forecast_dir     = 'data/FORECAST/MERCATOR/PHYSICS'
 ocean_hindcast_dir     = 'data/FORECAST/MERCATOR/PHYSICS/HINDCAST'
 ocean_climatology_file = 'data/CLIMATOLOGIES.nc'
 ocean_validation_dir   = 'data/OSTIA'
 # ------------------------------ variable names ------------------------------ #
-sst_name = 'thetao'
-uo_name  = 'uo'
-vo_name  = 'vo'
-ssh_name = 'zos'
+sst_name  = 'thetao'
+uo_name   = 'uo'
+vo_name   = 'vo'
+ssh_name  = 'zos'
 
 
 

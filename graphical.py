@@ -273,7 +273,7 @@ def make_forecast_plot(var, cmap, cbar_label, vmin, vmax, figsize=MAPS_FIGSIZE,
     return fig,ax,cax,cbar
 
 
-def create_timegrid(timestamp,nvars, figsize=(120,3)):
+def create_timegrid(timestamp, nvars, figsize=(120,3)):
     fig = plt.figure(num=0,figsize=figsize)
     ax  = fig.add_subplot(111)
     
@@ -330,6 +330,10 @@ def plot_row_textcolor(data, grid, ax, text=True, colors=True):
             ax.pcolormesh(X,Y,matrix,rasterized=True,edgecolor='w')
     if text:
         for y in range(matrix.shape[1]):
+            if 'nan' in str(matrix.iloc[row,y]):
+                continue
+            if 'NaT' in str(matrix.iloc[row,y]):
+                continue
             if 'fmt' in data.keys():
                 ax.text((y+0.5)/matrix.shape[1],1-(row+0.5)/matrix.shape[0],
                         data['fmt'].format(matrix.iloc[row,y]),
