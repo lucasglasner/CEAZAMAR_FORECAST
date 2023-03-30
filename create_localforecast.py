@@ -96,12 +96,12 @@ def createlocal_data(name, lat, lon, atm, waves, ocean):
     tides_local      = tides_local.reindex(sst_local.index)
 
 # ----------------------------------- MERGE ---------------------------- #
-    data = pd.concat([atm_local,waves_local,sst_local,tides_local,
-                      hightides,lowtides], axis=1)
+    data = pd.concat([atm_local,waves_local,sst_local], axis=1)
     data['WDIR_STR'] = data['WDIR'].map(lambda x: deg2compass(x))
     data['VMDR_STR'] = data[wavedir_name].map(lambda x: deg2compass(x))
     data['BEAUFORT'] = (data[windspeed_name]*1.94).map(
         lambda x: beaufort_scale(x))
+    data = pd.concat([data,tides_local,hightides,lowtides], axis=1)
     data.name = name
     data = utc_to_local(data)
     # data = data.loc[FORECAST_DATE:]

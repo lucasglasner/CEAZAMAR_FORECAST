@@ -22,6 +22,7 @@ import cmocean
 import seaborn as sns
 import cartopy.crs as ccrs
 
+from numerics import coriolis_parameter
 from load import load_forecast_data,forecast_path,load_forecast_ini
 from graphical import make_forecast_plot
 from params import *
@@ -43,7 +44,16 @@ def currents_forecast(idate):
     data = data.reindex({'leadtime':pd.date_range(idate,fdate,freq='d')})
     uo,vo = data[uo_name],data[vo_name]
     data['cs'] = np.hypot(uo,vo)
-
+    
+    lon2d,lat2d = np.meshgrid(data.lon,data.lat)
+    
+    #Compute geostrophic currents
+    f  = coriolis_parameter(lat2d)
+    ug = -9.81/f*data[ssh_name].differentiate('lat')/6400e3
+    vg = 9.81/f*data[ssh_name].differentiate('lon')/6400e3
+    
+    ug = ug.transpose('leadtime','lat','lon')
+    vg = vg.transpose('leadtime','lat','lon')/np.cos(np.deg2rad(lat2d))
 
 # ---------------------------------------------------------------------------- #
 #                                     PLOTS                                    #
@@ -56,8 +66,8 @@ def currents_forecast(idate):
         cmap=cmocean.cm.balance,
         cbar_label='Anomalía del nivel del mar (cm)',
         vmin=vmin,vmax=vmax,level_step=0.5,
-        xticks=[-75,-73,-71],
-        yticks=[-34,-33,-32,-31,-30,-29,-28,-27],
+        xticks=[-74,-72],
+        yticks=[-34,-33,-32,-31,-30,-29,-28],
         extent=ocean_mapsextent)
     
     
@@ -66,9 +76,12 @@ def currents_forecast(idate):
     for i,axis in enumerate(ax.ravel()):
         axis.set_title(pd.to_datetime(data.leadtime[i].values).strftime('%a %d-%b'),
                     loc='left', fontsize=13.5)
-        axis.quiver(data.lon,data.lat,uo[i].values,vo[i].values, scale=3,width=0.008,
-                transform=ccrs.PlateCarree(), regrid_shape=14, alpha=0.7,
-                zorder=0)
+        axis.streamplot(lon2d,lat2d,ug[i].values, vg[i].values, density=1.0,
+                transform=ccrs.PlateCarree(), zorder=0, color='k', linewidth=0.8,
+                arrowsize=0.5)
+        # axis.quiver(lon2d,lat2d,ug[i].values,vg[i].values, scale=3,width=0.008,
+        #         transform=ccrs.PlateCarree(), regrid_shape=16, alpha=0.7,
+        #         zorder=0)
 
     ax[-1,0].text(0,-0.15,'Inicio pronóstico océanico: '+ocean_model_name+' '+init+'\n',
                   fontsize=10, transform=ax[-1,0].transAxes, va='top', ha='left')
@@ -85,8 +98,8 @@ def currents_forecast(idate):
         cmap='PuBu',
         cbar_label='Líneas de corriente y velocidad (cm/s)',
         vmin=vmin,vmax=vmax,level_step=0.5,
-        xticks=[-75,-73,-71],
-        yticks=[-34,-33,-32,-31,-30,-29,-28,-27],
+        xticks=[-74,-72],
+        yticks=[-34,-33,-32,-31,-30,-29,-28],
         extent=ocean_mapsextent)
     
     cbar.ax.tick_params(labelsize=14)
@@ -97,8 +110,8 @@ def currents_forecast(idate):
         # axis.quiver(data.lon,data.lat,uo[i].values,vo[i].values, scale=3,width=0.008,
         #         transform=ccrs.PlateCarree(), regrid_shape=14, alpha=0.7,
         #         zorder=0)
-        axis.streamplot(data.lon,data.lat,uo[i].values, vo[i].values, density=1.5,
-                transform=ccrs.PlateCarree(), zorder=0, color='k', linewidth=0.5,
+        axis.streamplot(lon2d,lat2d,uo[i].values, vo[i].values, density=1.0,
+                transform=ccrs.PlateCarree(), zorder=0, color='k', linewidth=0.8,
                 arrowsize=0.5)
 
     ax[-1,0].text(0,-0.15,'Inicio pronóstico océanico: '+ocean_model_name+' '+init+'\n',

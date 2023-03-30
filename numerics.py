@@ -21,6 +21,33 @@ import scipy.signal as signal
 # ---------------------------- Numerical data functions ---------------------- #
 # ---------------------------------------------------------------------------- #
 
+def coriolis_parameter(lat, units='deg'):
+    """
+    This function computes the classical coriolis parameter
+    or planetary vorticity from an array of latitudes.
+
+    Args:
+        lat (array): latitude
+        units (str, optional): units of latitude array.
+        Defaults to 'deg'.
+
+    Raises:
+        ValueError: If units is not deg or rad
+
+    Returns:
+        array: coriolis parameter
+    """
+    if units == 'deg':
+        lat = np.deg2rad(lat)
+    elif units == 'rad':
+        pass
+    else:
+        raise ValueError('units should be "deg" or "rad" not'+str(units))
+    omega = 1/(24*3600) #Earth axis angular speed
+    f     = 2*omega*np.sin(lat)
+    return f
+    
+
 def julian_day(date):
     """
     From a python datetime compute the julian day
@@ -384,12 +411,13 @@ def grabpoint(data,lat,lon,method='nearest'):
 
     
 def egbert_correct(mjd, hour, minutes, seconds):
-    #---------------------------------------------------------------------
+    """
     #  Correct phases and amplitudes for real time runs
     #  Use parts of pos-processing code from Egbert's & Erofeeva's (OSU) 
     #  TPXO model. Their routines have been adapted from code by Richard Ray 
     #  (@?) and David Cartwright.
     #  Adapted to python from crocotoolsv1.2 egbert_correct.m function
+    """
     #---------------------------------------------------------------------
     tstart=mjd+hour/24+minutes/(60*24)+seconds/(60*60*24)
     # Determine nodal corrections pu & pf :
