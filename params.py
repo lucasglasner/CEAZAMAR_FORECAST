@@ -59,10 +59,17 @@ wave_hindcast_dir  = 'data/FORECAST/MERCATOR/WAVES/HINDCAST'
 wave_altimeter_dir = str('data/WAVES_SATELLITE_NRT/nrt.cmems-du.eu/Core/'+
                      'WAVE_GLO_PHY_SWH_L3_NRT_014_001')
 # ------------------------------ wave variables ------------------------------ #
-waveheight_name  = 'VHM0'
-wavedir_name     = 'VPED'
-waveperiod_name  = 'VTPK'
+waveheight_name   = 'VHM0'
+swell1height_name = 'VHM0_SW1'
+swell2height_name = 'VHM0_SW2'
 
+waveperiod_name   = 'VTPK'
+swell1period_name = 'VTM01_SW1'
+swell2period_name = 'VTM01_SW2'
+
+wavedir_name      = 'VPED'
+swell1dir_name    = 'VMDR_SW1'
+swell2dir_name    = 'VMDR_SW2'
 # ---------------------------------------------------------------------------- #
 #                                     OCEAN                                    #
 # ---------------------------------------------------------------------------- #

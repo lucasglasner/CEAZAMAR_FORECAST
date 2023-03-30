@@ -59,7 +59,7 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                         'fmt':'{:.0f}',
                         'fontsize':14,
                         'color_kwargs':{'cmap':'OrRd',
-                                        'norm':mcolors.Normalize(5,40)}
+                                        'norm':mcolors.Normalize(5,45)}
                         },
                         grid=grid, ax=ax)
     plot_row_textcolor({'data':data['BEAUFORT'],

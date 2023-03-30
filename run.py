@@ -49,25 +49,25 @@ matplotlib.use('Agg')
 # ---------------------------------------------------------------------------- #
 #                               GLOBAL VARIABLES                               #
 # ---------------------------------------------------------------------------- #
-diagnostics=False
+diagnostics=True
 if diagnostics:
     make_wind_diagnostics = False
     make_wave_diagnostics = False
     make_sst_diagnostics  = True
     make_nrt_diagnostics  = True
-validation = False
+validation = True
 if validation:
     make_wind_validation = True
     make_wave_validation = False
     make_sst_validation  = True
 forecast = True
 if forecast:
-    make_sst_forecast      = False
-    make_wave_forecast     = False
-    make_currents_forecast = False
-    make_wind_forecast     = False
+    make_sst_forecast      = True
+    make_wave_forecast     = True
+    make_currents_forecast = True
+    make_wind_forecast     = True
     make_local_forecast    = True
-post_webserver = False
+post_webserver = True
 if post_webserver:
     post_ceazamar    = True
     post_personalweb = True
