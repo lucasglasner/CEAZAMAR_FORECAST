@@ -1,4 +1,4 @@
-# !/usr/bin/env/python3
+#!/home/lucas/miniconda3/envs/forecast/bin/python
 
 
 '''
@@ -160,15 +160,14 @@ if __name__=='__main__':
                         outdir.append('plots/FORECAST_SITES/CEAZAMAR/')
                     else:
                         outdir.append('plots/FORECAST_SITES/')
-                Pool(processes=N_JOBS).starmap(local_forecast,
-                                            zip(repeat(FORECAST_DATE, len(locations)),
+                pool = Pool(processes=N_JOBS)
+                pool.starmap(local_forecast,zip(repeat(FORECAST_DATE, len(locations)),
                                                 locations.index,
                                                 locations.lon,
                                                 locations.lat,
                                                 outdir))
             except Exception as e:
                 print(e)
-            # time.sleep(len(locations)*2)
             print('\n')
             print('Done')
             space(char='-')
@@ -305,6 +304,10 @@ if __name__=='__main__':
         else:
             print('GLOBAL STATUS: ERROR')
     space()
+    try:
+        pool.terminate()
+    except:
+        pass
     end = datetime.datetime.now()
     print("LISTO !!!")
     print('Execution time: '+str((end-start)))

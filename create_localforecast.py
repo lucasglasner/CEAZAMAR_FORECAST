@@ -30,7 +30,7 @@ from numerics import utc_to_local
 from params import *
 
 import sys
-sys.path.append('./pytides/pytides/')
+sys.path.append('/home/lucas/CEAZAMAR_FORECAST/pytides/pytides')
 
 from pytides.pytides.tide import Tide
 from pytides.pytides.constituent import TPXO7
@@ -77,7 +77,7 @@ def createlocal_data(name, lat, lon, atm, waves, ocean):
     
     #Get time of local high and low tide
     hightides_time   = tides_local.index[argrelmax(tides_local.values,
-                                              order=120)]
+                                              order=60*8)]
     hightides        = pd.Series(np.ones(len(sst_local.index))*np.nan,
                                  index=sst_local.index,name='hightides')
     for h in hightides_time:
@@ -85,7 +85,7 @@ def createlocal_data(name, lat, lon, atm, waves, ocean):
         hightides.iloc[np.where(f==np.min(f))] = h-pd.Timedelta(hours=4)
         
     lowtides_time    = tides_local.index[argrelmin(tides_local.values,
-                                              order=120)]
+                                              order=60*8)]
     lowtides         = pd.Series(np.ones(len(sst_local.index))*np.nan,
                                  index=sst_local.index,name='lowtides')
     for h in lowtides_time:
