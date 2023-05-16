@@ -29,7 +29,7 @@ from params import *
 # ------------------------- Script specific functions ------------------------ #
 def sst_validation(N=30, offset=3):
     # ----------------------- Define times for the analysis ---------------------- #
-    time = target_date("data/FORECAST/SST/DATAD/*.nc","data/OSTIA/*.nc")
+    time = target_date(ocean_forecast_dir+'/*.nc',"data/OSTIA/*.nc")
     time = time-pd.Timedelta(days=offset)
     target_times = [time-pd.Timedelta(days=n) for n in range(N)]
     date_interval = target_times[-1].strftime("%F"),target_times[0].strftime("%F")
