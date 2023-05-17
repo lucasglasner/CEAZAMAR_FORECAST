@@ -37,7 +37,8 @@ def sst_diagnostics(idate):
     print('Loading OSTIA SST data...')
     sst_clim = xr.open_dataset(ocean_climatology_file)['sst_ostia']
     sst = [load_ostia(d) for d in pd.date_range(daysago, idate, freq='d')]
-    sst = xr.concat(sst, 'time')
+    mask = [False if v is None else True for v in sst]
+    sst = xr.concat(np.array(sst)[mask], 'time')
     sst.coords['days'] = ('time',np.arange(1,len(sst.time)+1,1))    
     
     sst_anomaly = sst.convert_calendar('noleap').groupby('time.dayofyear')-sst_clim

@@ -31,7 +31,7 @@ from params import *
 
 def nrt_forecast(idate):
     now = datetime.datetime.now()
-    extent = [-75, -70.5, -34, -28]
+    extent = [-75, -70.6, -34, -28]
     # --------------------------------- load data -------------------------------- #
     #Load ocean data
     print('Loading SST and currents forecast data...')

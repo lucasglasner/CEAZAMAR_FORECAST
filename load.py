@@ -363,14 +363,13 @@ def load_ostia(idate, **kwargs):
     ostia_path = 'data/OSTIA/'+p.strftime('%Y%m%d')+\
         '-UKMO-L4HRfnd-GLOB-v01-fv02-OSTIA.nc'
     if os.path.isfile(ostia_path):
-        # print('          '+ostia_path)
         data = xr.open_dataset(ostia_path, **kwargs).analysed_sst-273.15
         data = data.resample({'time':'d'}).mean().squeeze()
         data = data.sel(lat=slice(diagnostics_mapsextent[2]-1,diagnostics_mapsextent[3]+1),
                     lon=slice(diagnostics_mapsextent[0]-1,diagnostics_mapsextent[1]+1))
         return data
     else:
-        print('         OSTIA data for '+idate+' doesnt exists!')
+        print('         OSTIA data for '+idate.strftime('%F')+' doesnt exists!')
         return
 
 def load_tpxo(idate, path=ocean_tidemodel_file, n_constituents=10, **kwargs):
