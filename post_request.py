@@ -28,17 +28,16 @@ def transfer_personalweb():
     paths = glob(localforecastdir+'*FORECAST*.png')
     paths = paths + glob(localforecastdir+'CEAZAMAR/*FORECAST*.png')
     paths = paths + glob(regionalforecastdir+'*.png')
-    files = {'img':open(p, 'rb') for p in paths}
+
+    files = {'img'+str(i):open(p, 'rb') for i,p in enumerate(paths)}
     
-    for p in paths:
-        print(p)
-    
+    # print(files)
     resp = requests.post(weburl, files=files)
     print(resp.text)
     return resp.text
 
 if __name__=='__main__':
-    transfer_ceazamar()
+    # transfer_ceazamar()
     transfer_personalweb()
     
 
