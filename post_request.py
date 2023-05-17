@@ -24,20 +24,18 @@ def transfer_ceazamar():
             'CEAZAMAR/*.png lucas@ip1.ceazamet.cl:/home/lucas/PRONOSTICOS/LOCAL/')
     return
 
-def postserver(imgpath):
-    print(imgpath)
-    img = {'img':open(imgpath,'rb')}
-    resp = requests.post(weburl,files=img)
-    return resp.text
-
 def transfer_personalweb():
     paths = glob(localforecastdir+'*FORECAST*.png')
     paths = paths + glob(localforecastdir+'CEAZAMAR/*FORECAST*.png')
+    paths = paths + glob(regionalforecastdir+'*.png')
+    files = {'img':open(p, 'rb') for p in paths}
+    
     for p in paths:
-        postserver(p)
-    for p in glob(regionalforecastdir+'*.png'):
-        postserver(p)
-    return
+        print(p)
+    
+    resp = requests.post(weburl, files=files)
+    print(resp.text)
+    return resp.text
 
 if __name__=='__main__':
     transfer_ceazamar()
