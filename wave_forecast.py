@@ -56,7 +56,7 @@ def wave_forecast(idate):
 # ------------------------------------ Hm0 ----------------------------------- #
     plt.rc('font',size=12)
     vmin,vmax=1.0, 5.5
-    cmap = mcolors.ListedColormap(plt.cm.nipy_spectral(np.linspace(0.1,0.95,
+    cmap = mcolors.ListedColormap(plt.cm.nipy_spectral(np.linspace(0.3,0.95,
                                                                    1000)))
     fig,ax,cax,cbar = make_forecast_plot(var=waves[waveheight_name],
         cmap=cmap,

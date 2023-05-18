@@ -78,7 +78,7 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                         },
                         colors=False,grid=grid, ax=ax)
 # ----------------------------------- WAVES ---------------------------------- #
-    cmap = mcolors.ListedColormap(plt.cm.nipy_spectral(np.linspace(0.1,0.95,
+    cmap = mcolors.ListedColormap(plt.cm.nipy_spectral(np.linspace(0.4,0.95,
                                                                    1000)))
     plot_row_textcolor({'data':data[waveheight_name],
                         'row':4,
@@ -179,7 +179,7 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
 
 # ---------------------------------------------------------------------------- #
 if __name__=='__main__':
-    name,lon,lat,outdir = 'PICHIDANGUI2',-71.52963575601872,-32.136061055814,'./'
+    name,lon,lat,outdir = "TONGOY",-71.49985264043625,-30.25582913748926,'./'
     #name,lon,lat,outdir = sys.argv[1],float(sys.argv[2]),float(sys.argv[3]),sys.argv[4]
     print('Making forecast for: '+name)
     local_forecast(FORECAST_DATE,name,lon,lat,outdir)
