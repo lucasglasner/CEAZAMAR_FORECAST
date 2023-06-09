@@ -11,7 +11,7 @@ import datetime
 # ---------------------------------------------------------------------------- #
 #                                 GENERAL STUFF                                #
 # ---------------------------------------------------------------------------- #
-FORECAST_DATE        = datetime.datetime.now().strftime('%F')
+FORECAST_DATE        = '2023-01-16'#datetime.datetime.now().strftime('%F')
 EXECUTION_DIRECTORY  = '/home/lucas/projects/CEAZAMAR_KITCHEN/CEAZAMAR_FORECAST'
 NDAYS_REGIONAL = 10
 NHOURS_LOCAL   = 24*9-12
@@ -21,7 +21,7 @@ N_JOBS = 10
 landpolygon_path       = 'data/regiones.gpkg'
 atm_mapsextent         = [-75,-70.8,-34,-28]
 ocean_mapsextent       = [-75,-70.8,-34,-28]
-wave_mapsextent        = [-75,-70.8,-34,-28]
+wave_mapsextent        = [-74,-70.8,-34,-28]
 diagnostics_mapsextent = [-75,-70.8,-34,-28]
 
 MAPS_GRID    = (2,5)

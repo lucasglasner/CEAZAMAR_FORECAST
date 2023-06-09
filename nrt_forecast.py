@@ -102,7 +102,7 @@ def nrt_forecast(idate):
                  label='Velocidad del viento (m/s)')
     
     vmin,vmax=1.0, 5.5
-    cmap = mcolors.ListedColormap(plt.cm.nipy_spectral(np.linspace(0.1,0.95,
+    cmap = mcolors.ListedColormap(plt.cm.nipy_spectral(np.linspace(0.4,0.95,
                                                                    1000)))
     m=ax[0,2].contourf(waves.lon, waves.lat, fill_borders(waves[waveheight_name]),
                   cmap=cmap, extend='both', levels=np.arange(vmin,vmax+0.1,0.1))

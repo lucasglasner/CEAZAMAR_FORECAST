@@ -160,6 +160,7 @@ def check_localforecast(date=FORECAST_DATE):
         status (bool): Created files and figures (oceangrams) status
     """
     locations = pd.read_csv('data/COASTAL_POINTS.csv', index_col=0)
+    locations = locations[locations['REGION']=='COQUIMBO']
     locations = list(locations[locations['CEAZAMAR']].index)
     status=[]
     for site in locations:
