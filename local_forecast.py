@@ -179,7 +179,7 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
 
 # ---------------------------------------------------------------------------- #
 if __name__=='__main__':
-    name,lon,lat,outdir = "TONGOY",-71.49985264043625,-30.25582913748926,'./'
+    name,lon,lat,outdir = "CALDERA",-72.84,-28.04,'./'
     #name,lon,lat,outdir = sys.argv[1],float(sys.argv[2]),float(sys.argv[3]),sys.argv[4]
     print('Making forecast for: '+name)
     local_forecast(FORECAST_DATE,name,lon,lat,outdir)

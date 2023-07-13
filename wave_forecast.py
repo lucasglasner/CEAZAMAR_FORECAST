@@ -144,7 +144,7 @@ def wave_forecast(idate):
     fig,ax,cax,cbar = make_forecast_plot(var=waves[waveperiod_name],
         cmap='turbo',
         cbar_label='Período peak (s)',
-        vmin=vmin,vmax=vmax,level_step=0.25,
+        vmin=vmin,vmax=vmax,level_step=1.0,
         xticks=[-74,-72],
         yticks=[-34,-33,-32,-31,-30,-29,-28],
         extent=wave_mapsextent)
@@ -172,7 +172,7 @@ def wave_forecast(idate):
     fig,ax,cax,cbar = make_forecast_plot(var=waves[swell1period_name],
         cmap='turbo',
         cbar_label='Período del swell principal (s)',
-        vmin=vmin,vmax=vmax,level_step=0.25,
+        vmin=vmin,vmax=vmax,level_step=1.0,
         xticks=[-74,-72],
         yticks=[-34,-33,-32,-31,-30,-29,-28],
         extent=wave_mapsextent)
@@ -198,7 +198,7 @@ def wave_forecast(idate):
     fig,ax,cax,cbar = make_forecast_plot(var=waves[swell2period_name],
         cmap='turbo',
         cbar_label='Período del swell secundario (s)',
-        vmin=vmin,vmax=vmax,level_step=0.25,
+        vmin=vmin,vmax=vmax,level_step=1.0,
         xticks=[-74,-72],
         yticks=[-34,-33,-32,-31,-30,-29,-28],
         extent=wave_mapsextent)

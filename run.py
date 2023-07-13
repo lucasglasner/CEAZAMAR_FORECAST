@@ -149,7 +149,7 @@ if __name__=='__main__':
                 create_localforecast(FORECAST_DATE, locations=locations, n_jobs=N_JOBS)
                 outdir = []
                 print('Making forecast plots ("oceangrams")...')
-                for p,name,lat,lon in zip(locations.CEAZAMAR, locations.index,
+                for p,name,lat,lon in zip(locations.CEAZAMAR, locations.Name,
                                         locations.lon, locations.lat):
                     text=pd.DataFrame([name.ljust(30,' '),
                         "{:.4f}".format(lon).ljust(20,' '),
@@ -162,7 +162,7 @@ if __name__=='__main__':
                         outdir.append('plots/FORECAST_SITES/')
                 pool = Pool(processes=N_JOBS)
                 pool.starmap(local_forecast,zip(repeat(FORECAST_DATE, len(locations)),
-                                                locations.index,
+                                                locations.Name,
                                                 locations.lon,
                                                 locations.lat,
                                                 outdir))

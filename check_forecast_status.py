@@ -161,7 +161,7 @@ def check_localforecast(date=FORECAST_DATE):
     """
     locations = pd.read_csv('data/COASTAL_POINTS.csv', index_col=0)
     locations = locations[locations['REGION']=='COQUIMBO']
-    locations = list(locations[locations['CEAZAMAR']].index)
+    locations = list(locations[locations['CEAZAMAR']]['Name'])
     status=[]
     for site in locations:
         p         = 'tmp/'+site.replace('_','')+'_FORECAST_CURRENT.csv'

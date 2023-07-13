@@ -158,14 +158,14 @@ def create_localforecast(idate, locations, n_jobs=10, save=True):
                                                            atm,
                                                            waves,
                                                            ocean) 
-                             for n,i,j in zip(locations.index,
+                             for n,i,j in zip(locations.Name,
                                               locations.lat,
                                               locations.lon))
     DATA = [data.reindex(pd.date_range(idate,fdate,freq='h'))
             for data in DATA]
     if save:
         print('Saving data...')
-        for name,data in zip(locations.index,DATA):
+        for name,data in zip(locations.Name,DATA):
             # data = data.reindex(pd.date_range(idate,fdate,freq='h'))
             # data = data.loc[idate:fdate]
             data.to_csv('tmp/'+name.replace("_","")+'_FORECAST_CURRENT.csv')
