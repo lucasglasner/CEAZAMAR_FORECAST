@@ -11,8 +11,9 @@ import datetime
 # ---------------------------------------------------------------------------- #
 #                                 GENERAL STUFF                                #
 # ---------------------------------------------------------------------------- #
-FORECAST_DATE        = datetime.datetime.now().strftime('%F')
-EXECUTION_DIRECTORY  = '/home/lucas/CEAZAMAR_FORECAST'
+# FORECAST_DATE        = datetime.datetime.now().strftime('%F')
+FORECAST_DATE='2023-07-27'
+EXECUTION_DIRECTORY  = '/home/lucas/projects/CEAZAMAR_KITCHEN/CEAZAMAR_FORECAST'
 NDAYS_REGIONAL = 10
 NHOURS_LOCAL   = 24*9-12
 N_JOBS = 10

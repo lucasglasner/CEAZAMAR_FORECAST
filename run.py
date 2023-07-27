@@ -67,7 +67,7 @@ if forecast:
     make_currents_forecast = True
     make_wind_forecast     = True
     make_local_forecast    = True
-post_webserver = True
+post_webserver = False
 if post_webserver:
     post_ceazamar    = True
     post_personalweb = True

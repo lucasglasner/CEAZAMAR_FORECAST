@@ -90,7 +90,7 @@ def nrt_forecast(idate):
     cax.axis('off')
     vmin,vmax=0, 15
     cmap='viridis'
-    m=ax[0,0].contourf(winds.XLONG, winds.XLAT, fill_borders(winds[windspeed_name]),
+    m=ax[0,0].contourf(winds.lon, winds.lat, fill_borders(winds[windspeed_name]),
                      cmap=cmap, extend='both', levels=np.arange(vmin,vmax+0.5,0.5))
     ax[0,0].quiver(winds.lon,winds.lat,
                    winds[uwnd_name].values,

@@ -17,6 +17,7 @@ import xarray as xr
 import numpy as np
 import pandas as pd
 
+from numerics import regrid
 from params import *
 
 # ---------------------------------------------------------------------------- #
@@ -130,14 +131,22 @@ def load_wrf(path, **kwargs):
     data = xr.open_dataset(path, engine='netcdf4', **kwargs)
     p = data.attrs['SIMULATION_START_DATE']
     data = data.sortby('XTIME')
-    data = data.assign_coords({'west_east':data.XLONG.values[0,:],
-                               'south_north':data.XLAT.values[:,0]})
-    data = data.rename({'south_north':'lat',
-                        'west_east':'lon',
-                        'XTIME':'leadtime'})
-    data.coords['time'] = pd.to_datetime(p,
-                                         format="%Y-%m-%d_%H:%M:%S")
-    data = data.sortby('lat').sortby('lon')
+    data = data.rename({'south_north':'y',
+                        'west_east':'x',
+                        'XTIME':'leadtime',
+                        'XLONG':'lon',
+                        'XLAT':'lat'})
+    data.coords['time'] = pd.to_datetime(p, format="%Y-%m-%d_%H:%M:%S")
+    
+    # Regrid to rectangular grid
+    lonmin,lonmax = data.lon.min().item(), data.lon.max().item()
+    latmin,latmax = data.lat.min().item(), data.lat.max().item()
+    dlon,dlat = data.lon.diff('x').min(),data.lat.diff('y').min()
+    dlon,dlat = abs(dlon.item()),abs(dlat.item())
+    hres      = min(dlon,dlat)
+    husk = xr.Dataset(coords={'lat':(['y'], np.arange(latmin,latmax+hres,hres)),
+                                'lon':(['x'], np.arange(lonmin,lonmax+hres,hres))})
+    data = regrid(data,husk).rename({'x':'lon','y':'lat'})
     return data
 
 def load_mercator(path, **kwargs):

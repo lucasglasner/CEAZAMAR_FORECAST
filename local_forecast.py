@@ -41,7 +41,7 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                            index_col=0)
         data.index = pd.to_datetime(data.index)  
     else:
-        locations=pd.DataFrame([lon,lat],columns=[name],index=['lon','lat'])
+        locations=pd.DataFrame([lon,lat,name],columns=[0],index=['lon','lat','Name'])
         data = create_localforecast(idate,locations.T, save=False)[0]
         data.index = pd.to_datetime(data.index)
     inits = []
@@ -179,7 +179,7 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
 
 # ---------------------------------------------------------------------------- #
 if __name__=='__main__':
-    name,lon,lat,outdir = "CALDERA",-72.84,-28.04,'./'
+    name,lon,lat,outdir = "EJEMPLO 75°W 30°S",-75,-30,'./'
     #name,lon,lat,outdir = sys.argv[1],float(sys.argv[2]),float(sys.argv[3]),sys.argv[4]
     print('Making forecast for: '+name)
     local_forecast(FORECAST_DATE,name,lon,lat,outdir)

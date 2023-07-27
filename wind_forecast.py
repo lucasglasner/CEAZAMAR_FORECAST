@@ -18,7 +18,6 @@ import pandas as pd
 import numpy as np
 
 import matplotlib.pyplot as plt
-from colormap import Colormap
 import cartopy.crs as ccrs
 
 
@@ -67,7 +66,7 @@ def wind_forecast(idate):
     for i,axis in enumerate(ax.ravel()):
         axis.set_title(pd.to_datetime(wind.leadtime[i].values).strftime('%a %d-%b'),
                     loc='left', fontsize=13.5)
-        axis.quiver(wind.XLONG,wind.XLAT,u[i].values,v[i].values, scale=16,width=0.005,
+        axis.quiver(wind.lon,wind.lat,u[i].values,v[i].values, scale=16,width=0.005,
                 transform=ccrs.PlateCarree(), regrid_shape=16, alpha=1.0,
                 zorder=0)
 
