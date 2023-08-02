@@ -58,8 +58,8 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                         'row':0,
                         'fmt':'{:.0f}',
                         'fontsize':14,
-                        'color_kwargs':{'cmap':'OrRd',
-                                        'norm':mcolors.Normalize(5,45)}
+                        'color_kwargs':{'cmap':'traffic_ceaza',
+                                        'norm':mcolors.Normalize(10,40)}
                         },
                         grid=grid, ax=ax)
     plot_row_textcolor({'data':data['BEAUFORT'],
@@ -67,7 +67,7 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                         'fmt':'{:.0f}',
                         'fontsize':14,
                         'color_kwargs':{'cmap':'PuRd',
-                                        'norm':mcolors.Normalize(3,12)}},
+                                        'norm':mcolors.Normalize(3,9)}},
                          grid=grid,ax=ax)
     plot_row_arrows({'data':data['WDIR'],
                      'row':2},
@@ -78,14 +78,12 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                         },
                         colors=False,grid=grid, ax=ax)
 # ----------------------------------- WAVES ---------------------------------- #
-    cmap = mcolors.ListedColormap(plt.cm.nipy_spectral(np.linspace(0.4,0.95,
-                                                                   1000)))
     plot_row_textcolor({'data':data[waveheight_name],
                         'row':4,
                         'fmt':'{:.1f}',
                         'fontsize':14,
-                        'color_kwargs':{'cmap':cmap,
-                                        'norm':mcolors.Normalize(0,4.0)}
+                        'color_kwargs':{'cmap':'traffic_ceaza',
+                                        'norm':mcolors.Normalize(1.0,3.0)}
                        },
                         grid=grid, ax=ax)
     plot_row_textcolor({'data':data[waveperiod_name],
@@ -132,9 +130,9 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
     sst_daily = data[sst_name].resample('d').mean().reindex(data.index).interpolate()
     plot_row_textcolor({'data':sst_daily,
                         'row':10,
-                        'color_kwargs':{'cmap':'RdBu_r',
-                                        'norm':mcolors.Normalize(sst_daily.min()*0.925,
-                                                                 sst_daily.max()*1.075)}
+                        'color_kwargs':{'cmap':'redblue_ceaza',
+                                        'norm':mcolors.Normalize(sst_daily.min()-0.15,
+                                                                 sst_daily.max()+0.15)}
                         },
                        text=False,grid=grid,ax=ax)
     plot_row_textcolor({'data':data[sst_name],
@@ -179,7 +177,8 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
 
 # ---------------------------------------------------------------------------- #
 if __name__=='__main__':
-    name,lon,lat,outdir = "EJEMPLO 75°W 30°S",-75,-30,'./'
+    name,lon,lat,outdir = "TALCARUCA",-71.69672321221529,-30.47607497047192,'./'
+    print(FORECAST_DATE)
     #name,lon,lat,outdir = sys.argv[1],float(sys.argv[2]),float(sys.argv[3]),sys.argv[4]
     print('Making forecast for: '+name)
     local_forecast(FORECAST_DATE,name,lon,lat,outdir)
