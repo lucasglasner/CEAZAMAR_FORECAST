@@ -2,7 +2,7 @@
  # @ Author: Your lucas
  # @ Create Time: 2022-07-22 19:35:24
  # @ Modified by: lucas
- # @ Modified time: 2022-07-22 19:35:46
+ # @ Modified time: 2023-08-11 13:03:00
  # @ Description:
  '''
 
@@ -179,36 +179,6 @@ def compute_metrics(model,reference, dim='time'):
     return METRICS
 
 
-def bias_correct_SST(data,method='linregress'):
-    """
-    Bias correct SST with delta method or linregress
-    Require the files with the coefficient or correction data.
-
-    Args:
-        data (xarray): 
-         Mercator forecast sea surface temperature
-        method (str, optional): 
-         linregress or delta. Defaults to 'linregress'.
-
-    Returns:
-        xarray: bias corrected mercator sst as xarray object
-    """
-    if method == 'delta':
-        p = '~/storage/FORECAST/MERCATOR/'
-        mbias = xr.open_dataset(p+'MBIAS_MERCATORANALYSIS-OSTIA_MONTHLY.nc').mbias
-        mbias = mbias.rename({'longitude':'lon','latitude':'lat'})
-        mbias = mbias.reindex({'lon':data.lon,'lat':data.lat},
-                            method='nearest')
-        data = data.groupby('time.dayofyear')-mbias
-    if method == 'linregress':
-        p = '~/storage/FORECAST/MERCATOR/'
-        lr = xr.open_dataset(p+'LINEAR_REGRESSION_COEFFICIENTS.nc')
-        lr = lr.reindex({'lon':data.lon,'lat':data.lat},
-                            method='nearest')
-        data = data*lr.SLOPE+lr.INTERCEPT
-    return data
-
-
 def deg2compass(angle):
     """
     Transform an angle in degrees to the
@@ -361,20 +331,6 @@ def filter_xarray(data, dim, order, cutoff, btype='lowpass', parallel=True, fs=1
                           vectorize=True, dask=dask)
     filt[dim] = data[dim]
     return filt
-
-def compute_anomalies(forecast, climatology, timename='leadtime'):
-    """Compute anomaly from climatology
-
-    Args:
-        forecast (XDataArray): forecast data
-        climatology (XDataArray): climatology data
-
-    Returns:
-        XDataArray: anomaly
-    """
-    climatology = climatology.reindex({'lat':forecast.lat,'lon':forecast.lon})
-    anomaly = forecast.groupby(timename+'.dayofyear')-climatology
-    return anomaly
 
 def utc_to_local(series, gap=4):
     """

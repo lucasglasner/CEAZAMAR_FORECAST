@@ -69,6 +69,8 @@ ocean_variables = {
     'ssh':'zos'
 }
 
+ocean_tidemodel = 'data/TPXO7.nc'
+
 # -------------------------------- WAVE MODEL -------------------------------- #
 wave_globalparams = {
     'forecast_model':'MERCATOR-MFWAM',

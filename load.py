@@ -18,6 +18,7 @@ import numpy as np
 import pandas as pd
 
 from params import *
+from numerics import *
 
 
 # ------------------------------ PATH FUNCTIONS ------------------------------ #
@@ -179,3 +180,73 @@ def load_mercator_waves(path, **kwargs):
     p = path.split("/")[-1].split(".")[0]
     data.coords['inittime'] = pd.to_datetime(p,format="%Y-%m-%d")
     return data
+
+
+def load_tpxo(date, path=ocean_tidemodel, n_constituents=10, **kwargs):
+    """
+    This functions load the TPXO ocean tides dataset and computes the 
+    amplitude and phase of each tidal constituent taking account the
+    nodal corrections for the desired datetime.
+
+    Args: 
+        date (str): forecast date
+        path (str): ocean tide model file (netcdf)
+        n_constituents (int): number of tidal constituents (1..10)
+        **kwargs are passed to xarray.open_dataset()
+    Returns:
+        _type_: _description_
+    """
+    tides = xr.open_dataset(path, **kwargs)
+    tides = tides.isel(periods=slice(0,n_constituents))
+
+    tides = tides.rename({'lat_r':'lat','lon_r':'lon'})
+    tides.coords['lon'] = (tides.coords['lon'] + 180) % 360 - 180
+
+    constituents=np.array(tides.components.split(' ')).squeeze()[:n_constituents]
+    tides = tides.assign_coords({'constituents':('periods',constituents)})
+    tides = tides.swap_dims({'periods':'constituents'})
+    
+    # Computing amplitude and phase for each constituent...
+    tides['tssh_complex']   = tides.ssh_r+tides.ssh_i*np.sqrt(-1, dtype=complex)
+    tides['tssh_amplitude'] = np.abs(tides['tssh_complex'])
+    tides['tssh_phase']     = np.mod(np.rad2deg(xr.apply_ufunc(np.angle,tides['tssh_complex'])),360)
+    tides['t_time']         = pd.to_datetime(date)
+
+    # Perform nodal corrections    
+    pf,pu,t0,phase_mkB  = egbert_correct(modified_julian_day(
+                                         pd.to_datetime(date).date()),
+                                         0,0,0)
+    pf = pf.loc[tides.constituents.values]
+    pu = pu.loc[tides.constituents.values]
+    
+
+    tides['tssh_amplitude'] = tides['tssh_amplitude']*pf.to_xarray().rename(
+        {'index':'constituents'})
+    tides['tssh_phase']     = np.mod(-tides['tssh_phase']-pu.to_xarray().rename(
+        {'index':'constituents'}),360)
+    
+    return tides
+
+def load_forecast_data(date, which,**kwargs):
+    """
+    Load netcdf forecast data
+
+    Args:
+        date  (str): %Y-%m-%d
+        which (str): kind of forecast (ocean, atm, wave) 
+
+    Raises:
+        RunTimeError: If wrong kind of forecast is selected
+
+    Returns:
+        XDataSet: xarray with the loaded forecast data
+    """
+    path = forecast_path(date, which)
+    if which=='ocean':
+        return load_mercator_ocean(path, **kwargs)
+    elif which=='wave':
+        return load_mercator_waves(path, **kwargs)
+    elif which=='atm':
+        return load_wrf(path, **kwargs)
+    else:
+        raise_incorrect_type(which)
