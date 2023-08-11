@@ -122,3 +122,60 @@ def forecast_path(date, which):
     return path
 
 # ------------------------------ LOAD FUNCTIONS ------------------------------ #
+
+def load_wrf(path, **kwargs):
+    """ 
+    Load a wrf model output and adjust coordinates
+    for the package to work.
+    Args:
+        path (str): path to netcdf file
+        **kwargs passed to xarray.open_dataset
+
+    Returns:
+        data (xDataset): loaded xarray
+    """
+    data  = xr.open_dataset(path, **kwargs)
+    cdict = {value:key for key, value in atm_variables.items()}
+    data  = data.rename(cdict)[atm_variables.keys()]
+    
+    inittime = data.attrs['SIMULATION_START_DATE'].replace('_',' ')
+    data.coords['inittime'] = pd.to_datetime(inittime) 
+    return data
+
+def load_mercator_ocean(path, **kwargs):
+    """ 
+    load a mercator model output and adjust
+    for the package to work.
+    Args:
+        path (str): path to netcdf file
+        **kwargs passed to xarray.open_dataset
+
+    Returns:
+        data (xDataset): loaded xarray
+    """
+    data = xr.open_dataset(path, engine='netcdf4', **kwargs)
+    data = data.squeeze()
+    cdict = {value:key for key, value in ocean_variables.items()}
+    data  = data.rename(cdict)[ocean_variables.keys()]
+    p = path.split("/")[-1].split(".")[0]
+    data.coords['inittime'] = pd.to_datetime(p,format="%Y-%m-%d")
+    return data
+
+def load_mercator_waves(path, **kwargs):
+    """ 
+    load a mercator model output and adjust
+    for the package to work.
+    Args:
+        path (str): path to netcdf file
+        **kwargs passed to xarray.open_dataset
+
+    Returns:
+        data (xDataset): loaded xarray
+    """
+    data = xr.open_dataset(path, engine='netcdf4', **kwargs)
+    data = data.squeeze()
+    cdict = {value:key for key, value in wave_variables.items()}
+    data  = data.rename(cdict)[wave_variables.keys()]
+    p = path.split("/")[-1].split(".")[0]
+    data.coords['inittime'] = pd.to_datetime(p,format="%Y-%m-%d")
+    return data
