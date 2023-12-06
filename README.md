@@ -53,8 +53,32 @@ La presente documentación muestra un resumen de los scripts y como usarlos para
 ├── numerics.py				# Listado de funciones/rutinas de cálculo numérico de cosas
 ├── graphical.py			# Listado de funciones/rutinas para graficar
 ├── load.py				# Listado de funciones/rutinas para leer la data cruda y transformarla a un formato común
+├── forecast.yml			# Archivo con el ambiente python necesario para correr este paquete en Linux
 └── README.md				# Archivo con esta documentación.
 
 ```
 
-zz
+Todos los scripts están construidos siguiendo un formato python del siguiente estilo:
+
+```python
+import os
+import sys
+import ... as ...
+from ... import ...
+
+def method1(...):
+    ...
+    return ...
+
+def method2(...):
+    ...
+    return ...
+
+if __name__=='__main'__:
+    ...
+    method1(...)
+    method2(...)
+    sys.exit()
+
+
+```
