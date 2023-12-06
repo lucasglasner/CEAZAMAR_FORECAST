@@ -8,6 +8,7 @@
  '''
 from params import *
 from glob import glob
+import pandas as pd
 import requests
 import os
 
@@ -16,12 +17,19 @@ localforecastdir=EXECUTION_DIRECTORY+'/plots/FORECAST_SITES/'
 weburl="https://lhgv.pythonanywhere.com/upload_forecast"
 # ---------------------------------------------------------------------------- #
 def transfer_ceazamar():
-    os.system('scp -P 10722 '+EXECUTION_DIRECTORY+'/tmp/*.csv '+
-              'lucas@ip1.ceazamet.cl:/home/lucas/PRONOSTICOS/LOCAL/DATA/')
     os.system('scp -P 10722 '+regionalforecastdir+
             '*.png lucas@ip1.ceazamet.cl:/home/lucas/PRONOSTICOS/REGIONAL/')
-    os.system('scp -P 10722 '+localforecastdir+
-            'CEAZAMAR/*.png lucas@ip1.ceazamet.cl:/home/lucas/PRONOSTICOS/LOCAL/')
+    locations=pd.read_csv('data/COASTAL_POINTS.csv', index_col=0)
+    names = locations[locations['REGION']=='COQUIMBO']
+    names = names[names['CEAZAMAR']].Name
+    for name in names:
+        name = name.replace('_','')
+        os.system('scp -P 10722 '+EXECUTION_DIRECTORY+f'/tmp/{name}*.csv '+
+                'lucas@ip1.ceazamet.cl:/home/lucas/PRONOSTICOS/LOCAL/DATA/')
+        os.system('scp -P 10722 '+localforecastdir+
+                f'CEAZAMAR/{name}*.png lucas@ip1.ceazamet.cl:/home/lucas/PRONOSTICOS/LOCAL/')
+        os.system('scp -P 10722 '+localforecastdir+
+                f'CEAZAMAR/{name}*.pdf lucas@ip1.ceazamet.cl:/home/lucas/PRONOSTICOS/LOCAL/')
     return
 
 def transfer_personalweb():

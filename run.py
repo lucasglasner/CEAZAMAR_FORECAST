@@ -33,6 +33,7 @@ from wind_forecast import wind_forecast
 from currents_forecast import currents_forecast
 from create_localforecast import create_localforecast
 from local_forecast import local_forecast
+from local_forecast_print import local_forecast_print
 
 from sst_validation import sst_validation
 from wind_validation import wind_validation
@@ -49,29 +50,29 @@ matplotlib.use('Agg')
 # ---------------------------------------------------------------------------- #
 #                               GLOBAL VARIABLES                               #
 # ---------------------------------------------------------------------------- #
-diagnostics=True
+diagnostics=False
 if diagnostics:
     make_wind_diagnostics = False
     make_wave_diagnostics = False
-    make_sst_diagnostics  = True
-    make_nrt_diagnostics  = True
-validation = True
+    make_sst_diagnostics  = False
+    make_nrt_diagnostics  = False
+validation = False
 if validation:
-    make_wind_validation = True
+    make_wind_validation = False
     make_wave_validation = False
-    make_sst_validation  = True
+    make_sst_validation  = False
 forecast = True
 if forecast:
-    make_sst_forecast      = True
-    make_wave_forecast     = True
-    make_currents_forecast = True
-    make_wind_forecast     = True
+    make_sst_forecast      = False
+    make_wave_forecast     = False
+    make_currents_forecast = False
+    make_wind_forecast     = False
     make_local_forecast    = True
-post_webserver = True
+post_webserver = False
 if post_webserver:
-    post_ceazamar    = True
-    post_personalweb = True
-check_todayforecast  = True
+    post_ceazamar    = False
+    post_personalweb = False
+check_todayforecast  = False
 
 
 
@@ -168,6 +169,19 @@ if __name__=='__main__':
                                                 outdir))
             except Exception as e:
                 print(e)
+            
+            print('\n')
+            try:
+                print('Transforming "oceangrams" to printable pdfs')
+                names = locations[locations['REGION']=='COQUIMBO']
+                names = names[names['CEAZAMAR']].Name
+                for name in names:
+                    name = name.replace('_','')
+                    path = f'plots/FORECAST_SITES/CEAZAMAR/{name}_FORECAST_CURRENT.png' 
+                    local_forecast_print(path)
+            except Exception as e:
+                print(e)
+                
             print('\n')
             print('Done')
             space(char='-')

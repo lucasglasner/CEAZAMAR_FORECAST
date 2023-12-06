@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 #                                 GENERAL STUFF                                #
 # ---------------------------------------------------------------------------- #
 FORECAST_DATE        = datetime.datetime.now().strftime('%F')
-EXECUTION_DIRECTORY  = '/home/lucas/projects/CEAZAMAR_KITCHEN/CEAZAMAR_FORECAST'
+EXECUTION_DIRECTORY  = '/home/lucas/projects/CEAZAMAR_KITCHEN/CEAZAMAR_NRT/'
 NDAYS_REGIONAL = 10
 NHOURS_LOCAL   = 24*9-12
 N_JOBS = 10

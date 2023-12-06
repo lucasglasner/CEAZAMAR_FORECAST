@@ -52,7 +52,7 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
 #                                         PLOT                                 #
 # ---------------------------------------------------------------------------- #
     plt.rc('font',size=12)
-    fig,ax,grid = create_timegrid(data.index, 11, figsize=(130,6))
+    fig,ax,grid = create_timegrid(data.index, 10, figsize=(130,6))
 # ----------------------------------- WINDS ---------------------------------- #
     plot_row_textcolor({'data':data[windspeed_name]*3.6,
                         'row':0,
@@ -62,24 +62,18 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                                         'norm':mcolors.Normalize(10,40)}
                         },
                         grid=grid, ax=ax)
-    plot_row_textcolor({'data':data['BEAUFORT'],
-                        'row':1,
-                        'fmt':'{:.0f}',
-                        'fontsize':14,
-                        'color_kwargs':{'cmap':'PuRd',
-                                        'norm':mcolors.Normalize(3,9)}},
-                         grid=grid,ax=ax)
+
     plot_row_arrows({'data':data['WDIR'],
-                     'row':2},
+                     'row':1},
                     grid=grid,ax=ax)
     plot_row_textcolor({'data':data['WDIR_STR'],
-                        'row':3,
+                        'row':2,
                         'fontsize':16
                         },
                         colors=False,grid=grid, ax=ax)
 # ----------------------------------- WAVES ---------------------------------- #
     plot_row_textcolor({'data':data[waveheight_name],
-                        'row':4,
+                        'row':3,
                         'fmt':'{:.1f}',
                         'fontsize':14,
                         'color_kwargs':{'cmap':'traffic_ceaza',
@@ -87,7 +81,7 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                        },
                         grid=grid, ax=ax)
     plot_row_textcolor({'data':data[waveperiod_name],
-                        'row':5,
+                        'row':4,
                         'fmt':'{:.0f}',
                         'fontsize':14,
                         'color_kwargs':{'cmap':'YlGnBu',
@@ -95,48 +89,48 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
                        },
                         grid=grid, ax=ax)
     plot_row_arrows({'data':data[wavedir_name],
-                     'row':6},
+                     'row':5},
                     grid=grid,ax=ax)
     plot_row_textcolor({'data':data['VMDR_STR'],
-                        'row':7,
+                        'row':6,
                         'fontsize':16
                         },
                         colors=False,grid=grid, ax=ax)
 # ----------------------------------- TIDES ---------------------------------- #
     tiderange = (data['ssh_tides'].max()-data['ssh_tides'].min())/1.5
     x = data['ssh_tides'].resample('1min').interpolate()
-    ax.scatter(x.index,-x/tiderange+8.5,
+    ax.scatter(x.index,-x/tiderange+7.5,
                c=-x/tiderange, alpha=0.75,
                cmap='BrBG_r', s=10, zorder=2,
                vmin=1.5*data['ssh_tides'].min(),
                vmax=1.5*data['ssh_tides'].max(),
                marker='s')
-    ax.plot(x.index,-x/tiderange+8.5, color='k', alpha=0.2, zorder=3)
+    ax.plot(x.index,-x/tiderange+7.5, color='k', alpha=0.2, zorder=3)
     for t,h in zip(data['hightides'].dropna().index,
                    pd.to_datetime(data['hightides']).dropna()):
         ax.text(t,
-                -data['ssh_tides'].loc[t]/tiderange+9.35,
+                -data['ssh_tides'].loc[t]/tiderange+8.35,
                 h.strftime('%H:%M')+'\n{:.1f}'.format(data['ssh_tides'].loc[t]),
                 ha='center', fontsize=12)
         
     for t,h in zip(data['lowtides'].dropna().index,
                    pd.to_datetime(data['lowtides']).dropna()):
         ax.text(t,
-                -data['ssh_tides'].loc[t]/tiderange+8.35,
+                -data['ssh_tides'].loc[t]/tiderange+7.35,
                 h.strftime('%H:%M')+'\n{:.1f}'.format(data['ssh_tides'].loc[t]),
                 ha='center', fontsize=12)
         
 # ------------------------------------ SST ----------------------------------- #
     sst_daily = data[sst_name].resample('d').mean().reindex(data.index).interpolate()
     plot_row_textcolor({'data':sst_daily,
-                        'row':10,
+                        'row':9,
                         'color_kwargs':{'cmap':'redblue_ceaza',
                                         'norm':mcolors.Normalize(sst_daily.min()-0.15,
                                                                  sst_daily.max()+0.15)}
                         },
                        text=False,grid=grid,ax=ax)
     plot_row_textcolor({'data':data[sst_name],
-                        'row':10,
+                        'row':9,
                         'fmt':'{:0.1f}',
                         'fontsize':14
                         },
@@ -145,7 +139,6 @@ def local_forecast(idate,name,lon,lat,outdir='plots/PRONOSTICO_SITIOS/'):
     
     # ------------------------------- common stuff --------------------------- #
     ax.set_yticklabels(['Velocidad del\nviento (km/h)',
-                        'Escala de Beaufort',
                         '\n\nDirección\ndel viento',
                         '',
                         'Altura\nde ola (m)',

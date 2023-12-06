@@ -281,11 +281,11 @@ def create_timegrid(timestamp, nvars, figsize=(120,3)):
     grid = np.meshgrid(x,y)
     ax.xaxis.tick_top()
     fmt = lambda x,pos: mdates.DateFormatter(
-        '%B\n%a\n%d\n%Hhr')(x,pos).capitalize()
+        '%B\n%a\n%d\n%Hh')(x,pos).capitalize()
     ax.xaxis.set_major_formatter(fmt)
-    ax.xaxis.set_major_locator(mdates.DayLocator(interval=1))
+    ax.xaxis.set_major_locator(mdates.HourLocator(byhour=1))
 
-    ax.xaxis.set_minor_formatter(mdates.DateFormatter('%a\n%d\n%Hhr'))
+    ax.xaxis.set_minor_formatter(mdates.DateFormatter('%a\n%d\n%Hh'))
     ax.xaxis.set_minor_locator(mdates.HourLocator(interval=1))
     
     ax.invert_yaxis()
@@ -294,6 +294,7 @@ def create_timegrid(timestamp, nvars, figsize=(120,3)):
     ax.set_ylim(y.max()+0.5,y.min()-0.5)
     ax.set_yticks(y[::-1])
     ax.set_yticklabels([])
+
     
     # ax.grid(which='major',color='k')
 
