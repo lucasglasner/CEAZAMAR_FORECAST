@@ -90,7 +90,7 @@ vo_name   = 'vo'
 ssh_name  = 'zos'
 
 
-# ----------------------------- CUSTOM COLORMAPS ----------------------------- #
+# -------------------- CUSTOM COLORMAPS Janina et al ------------------------- #
 hexcolors = ["#4cb164","#5cb35b","#6cb452","#7cb649","#8cb840","#9cb937",
              "#adbb2d","#bdbc24","#cdbe1b","#ddc012","#edc109","#fdc300",
              "#fab302","#f7a204","#f49206","#f18208","#ee720a","#ea610c",

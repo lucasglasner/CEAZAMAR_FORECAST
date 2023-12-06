@@ -40,6 +40,20 @@ from pytides.pytides.constituent import TPXO7
 # ---------------------------------------------------------------------------- #
     
 def createlocal_data(name, lat, lon, atm, waves, ocean):
+    """
+    This function creates the oceanogram table
+
+    Args:
+        name (_type_): point name
+        lat (_type_): latitude of interest
+        lon (_type_): longitude of interest
+        atm (_type_): xarray ndimensional dataset
+        waves (_type_): xarray ndimensional dataset
+        ocean (_type_): xarray ndimensional dataset
+
+    Returns:
+        _type_: pandas dataframe with the forecast table
+    """
 # ----------------------------------- atm ------------------------------- #
     atm_local  = grabpoint(atm,lat,lon)[[windspeed_name,'WDIR','COASTANGLE',
                                          uwnd_name,vwnd_name]]
@@ -51,10 +65,14 @@ def createlocal_data(name, lat, lon, atm, waves, ocean):
 
     waves_local = waves_local.resample('h').interpolate(method='linear')
     
-# ------------------------------------ SST ----------------------------- #
+# ----------------------------------- OCEAN ----------------------------- #
     sst_local = grabpoint(ocean[sst_name],lat,lon)[sst_name]
     #interpolate from xx:30 to xx:00
     sst_local = sst_local.resample('h').bfill()
+    
+    # If sea level has tides comment the tide section and use this lines
+    # tides_local = grabpoint(ocean[ssh_name],lat,lon)[ssh_name]
+    # tides_local = tides_local.resample('h').bfill()
 
 # ----------------------------------- TIDES ---------------------------- #
     #Get harmonics
@@ -109,6 +127,22 @@ def createlocal_data(name, lat, lon, atm, waves, ocean):
     return data
 
 def create_localforecast(idate, locations, n_jobs=10, save=True):
+    """
+    This function creates loads the multidimensional data and 
+    creates the forecast table for multiple regions using 
+    parallel computing. 
+
+    Args:
+        idate (_type_): forecast date
+        locations (_type_): dataframe with the locations (see data/COASTAL_points.csv
+                            for an example of the structure)
+        n_jobs (int, optional): number of parallel jobs. Defaults to 10.
+        save (bool, optional): bool for saving tables on disk as csv.
+        Defaults to True.
+
+    Returns:
+        _type_: a list with all the dataframes/tables built
+    """
     fdate = pd.to_datetime(idate)+pd.Timedelta(hours=NHOURS_LOCAL)
     fdate = (fdate).strftime('%Y-%m-%d %H:%M:%S')
     
@@ -132,7 +166,7 @@ def create_localforecast(idate, locations, n_jobs=10, save=True):
     tides   = tides[['tssh_amplitude','tssh_phase']].interp({'lat':ocean.lat,
                                                              'lon':ocean.lon})
 
-    
+    # Nodal corrections
     pf,pu,t0,phase_mkB  = egbert_correct(modified_julian_day(
                                          pd.to_datetime(idate).date()),
                                          0,0,0)

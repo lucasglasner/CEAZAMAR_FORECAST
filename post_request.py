@@ -16,20 +16,23 @@ regionalforecastdir=EXECUTION_DIRECTORY+'/plots/'
 localforecastdir=EXECUTION_DIRECTORY+'/plots/FORECAST_SITES/'
 weburl="https://lhgv.pythonanywhere.com/upload_forecast"
 # ---------------------------------------------------------------------------- #
-def transfer_ceazamar():
+def transfer_ceazamar(remotehost='lucas@ip1.ceazamet.cl',
+                      remotepath_regional='/home/lucas/PRONOSTICOS/REGIONAL/',
+                      remotepath_local_tables='/home/lucas/PRONOSTICOS/LOCAL/DATA/',
+                      remotepath_local_figures='/home/lucas/PRONOSTICOS/LOCAL/'):
     os.system('scp -P 10722 '+regionalforecastdir+
-            '*.png lucas@ip1.ceazamet.cl:/home/lucas/PRONOSTICOS/REGIONAL/')
+            f'*.png {remotehost}:{remotepath_regional}')
     locations=pd.read_csv('data/COASTAL_POINTS.csv', index_col=0)
     names = locations[locations['REGION']=='COQUIMBO']
     names = names[names['CEAZAMAR']].Name
     for name in names:
         name = name.replace('_','')
         os.system('scp -P 10722 '+EXECUTION_DIRECTORY+f'/tmp/{name}*.csv '+
-                'lucas@ip1.ceazamet.cl:/home/lucas/PRONOSTICOS/LOCAL/DATA/')
+                f'{remotehost}:{remotepath_local_tables}')
         os.system('scp -P 10722 '+localforecastdir+
-                f'CEAZAMAR/{name}*.png lucas@ip1.ceazamet.cl:/home/lucas/PRONOSTICOS/LOCAL/')
+                f'CEAZAMAR/{name}*.png {remotehost}:{remotepath_local_figures}')
         os.system('scp -P 10722 '+localforecastdir+
-                f'CEAZAMAR/{name}*.pdf lucas@ip1.ceazamet.cl:/home/lucas/PRONOSTICOS/LOCAL/')
+                f'CEAZAMAR/{name}*.pdf {remotehost}:{remotepath_local_figures}')
     return
 
 def transfer_personalweb():

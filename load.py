@@ -169,6 +169,8 @@ def load_mercator(path, **kwargs):
 
     return data
     
+# MOST IMPORTANT FUNCTION OF THE PACKAGE!!!!
+# EDIT IF NECESARY
 def load_forecast_data(path, which,**kwargs):
     """
     Load netcdf forecast data
