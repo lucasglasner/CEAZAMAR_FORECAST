@@ -1,4 +1,4 @@
-# Pronóstico CEAZAMAR - Rutinas Oceanograma y plots varios
+# Pronóstico CEAZAMAR - Rutinas del oceanograma y plots varios
 
 La presente documentación muestra un resumen de los scripts y como usarlos para visualizar el pronóstico del ceazamar a nivel regional o local para un punto de interés. En primer lugar para tener un idea del funcionamiento del paquete se lista la estructura general de directorios con un breve comentario de que es cada cosa:
 
